@@ -1,0 +1,21 @@
+<?php
+
+use CodeIgniter\Router\RouteCollection;
+
+/**
+ * @var RouteCollection $routes
+ */
+// $routes->get('/', 'Home::index');
+
+//user
+$routes->match(['post','get'],'/register', 'UserController::register');
+$routes->match(['post','get'],'/login', 'UserController::login');
+
+
+//patient
+$routes->match(['post','get'],'patient/insertBooking/(:num)', 'PatientController::insertBooking/$1');
+
+//doctor
+$routes->match(['post','get'],'getAppointmentsByDoctorUsername/(:any)', 'DoctorController::getAppointmentsByDoctorUsername/$1');
+$routes->match(['post','get'],'approveAppointment/(:any)/(:any)', 'DoctorController::approveAppointment/$1/$2');
+$routes->match(['post','get'],'sendApprovalEmail', 'DoctorController::sendApprovalEmail');

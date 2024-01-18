@@ -1,0 +1,8 @@
+CRITICAL - 2024-01-18 14:28:57 --> Undefined array key "ClientName"
+in APPPATH\Controllers\DoctorController.php on line 80.
+ 1 APPPATH\Controllers\DoctorController.php(80): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "ClientName"', 'C:\\laragon\\www\\adonback\\app\\Controllers\\DoctorController.php', 80)
+ 2 APPPATH\Controllers\DoctorController.php(58): App\Controllers\DoctorController->sendApprovalEmail([...])
+ 3 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\DoctorController->approveAppointment('1', '8')
+ 4 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DoctorController))
+ 5 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()

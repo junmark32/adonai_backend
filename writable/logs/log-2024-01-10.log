@@ -1,0 +1,26 @@
+ERROR - 2024-01-10 13:41:11 --> mysqli_sql_exception: Column 'Fullname' cannot be null in C:\laragon\www\adonback\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 C:\laragon\www\adonback\system\Database\MySQLi\Connection.php(306): mysqli->query('INSERT INTO `ap...', 0)
+#1 C:\laragon\www\adonback\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `ap...')
+#2 C:\laragon\www\adonback\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `ap...')
+#3 C:\laragon\www\adonback\system\Database\BaseBuilder.php(2308): CodeIgniter\Database\BaseConnection->query('INSERT INTO `ap...', Array, false)
+#4 C:\laragon\www\adonback\system\Model.php(319): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\laragon\www\adonback\system\BaseModel.php(788): CodeIgniter\Model->doInsert(Array)
+#6 C:\laragon\www\adonback\system\Model.php(715): CodeIgniter\BaseModel->insert(Array, true)
+#7 C:\laragon\www\adonback\app\Controllers\PatientController.php(34): CodeIgniter\Model->insert(Array)
+#8 C:\laragon\www\adonback\system\CodeIgniter.php(942): App\Controllers\PatientController->insertBooking('1')
+#9 C:\laragon\www\adonback\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PatientController))
+#10 C:\laragon\www\adonback\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\laragon\www\adonback\public\index.php(87): CodeIgniter\CodeIgniter->run()
+#12 {main}
+CRITICAL - 2024-01-10 13:41:11 --> Column 'Fullname' cannot be null
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2308): CodeIgniter\Database\BaseConnection->query('INSERT INTO `appointments` (`PatientID`, `Fullname`, `Email`, `Phone`, `Pref_Date`, `Pref_Doctor`, `Purpose`, `Add_message`, `Status`) VALUES (:PatientID:, :Fullname:, :Email:, :Phone:, :Pref_Date:, :Pref_Doctor:, :Purpose:, :Add_message:, :Status:)', [...], false)
+ 2 SYSTEMPATH\Model.php(319): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(788): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(715): CodeIgniter\BaseModel->insert([...], true)
+ 5 APPPATH\Controllers\PatientController.php(34): CodeIgniter\Model->insert([...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\PatientController->insertBooking('1')
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PatientController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
