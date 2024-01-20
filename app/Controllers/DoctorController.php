@@ -29,8 +29,19 @@ class DoctorController extends ResourceController
         // Fetch appointments based on DoctorID
         $appointments = $appointmentsModel->like('Pref_Doctor', $doctorUsername)->findAll();
 
+        // Format the Pref_Date column to word format
+        foreach ($appointments as &$appointment) {
+            $appointment['Pref_Date'] = date('F j, Y', strtotime($appointment['Pref_Date']));
+        }
+
+        // Sort appointments in descending order based on Pref_Date
+        usort($appointments, function ($a, $b) {
+            return strtotime($b['Pref_Date']) - strtotime($a['Pref_Date']);
+        });
+
         return $this->respond($appointments);
     }
+
 
     public function approveAppointment($doctorID, $appointmentID)
     {
@@ -60,6 +71,7 @@ class DoctorController extends ResourceController
         return $this->respond(['message' => 'Appointment approved successfully']);
     }
 
+        //mailer
     private function sendApprovalEmail($appointment)
     {
         // Initialize PHPMailer
@@ -71,7 +83,7 @@ class DoctorController extends ResourceController
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
             $mail->Username   = 'adonaieyecare@gmail.com'; //gmail email
-            $mail->Password   = 'suxqojbojluggurs'; //gmail app password
+            $mail->Password   = ''; //gmail app password
             $mail->SMTPSecure = 'tls';
             $mail->Port       = 587;
 
@@ -82,7 +94,18 @@ class DoctorController extends ResourceController
             // Content
             $mail->isHTML(true);
             $mail->Subject = 'Appointment Approved';
-            $mail->Body    = 'Your appointment has been approved.';
+            $mail->Body    = 'Dear ' . $appointment['Fullname'] . ',<br><br>Your appointment has been approved.';
+
+            // Add more content to the email body
+            $mail->Body .= '<br><br><strong>Appointment Details:</strong><br>';
+            $mail->Body .= 'Patient_ID: ' . $appointment['PatientID'] . '<br>';
+            $mail->Body .= 'Appointment_ID: ' . $appointment['AppointmentID'] . '<br>';
+            $mail->Body .= 'Email: ' . $appointment['Email'] . '<br>';
+            $mail->Body .= 'Date: ' . $appointment['Pref_Date'] = date('F j, Y', strtotime($appointment['Pref_Date'])) . '<br>';
+            $mail->Body .= 'Doctor: ' . $appointment['Pref_Doctor'] . '<br>';
+            $mail->Body .= 'Purpose: ' . $appointment['Purpose'] . '<br>';
+            $mail->Body .= 'Message: ' . $appointment['Add_message'] . '<br>';
+            // $mail->Body .= 'Location: ' . $appointment['Location'] . '<br>';
 
             $mail->send();
         } catch (Exception $e) {
@@ -91,7 +114,7 @@ class DoctorController extends ResourceController
         }
     }
 
-    //mailer
+
 
     
 
