@@ -16,6 +16,8 @@ $routes->match(['post','get'],'/login', 'UserController::login');
 $routes->match(['post','get'],'patient/insertBooking/(:num)', 'PatientController::insertBooking/$1');
 
 //doctor
+$routes->match(['post','get'],'getDoctorsData/(:num)', 'DoctorController::getDoctorsData/$1');
+$routes->match(['post','get'],'getPatients', 'DoctorController::getPatients');
 $routes->match(['post','get'],'getAppointmentsByDoctorUsername/(:any)', 'DoctorController::getAppointmentsByDoctorUsername/$1');
 $routes->match(['post','get'],'approveAppointment/(:any)/(:any)', 'DoctorController::approveAppointment/$1/$2');
 $routes->match(['post','get'],'sendApprovalEmail', 'DoctorController::sendApprovalEmail');

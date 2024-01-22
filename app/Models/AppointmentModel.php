@@ -12,7 +12,7 @@ class AppointmentModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['PatientID', 'DoctorID', 'Fullname', 'Email', 'Phone', 'Pref_Date', 'Pref_Doctor', 'Purpose', 'Add_message', 'Status'];
+    protected $allowedFields    = ['PatientID', 'DoctorID', 'Fullname', 'Email', 'Phone', 'Pref_Date', 'Pref_Doctor', 'Purpose', 'Pref_Location', 'Add_message', 'Status'];
 
     // Dates
     protected $useTimestamps = false;

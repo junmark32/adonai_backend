@@ -27,6 +27,7 @@ class PatientController extends ResourceController
             'Pref_Date' => $this->request->getVar('pref_date'),
             'Pref_Doctor' => $this->request->getVar('pref_doctor'),
             'Purpose' => $this->request->getVar('purpose'),
+            'Pref_Location' => $this->request->getVar('pref_location'),
             'Add_message' => $this->request->getVar('add_message'),
             'Status' => 'Pending', // Set the initial status as 'Pending' or adjust as needed
         ];
@@ -39,5 +40,4 @@ class PatientController extends ResourceController
             return $this->respond(['msg' => 'Failed to add appointment']);
         }
     }
-
 }
