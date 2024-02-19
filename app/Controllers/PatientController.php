@@ -21,7 +21,8 @@ class PatientController extends ResourceController
 
         $data = [
             'PatientID' => $PatientID,
-            'Fullname' => $this->request->getVar('fullname'),
+            'Firstname' => $this->request->getVar('firstname'),
+            'Lastname' => $this->request->getVar('lastname'),
             'Email' => $this->request->getVar('email'),
             'Phone' => $this->request->getVar('phone'),
             'Pref_Date' => $this->request->getVar('pref_date'),
@@ -40,4 +41,65 @@ class PatientController extends ResourceController
             return $this->respond(['msg' => 'Failed to add appointment']);
         }
     }
+
+    //
+
+     // Method to fetch booked dates
+     public function getBookedDates()
+     {
+         try {
+             // Load the necessary model
+             $appointmentModel = new AppointmentModel();
+     
+             // Fetch the booked dates from the database
+             $bookedDates = $appointmentModel->distinct()->findAll();
+     
+             // Extract the dates from the query result
+             $dates = [];
+             foreach ($bookedDates as $row) {
+                 $dates[] = $row['Pref_Date'];
+             }
+     
+             return $this->respond($dates);
+         } catch (\Exception $e) {
+             // Handle any errors
+             return $this->respond(['error' => 'Failed to fetch booked dates.'], 500);
+         }
+     }
+     
+ 
+     // Method to fetch available time slots based on selected date
+     public function getAvailableTimeSlots()
+     {
+         // Get selected date from the request
+         $selectedDate = $this->request->getVar('date');
+ 
+         // Simulated data for available time slots (replace this with actual logic to calculate available time slots)
+         $availableTimeSlots = [
+             '9:00 - 10:00',
+             '10:00 - 11:00',
+             '11:00 - 12:00',
+             // Add more time slots as needed
+         ];
+ 
+         // Return available time slots
+         return $this->respond($availableTimeSlots);
+     }
+
+    //  public function getAvailableTimeSlots()
+    //  {
+    //      // Get selected date from the request
+    //      $selectedDate = $this->request->getVar('date');
+ 
+    //      // Simulated data for available time slots (replace this with actual logic to calculate available time slots)
+    //      $availableTimeSlots = [
+    //          '9:00 - 10:00',
+    //          '10:00 - 11:00',
+    //          '11:00 - 12:00',
+    //          // Add more time slots as needed
+    //      ];
+ 
+    //      // Return available time slots
+    //      return $this->respond($availableTimeSlots);
+    //  }
 }
