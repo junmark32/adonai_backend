@@ -9,6 +9,7 @@ use App\Models\PatientModel;
 use App\Models\UserModel;
 use App\Models\DoctorModel;
 use App\Models\AppointmentModel;
+use App\Models\ScheduleModel;
 
 //
 use PHPMailer\PHPMailer\PHPMailer;
@@ -23,15 +24,94 @@ class DoctorController extends ResourceController
         //
     }
 
-    //get doctors data using DOCtorID
-    public function getDoctorsData($doctorID)
-    {
-        $doctorModel = new DoctorModel();
+    public function schedule_timings()
+{
+    // Load necessary models and libraries
+    $session = session();
+    $scheduleModel = new ScheduleModel();
 
-        $doctors = $doctorModel->where('DoctorID', $doctorID)->findAll();
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
 
-        return $this->respond($doctors, 200);
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            if ($doctor) {
+                // Fetch schedule timings for the doctor
+                $scheduleTimings = $scheduleModel
+                    ->select('day, slot_duration, start_time, end_time')
+                    ->where('doctor_id', $doctorID)
+                    ->findAll();
+
+                // Pass the doctor's data and schedule timings to the view
+                return view('doctor/schedule_timings', ['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings]);
+
+                // // // Prepare data array
+                // $data = [
+                //     'doctor' => $doctor,
+                //     'scheduleTimings' => $scheduleTimings
+                // ];
+
+                // // Return JSON response
+                // return $this->response->setJSON($data);
+
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
     }
+}
+
+
+
+
+    //get doctors data using DOCtorID
+    public function getDoctorsData()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            if ($doctor) {
+                return $this->respond($doctor, 200);
+            } else {
+                return $this->respond(['msg' => 'Doctor not found'], 404);
+            }
+        } else {
+            return $this->respond(['msg' => 'DoctorID not found in session data'], 404);
+        }
+    } else {
+        return $this->respond(['msg' => 'User data not found in session'], 404);
+    }
+}
+
+
+
 
     public function getPatients()
     {
@@ -47,7 +127,6 @@ class DoctorController extends ResourceController
 
         // Return the patients as JSON
         return $this->response->setJSON($patients);
-
     }
 
     public function getAppointmentsByDoctorUsername($doctorUsername)

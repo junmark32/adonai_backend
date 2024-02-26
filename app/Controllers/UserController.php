@@ -7,12 +7,117 @@ use CodeIgniter\Restful\ResourceController;
 use App\Models\PatientModel;
 use App\Models\UserModel;
 use App\Models\DoctorModel;
+use App\Models\ScheduleModel;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+use CodeIgniter\Session\Session;
+
 class UserController extends ResourceController
 {
+    public function index()
+    {
+        $doctorModel = new DoctorModel();
+        $data['doctors'] = $doctorModel->findAll();
+
+      return view('user/index', $data);
+    }
+
+    public function login()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      return view('login');
+    }
+
+    public function booking()
+    {
+        // Get the doctor ID from the URL parameter
+        $doctorID = $this->request->getGet('doctor_id');
+    
+        // Fetch the doctor's data based on the doctor ID
+        $doctorModel = new DoctorModel();
+        $doctor = $doctorModel->find($doctorID);
+    
+        // Fetch all schedule timings for the doctor
+        $scheduleModel = new ScheduleModel();
+        $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->findAll();
+
+        // $data = [
+                //     'doctor' => $doctor,
+                //     'scheduleTimings' => $scheduleTimings
+                // ];
+
+                // // Return JSON response
+                // return $this->response->setJSON($data);
+
+    
+        // Pass the doctor's data and schedule timings to the view
+        return view('user/booking', ['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings]);
+    }
+    
+
+    public function db_doctor()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+    //   return view('doctor/doctor_dashboard');
+
+        // Load the session service
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['DoctorID'])) {
+                // Retrieve the DoctorID
+                $doctorID = $userData['DoctorID'];
+
+                // Fetch doctor's data based on DoctorID
+                $doctorModel = new DoctorModel();
+                $doctor = $doctorModel->find($doctorID);
+
+                if ($doctor) {
+                    // Pass the doctor data to the view
+                    $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                    return view('doctor/doctor_dashboard', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+
+    }
+
+    public function getDoctorDetails($DoctorID)
+    {
+      // Load the ProductModel (adjust the model name accordingly)
+          $model = new DoctorModel();
+
+          // Fetch product details from the model based on the product_id
+          $doctor = $model->find($DoctorID);
+
+          // Check if the product exists
+          if ($doctor) {
+              // Return the product details as JSON response
+              return $this->response->setJSON($doctor);
+          } else {
+              // Handle the case where the product is not found (return a suitable response)
+              return $this->response->setStatusCode(404)->setJSON(['message' => 'Product not found']);
+          }
+    }
+
+    ///
     public function register()
     {
         try {
@@ -145,86 +250,109 @@ class UserController extends ResourceController
 
     /// login
 
-    public function login()
-    {
-        $user = new UserModel();
-        $username = $this->request->getVar('username');
-        $password = $this->request->getVar('password');
-        $userData = $user->where('Username', $username)->first();
+    public function fn_login()
+{
+    $user = new UserModel();
+    $username = $this->request->getVar('username');
+    $password = $this->request->getVar('password');
+    $userData = $user->where('Username', $username)->first();
+
+    if ($userData) {
+        $hashedPassword = $userData['PasswordHash'];
+        $authenticatePassword = password_verify($password, $hashedPassword);
+
+        if ($authenticatePassword) {
+            $status = $userData['status']; // Get the status of the user
+
+            if ($status === 'active') {
+                // User is active, proceed with login
+                $role = $userData['role']; // Adjust column name based on your database schema
+                $response = [];
+
+                switch ($role) {
+                    case 'user':
+                        $response = [
+                            'msg' => 'okay',
+                            'token' => $userData['token'],
+                            'UserID' => $userData['UserID'],
+                            'Username' => $userData['Username'],
+                            'Role' => $role,
+                        ];
+                        $redirectURL = '/';
+                        break;
+
+                    case 'doctor':
+                        $doctorModel = new DoctorModel();
+                        $doctorData = $doctorModel->where('UserID', $userData['UserID'])->first();
     
-        if ($userData) {
-            $hashedPassword = $userData['PasswordHash'];
-            $authenticatePassword = password_verify($password, $hashedPassword);
-    
-            if ($authenticatePassword) {
-                $status = $userData['status']; // Get the status of the user
-    
-                if ($status === 'active') {
-                    // User is active, proceed with login
-                    $role = $userData['role']; // Adjust column name based on your database schema
-    
-                    switch ($role) {
-                        case 'user':
-                            $patientModel = new PatientModel();
-                            $patientData = $patientModel->where('UserID', $userData['UserID'])->first();
-    
-                            if ($patientData) {
-                                return $this->respond([
-                                    'msg' => 'okay',
-                                    'token' => $userData['token'],
-                                    'UserID' => $userData['UserID'],
-                                    'Username' => $userData['Username'],
-                                    'PatientID' => $patientData['PatientID'],
-                                    'Role' => $role,
-                                ]);
-                            } else {
-                                return $this->respond(['msg' => 'Patient data not found'], 404);
-                            }
-                            break;
-    
-                        case 'doctor':
-                            $doctorModel = new DoctorModel();
-                            $doctorData = $doctorModel->where('UserID', $userData['UserID'])->first();
-    
-                            if ($doctorData) {
-                                return $this->respond([
-                                    'msg' => 'okay',
-                                    'token' => $userData['token'],
-                                    'UserID' => $userData['UserID'],
-                                    'Username' => $userData['Username'],
-                                    'DoctorID' => $doctorData['DoctorID'],
-                                    'Role' => $role,
-                                ]);
-                            } else {
-                                return $this->respond(['msg' => 'Doctor data not found'], 404);
-                            }
-                            break;
-    
-                        case 'admin':
-                            return $this->respond([
-                                'msg' => 'okay',
-                                'token' => $userData['token'],
-                                'UserID' => $userData['UserID'],
-                                'Username' => $userData['Username'],
-                                'Role' => $role,
-                            ]);
-    
-                        default:
-                            // Unknown role
-                            return $this->respond(['msg' => 'Invalid role'], 401);
-                    }
-                } else {
-                    // User is not active (status is pending or something else)
-                    return $this->respond(['msg' => 'User is not active'], 401);
+                        $response = [
+                            'msg' => 'okay',
+                            'token' => $userData['token'],
+                            'UserID' => $userData['UserID'],
+                            'Username' => $userData['Username'],
+                            'DoctorID' => $doctorData['DoctorID'],
+                            'Role' => $role,
+                        ];
+                        $redirectURL = '/Doctor/Dashboard';
+                        
+                        break;
+
+                    case 'admin':
+                        $response = [
+                            'msg' => 'okay',
+                            'token' => $userData['token'],
+                            'UserID' => $userData['UserID'],
+                            'Username' => $userData['Username'],
+                            'Role' => $role,
+                        ];
+                        $redirectURL = 'admin.php';
+                        break;
+
+                    default:
+                        // Unknown role
+                        return $this->respond(['msg' => 'Invalid role'], 401);
                 }
+
+                // Store the response data into session storage
+                $session = session();
+                $session->set('user_data', $response);
+
+                // Redirect based on the role
+                return redirect()->to($redirectURL);
             } else {
-                return $this->respond(['msg' => 'Invalid credentials'], 401);
+                // User is not active (status is pending or something else)
+                return $this->respond(['msg' => 'User is not active'], 401);
             }
         } else {
-            return $this->respond(['msg' => 'User not found'], 404);
+            return $this->respond(['msg' => 'Invalid credentials'], 401);
+        }
+    } else {
+        return $this->respond(['msg' => 'User not found'], 404);
+    }
+}
+
+    
+public function checkSessionData()
+    {
+        // Load the session library
+        $session = session();
+
+        // Check if session data exists
+        if ($session->has('user_data')) {
+            // Retrieve session data
+            $userData = $session->get('user_data');
+
+            // Display session data
+            echo "User ID: " . $userData['UserID'] . "<br>";
+            echo "Username: " . $userData['Username'] . "<br>";
+            echo "Role: " . $userData['Role'] . "<br>";
+            echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
+
+            // You can add more data if needed
+        } else {
+            echo "No session data found.";
         }
     }
-    
 
 
 

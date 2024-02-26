@@ -45,6 +45,7 @@ class PatientController extends ResourceController
     //
 
      // Method to fetch booked dates
+     
      public function getBookedDates()
      {
          try {
