@@ -185,107 +185,108 @@
 
 							
 							<!-- Schedule Widget -->
-							<div class="card booking-schedule schedule-widget">
-							
-								<!-- Schedule Header -->
-								<div class="schedule-header">
-									<div class="row">
-										<div class="col-md-12">
-										
-											
-                                        <!-- Day Slot -->
-                                        <div class="day-slot">
-                                            <ul id="calendar">
-                                            </ul>
-                                        </div>
-                                        <!-- /Day Slot -->
+<div class="card booking-schedule schedule-widget">
+    <!-- Schedule Header -->
+    <div class="schedule-header">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Day Slot -->
+                <div class="day-slot">
+                    <ul id="calendar">
+                    </ul>
+                </div>
+                <!-- /Day Slot -->
 
-                                        <script>
-                                            // Get current date
-                                            let currentDate = new Date();
-                                            
-                                            // Function to render the calendar
-                                            function renderCalendar(date) {
-                                                const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                                                const calendarElement = document.getElementById('calendar');
-                                                calendarElement.innerHTML = '';
+                <script>
+                    // Define currentDate outside the functions to make it accessible across functions
+let currentDate = new Date();
 
-                                                // Add left arrow
-                                                calendarElement.innerHTML += `<li class="left-arrow"><a href="#" onclick="prevWeek()"><i class="fa fa-chevron-left"></i></a></li>`;
+// Function to render the calendar
+function renderCalendar() {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const calendarElement = document.getElementById('calendar');
+    calendarElement.innerHTML = '';
 
-                                                // Add dates for the next 7 days
-                                                for (let i = 0; i < 7; i++) {
-                                                    const day = new Date(date.getTime() + i * 24 * 60 * 60 * 1000);
-                                                    const dayOfWeek = daysOfWeek[day.getDay()];
-                                                    const formattedDate = `${day.getDate()} ${day.toLocaleString('default', { month: 'short' })} <small class="slot-year">${day.getFullYear()}</small>`;
-                                                    calendarElement.innerHTML += `<li><span>${dayOfWeek}</span><span class="slot-date">${formattedDate}</span></li>`;
-                                                }
+    // Adjust current date to align with Sunday
+    let daysUntilSunday = (7 - currentDate.getDay()) % 7;
+    currentDate.setDate(currentDate.getDate() + daysUntilSunday);
 
-                                                // Add right arrow
-                                                calendarElement.innerHTML += `<li class="right-arrow"><a href="#" onclick="nextWeek()"><i class="fa fa-chevron-right"></i></a></li>`;
-                                            }
+    // Add left arrow
+    calendarElement.innerHTML += `<li class="left-arrow"><a href="#" onclick="prevWeek()"><i class="fa fa-chevron-left"></i></a></li>`;
 
-                                            // Function to navigate to the previous week
-                                            function prevWeek() {
-                                                currentDate.setDate(currentDate.getDate() - 7);
-                                                renderCalendar(currentDate);
-                                            }
+    // Add dates for the next 7 days
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
+        const dayOfWeek = daysOfWeek[day.getDay()];
+        const formattedDate = `${day.getDate()} ${day.toLocaleString('default', { month: 'short' })} <small class="slot-year">${day.getFullYear()}</small>`;
+        calendarElement.innerHTML += `<li><span>${dayOfWeek}</span><span class="slot-date">${formattedDate}</span></li>`;
+    }
 
-                                            // Function to navigate to the next week
-                                            function nextWeek() {
-                                                currentDate.setDate(currentDate.getDate() + 7);
-                                                renderCalendar(currentDate);
-                                            }
+    // Add right arrow
+    calendarElement.innerHTML += `<li class="right-arrow"><a href="#" onclick="nextWeek()"><i class="fa fa-chevron-right"></i></a></li>`;
+}
 
-                                            // Initial rendering
-                                            renderCalendar(currentDate);
-                                        </script>
-											
-										</div>
-									</div>
-								</div>
-								<!-- /Schedule Header -->
-								
-								<!-- Schedule Content -->
-<div class="schedule-cont">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Time Slot -->
-            <div class="time-slot">
-                <ul class="clearfix">
-                    <?php
-                    $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                    foreach ($daysOfWeek as $day) :
-                        ?>
-                        <li>
-                            <?php foreach ($scheduleTimings as $timing) : ?>
-                                <?php if ($timing['day'] == $day) : ?>
-                                    <?php // Merge the start time and end time ?>
-                                    <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
-                                    <a class="timing" href="#">
-                                        <span><?= $mergedTime ?></span>
-                                    </a>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+// Function to navigate to the previous week
+function prevWeek() {
+    currentDate.setDate(currentDate.getDate() - 7);
+    renderCalendar();
+}
+
+// Function to navigate to the next week
+function nextWeek() {
+    currentDate.setDate(currentDate.getDate() + 7);
+    renderCalendar();
+}
+
+// Initial rendering
+renderCalendar();
+
+                </script>
+
             </div>
-            <!-- /Time Slot -->
         </div>
     </div>
-</div>
-<!-- /Schedule Content -->
+    <!-- /Schedule Header -->
 
-								
-							</div>
-							<!-- /Schedule Widget -->
-							
-							<!-- Submit Section -->
-							<div class="submit-section proceed-btn text-right">
-								<a href="checkout.html" class="btn btn-primary submit-btn">Proceed to Pay</a>
-							</div>
-							<!-- /Submit Section -->
+    <!-- Schedule Content -->
+    <div class="schedule-cont">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Time Slot -->
+                <div class="time-slot">
+                    <ul class="clearfix">
+                        <?php
+                        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                        foreach ($daysOfWeek as $day) :
+                            ?>
+                            <li>
+                                <?php foreach ($scheduleTimings as $timing) : ?>
+                                    <?php if ($timing['day'] == $day) : ?>
+                                        <?php // Merge the start time and end time ?>
+                                        <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
+                                        <a class="timing" href="#">
+                                            <span><?= $mergedTime ?></span>
+                                        </a>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <!-- /Time Slot -->
+            </div>
+        </div>
+    </div>
+    <!-- /Schedule Content -->
+</div>
+<!-- /Schedule Widget -->
+
+<!-- Submit Section -->
+<div class="submit-section proceed-btn text-right">
+    <a href="checkout.html" class="btn btn-primary submit-btn">Proceed to Pay</a>
+</div>
+<!-- /Submit Section -->
+
 							
 						</div>
 					</div>
