@@ -12,6 +12,7 @@ $routes->get('/login', 'Usercontroller::login');
 $routes->get('/', 'Usercontroller::index');
 $routes->get('/booking', 'Usercontroller::booking');
 $routes->get('/doctor/getDoctorDetails/(:num)', 'UserController::getDoctorDetails/$1');
+$routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');
 ///
 $routes->match(['post','get'],'/register', 'UserController::register');
 $routes->match(['post','get'],'/verify-code/(:num)', 'UserController::verifyCode/$1');
@@ -28,6 +29,7 @@ $routes->match(['post','get'],'available-time-slots', 'PatientController::getAva
 $routes->get('/Doctor/Dashboard', 'Usercontroller::db_doctor');
 $routes->get('/Doctor/Dashboard/Schedule', 'Doctorcontroller::schedule_timings');
 $routes->get('/session', 'Usercontroller::checkSessionData');
+$routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');
 //
 $routes->match(['post','get'],'/getDoctorsData', 'DoctorController::getDoctorsData');
 $routes->match(['post','get'],'getPatients', 'DoctorController::getPatients');

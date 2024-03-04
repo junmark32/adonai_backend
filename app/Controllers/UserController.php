@@ -32,6 +32,19 @@ class UserController extends ResourceController
       return view('login');
     }
 
+    public function checkout()
+    {
+        // Get the doctor ID from the URL parameter
+        $doctorID = $this->request->getGet('doctor_id');
+    
+        // Fetch the doctor's data based on the doctor ID
+        $doctorModel = new DoctorModel();
+        $doctor = $doctorModel->find($doctorID);
+
+        return view('user/checkout', ['doctor'=>$doctor]);
+
+    }
+
     public function booking()
     {
         // Get the doctor ID from the URL parameter

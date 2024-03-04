@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <html lang="en">
 	
-<!-- doccure/booking.html  30 Nov 2019 04:12:16 GMT -->
+<!-- doccure/checkout.html  30 Nov 2019 04:12:16 GMT -->
 <head>
 		<meta charset="utf-8">
 		<title>Doccure</title>
@@ -11,14 +11,14 @@
 		<link href="assets/img/favicon.png" rel="icon">
 		
 		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css')?>">
 		
 		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-		<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/fontawesome.min.css')?>">
+		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/all.min.css')?>">
 		
 		<!-- Main CSS -->
-		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css')?>">
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -80,8 +80,8 @@
 								<ul class="submenu">
 									<li><a href="search.html">Search Doctor</a></li>
 									<li><a href="doctor-profile.html">Doctor Profile</a></li>
-									<li class="active"><a href="booking.html">Booking</a></li>
-									<li><a href="checkout.html">Checkout</a></li>
+									<li><a href="booking.html">Booking</a></li>
+									<li class="active"><a href="checkout.html">Checkout</a></li>
 									<li><a href="booking-success.html">Booking Success</a></li>
 									<li><a href="patient-dashboard.html">Patient Dashboard</a></li>
 									<li><a href="favourites.html">Favourites</a></li>
@@ -117,7 +117,7 @@
 							<li class="login-link">
 								<a href="login.html">Login / Signup</a>
 							</li>
-						</ul>	 
+						</ul>		 
 					</div>		 
 					<ul class="nav header-navbar-rht">
 						<li class="nav-item contact-item">
@@ -145,10 +145,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Booking</li>
+									<li class="breadcrumb-item active" aria-current="page">Checkout</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Booking</h2>
+							<h2 class="breadcrumb-title">Checkout</h2>
 						</div>
 					</div>
 				</div>
@@ -158,167 +158,186 @@
 			<!-- Page Content -->
 			<div class="content">
 				<div class="container">
-				
+
 					<div class="row">
-						<div class="col-12">
-						
-                        <div class="card">
-                        <div class="card-body">
-                            <div class="booking-doc-info">
-                                <a href="doctor-profile.html" class="booking-doc-img">
-                                    <img src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
-                                </a>
-                                <div class="booking-info">
-                                    <h4><a href="doctor-profile.html">Dr. <?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></a></h4>
-                                    <div class="rating">
-                                        <!-- Display the doctor's rating -->
-                                        <?php for ($i = 0; $i < $doctor['Rating']; $i++): ?>
-                                            <i class="fas fa-star filled"></i>
-                                        <?php endfor; ?>
-                                        <span class="d-inline-block average-rating"><?= $doctor['Rating_count'] ?></span>
-                                    </div>
-                                    <p class="text-muted mb-0"><i class="fas fa-map-marker-alt"></i> <?= $doctor['Location'] ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+						<div class="col-md-7 col-lg-8">
+							<div class="card">
+								<div class="card-body">
+								
+									<!-- Checkout Form -->
+									<form action="https://dreamguys.co.in/demo/doccure/booking-success.html">
+									
+										<!-- Personal Information -->
+										<div class="info-widget">
+											<h4 class="card-title">Personal Information</h4>
+											<div class="row">
+												<div class="col-md-6 col-sm-12">
+													<div class="form-group card-label">
+														<label>First Name</label>
+														<input class="form-control" type="text">
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="form-group card-label">
+														<label>Last Name</label>
+														<input class="form-control" type="text">
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="form-group card-label">
+														<label>Email</label>
+														<input class="form-control" type="email">
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="form-group card-label">
+														<label>Phone</label>
+														<input class="form-control" type="text">
+													</div>
+												</div>
+											</div>
+											<div class="exist-customer">Existing Customer? <a href="#">Click here to login</a></div>
+										</div>
+										<!-- /Personal Information -->
+										
+										<div class="payment-widget">
+											<h4 class="card-title">Payment Method</h4>
+											
+											<!-- Credit Card Payment -->
+											<div class="payment-list">
+												<label class="payment-radio credit-card-option">
+													<input type="radio" name="radio" checked>
+													<span class="checkmark"></span>
+													Credit card
+												</label>
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group card-label">
+															<label for="card_name">Name on Card</label>
+															<input class="form-control" id="card_name" type="text">
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group card-label">
+															<label for="card_number">Card Number</label>
+															<input class="form-control" id="card_number" placeholder="1234  5678  9876  5432" type="text">
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group card-label">
+															<label for="expiry_month">Expiry Month</label>
+															<input class="form-control" id="expiry_month" placeholder="MM" type="text">
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group card-label">
+															<label for="expiry_year">Expiry Year</label>
+															<input class="form-control" id="expiry_year" placeholder="YY" type="text">
+														</div>
+													</div>
+													<div class="col-md-4">
+														<div class="form-group card-label">
+															<label for="cvv">CVV</label>
+															<input class="form-control" id="cvv" type="text">
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- /Credit Card Payment -->
+											
+											<!-- Paypal Payment -->
+											<div class="payment-list">
+												<label class="payment-radio paypal-option">
+													<input type="radio" name="radio">
+													<span class="checkmark"></span>
+													Paypal
+												</label>
+											</div>
+											<!-- /Paypal Payment -->
+											
+											<!-- Terms Accept -->
+											<div class="terms-accept">
+												<div class="custom-checkbox">
+												   <input type="checkbox" id="terms_accept">
+												   <label for="terms_accept">I have read and accept <a href="#">Terms &amp; Conditions</a></label>
+												</div>
+											</div>
+											<!-- /Terms Accept -->
+											
+											<!-- Submit Section -->
+											<div class="submit-section mt-4">
+												<button type="submit" class="btn btn-primary submit-btn">Confirm and Pay</button>
+											</div>
+											<!-- /Submit Section -->
+											
+										</div>
+									</form>
+									<!-- /Checkout Form -->
+									
+								</div>
+							</div>
 							
-<!-- Schedule Widget -->
-<div class="card booking-schedule schedule-widget">
-    <!-- Schedule Header -->
-    <div class="schedule-header">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Day Slot -->
-                <div class="day-slot">
-                    <ul id="calendar">
-                    </ul>
-                </div>
-                <!-- /Day Slot -->
-
-                <script>
-                    // Define currentDate outside the functions to make it accessible across functions
-                    let currentDate = new Date();
-
-                   // Function to render the calendar
-                    function renderCalendar() {
-                        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        const calendarElement = document.getElementById('calendar');
-                        calendarElement.innerHTML = '';
-
-                        // Add left arrow
-                        calendarElement.innerHTML += `<li class="left-arrow"><a href="#" onclick="prevWeek()"><i class="fa fa-chevron-left"></i></a></li>`;
-
-                        // Start the calendar from Sunday
-                        let startingDayIndex = currentDate.getDay(); // Get the index of the current day
-                        if (startingDayIndex !== 0) {
-                            currentDate.setDate(currentDate.getDate() - startingDayIndex); // Set the date to the previous Sunday
-                        }
-
-                        // Add dates for the next 7 days
-                        for (let i = 0; i < 7; i++) {
-                            const day = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
-                            const dayOfWeek = daysOfWeek[day.getDay()];
-                            const formattedDate = `${day.getDate()} ${day.toLocaleString('default', { month: 'short' })} <small class="slot-year">${day.getFullYear()}</small>`;
-                            calendarElement.innerHTML += `<li><span>${dayOfWeek}</span><span class="slot-date">${formattedDate}</span></li>`;
-                        }
-
-                        // Add right arrow
-                        calendarElement.innerHTML += `<li class="right-arrow"><a href="#" onclick="nextWeek()"><i class="fa fa-chevron-right"></i></a></li>`;
-                    }
-
-
-                    // Function to navigate to the previous week
-                    function prevWeek() {
-                        currentDate.setDate(currentDate.getDate() - 7);
-                        renderCalendar();
-                    }
-
-                    // Function to navigate to the next week
-                    function nextWeek() {
-                        currentDate.setDate(currentDate.getDate() + 7);
-                        renderCalendar();
-                    }
-
-                    function selectTimeSlot(day, date, timeSlot) {
-                        // Calculate the selected date based on the current week's starting date (currentDate)
-                        const selectedDate = new Date(currentDate);
-                        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        const dayIndex = daysOfWeek.indexOf(day);
-                        selectedDate.setDate(currentDate.getDate() + dayIndex); // Add the day index to get the selected date
-
-                        // Format the selected date
-                        const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
-
-                        // Store selected values in local storage
-                        localStorage.setItem('selectedDay', day);
-                        localStorage.setItem('selectedDate', formattedDate);
-                        localStorage.setItem('selectedTime', timeSlot); // Store the selected timeslot
-
-                        // Redirect to the checkout page
-                        window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
-                    }
-
-
-
-
-                    // Initial rendering
-                    renderCalendar();
-                </script>
-
-            </div>
-        </div>
-    </div>
-    <!-- /Schedule Header -->
-
-    <!-- Schedule Content -->
-    <div class="schedule-cont">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Time Slot -->
-                <div class="time-slot">
-                    <ul class="clearfix">
-                        <?php
-                        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        foreach ($daysOfWeek as $day) :
-                            ?>
-                            <li>
-                                <?php foreach ($scheduleTimings as $timing) : ?>
-                                    <?php if ($timing['day'] == $day) : ?>
-                                        <?php // Merge the start time and end time ?>
-                                        <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
-                                        <?php $formattedDate = date('F j, Y', strtotime("next $day", strtotime("next Sunday", strtotime("now")))); ?>
-                                        <a class="timing" href="#" onclick="selectTimeSlot('<?= $day ?>', '<?= $formattedDate ?>', '<?= $mergedTime ?>')">
-                                            <span><?= $mergedTime ?></span>
-                                        </a>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <!-- /Time Slot -->
-            </div>
-        </div>
-    </div>
-    <!-- /Schedule Content -->
-
-</div>
-<!-- /Schedule Widget -->
-
-
-
-
-<!-- Submit Section -->
-<div class="submit-section proceed-btn text-right">
-    <a href="checkout.html" class="btn btn-primary submit-btn">Proceed to Pay</a>
-</div>
-<!-- /Submit Section -->
-
+						</div>
+						
+						<div class="col-md-5 col-lg-4 theiaStickySidebar">
+						
+							<!-- Booking Summary -->
+							<div class="card booking-card">
+								<div class="card-header">
+									<h4 class="card-title">Booking Summary</h4>
+								</div>
+								<div class="card-body">
+								
+									<!-- Booking Doctor Info -->
+									<div class="booking-doc-info">
+										<a href="doctor-profile.html" class="booking-doc-img">
+											<img src="<?= site_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
+										</a>
+										<div class="booking-info">
+											<h4><a href="doctor-profile.html">Dr. <?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></a></h4>
+											<div class="rating">
+                                                <!-- Display the doctor's rating -->
+                                                <?php for ($i = 0; $i < $doctor['Rating']; $i++): ?>
+                                                    <i class="fas fa-star filled"></i>
+                                                <?php endfor; ?>
+                                                <span class="d-inline-block average-rating"><?= $doctor['Rating_count'] ?></span>
+                                            </div>
+											<div class="clinic-details">
+												<p class="doc-location"><i class="fas fa-map-marker-alt"></i> <?= $doctor['Location'] ?></p>
+											</div>
+										</div>
+									</div>
+									<!-- Booking Doctor Info -->
+									
+									<div class="booking-summary">
+										<div class="booking-item-wrap">
+											<ul class="booking-date">
+                                                <li>Date <span id="selectedDate"></span></li>
+                                                <li>Time <span id="selectedTime"></span></li>
+											</ul>
+											<ul class="booking-fee">
+												<li>Consulting Fee <span>₱100</span></li>
+												<li>Booking Fee <span>₱10</span></li>
+												<!-- <li>Video Call <span>$50</span></li> -->
+											</ul>
+											<div class="booking-total">
+												<ul class="booking-total-list">
+													<li>
+														<span>Total</span>
+														<span class="total-cost">₱110</span>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /Booking Summary -->
+                            
 							
 						</div>
 					</div>
+
 				</div>
 
 			</div>		
@@ -465,6 +484,19 @@
 		   
 		</div>
 		<!-- /Main Wrapper -->
+
+        <script>
+        // Retrieve selected values from local storage
+        const selectedDay = localStorage.getItem('selectedDay');
+        const selectedDate = localStorage.getItem('selectedDate');
+        const selectedTime = localStorage.getItem('selectedTime');
+
+        // Display selected values in the booking summary
+        document.getElementById('selectedDate').textContent = selectedDate;
+        document.getElementById('selectedTime').textContent = selectedTime;
+    </script>
+        
+		<!-- jQuery & Bootstrap JS
 	  
 		<!-- jQuery -->
 		<script src="assets/js/jquery.min.js"></script>
@@ -473,10 +505,14 @@
 		<script src="assets/js/popper.min.js"></script>
 		<script src="assets/js/bootstrap.min.js"></script>
 		
+		<!-- Sticky Sidebar JS -->
+        <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
+        <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
+		
 		<!-- Custom JS -->
 		<script src="assets/js/script.js"></script>
 		
 	</body>
 
-<!-- doccure/booking.html  30 Nov 2019 04:12:16 GMT -->
+<!-- doccure/checkout.html  30 Nov 2019 04:12:16 GMT -->
 </html>

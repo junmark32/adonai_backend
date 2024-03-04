@@ -489,3 +489,10 @@ in APPPATH\Views\user\booking.php on line 268.
  8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
 10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-02-29 15:34:57 --> Call to undefined method CodeIgniter\Session\Session::isStarted()
+in APPPATH\Controllers\DoctorController.php on line 31.
+ 1 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\DoctorController->insertSchedule()
+ 2 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DoctorController))
+ 3 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')

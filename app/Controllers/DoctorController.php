@@ -24,6 +24,46 @@ class DoctorController extends ResourceController
         //
     }
 
+    //
+    public function insertSchedule()
+    {
+        $session = session();
+        
+        if ($session->has('user_data')) {
+            $userData = $session->get('user_data');
+    
+            if (isset($userData['DoctorID'])) {
+                $doctorId = $userData['DoctorID'];
+    
+                // Get doctor_id from session storage
+                $model = new ScheduleModel();
+    
+                $data = [
+                    'doctor_id' => $doctorId,
+                    'day' => $this->request->getVar('day'),
+                    // 'slot_duration' => $this->request->getVar('slot_duration'),
+                    'start_time' => $this->request->getVar('start_time'),
+                    'end_time' => $this->request->getVar('end_time')
+                ];
+    
+                $model->insert($data);
+    
+                return redirect()->to('/Doctor/Dashboard/Schedule'); // Redirect to a success page after insertion.
+            } else {
+                // Handle case where DoctorID is not set
+                // You might want to log an error or redirect to an error page
+                return redirect()->to('error_page');
+            }
+        } else {
+            // Handle case where session data is not set
+            // You might want to log an error or redirect to an error page
+            return redirect()->to('error_page');
+        }
+    }
+    
+
+    //
+
     public function schedule_timings()
 {
     // Load necessary models and libraries
