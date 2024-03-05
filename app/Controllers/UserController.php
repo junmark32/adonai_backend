@@ -284,11 +284,14 @@ class UserController extends ResourceController
 
                 switch ($role) {
                     case 'user':
+                        $patientModel = new PatientModel();
+                        $patientData = $patientModel->where('UserID', $userData['UserID'])->first();
                         $response = [
                             'msg' => 'okay',
                             'token' => $userData['token'],
                             'UserID' => $userData['UserID'],
                             'Username' => $userData['Username'],
+                            'PatientID' =>  $patientData['PatientID'],
                             'Role' => $role,
                         ];
                         $redirectURL = '/';
@@ -359,7 +362,8 @@ public function checkSessionData()
             echo "User ID: " . $userData['UserID'] . "<br>";
             echo "Username: " . $userData['Username'] . "<br>";
             echo "Role: " . $userData['Role'] . "<br>";
-            echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
+            echo "Patient ID: " . $userData['PatientID'] . "<br>";
+            // echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
 
             // You can add more data if needed
         } else {

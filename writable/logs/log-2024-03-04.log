@@ -43,3 +43,23 @@ in APPPATH\Views\user\booking.php on line 264.
  8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
 10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-04 17:12:32 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\DoctorController.php(113): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\DoctorController->schedule_timings()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\DoctorController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-04 17:12:35 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(110): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_doctor()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')

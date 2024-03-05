@@ -15,32 +15,86 @@ class PatientController extends ResourceController
         //
     }
 
-    public function insertBooking($PatientID)
+    // public function insertBooking($PatientID)
+    // {
+        
+    //     $appointmentModel = new AppointmentModel(); // Assuming you have a model named AppointmentModel
+
+    //     $data = [
+    //         'PatientID' => $PatientID,
+    //         'Firstname' => $this->request->getVar('firstname'),
+    //         'Lastname' => $this->request->getVar('lastname'),
+    //         'Email' => $this->request->getVar('email'),
+    //         'Phone' => $this->request->getVar('phone'),
+    //         'Pref_Date' => $this->request->getVar('pref_date'),
+    //         'Pref_Time_Start' => $this->request->getVar('pref_time_start'),
+    //         'Pref_Time_End' => $this->request->getVar('pref_time_end'),
+    //         'Pref_Doctor' => 'Dra. Ashley Cabudsan',
+    //         'Purpose' => $this->request->getVar('purpose'),
+    //         'Pref_Location' => $this->request->getVar('pref_location'),
+    //         'Add_message' => $this->request->getVar('add_message'),
+    //         'Status' => 'Pending', // Set the initial status as 'Pending' or adjust as needed
+    //     ];
+
+    //     $appointment = $appointmentModel->insert($data);
+
+    //     if ($appointment) {
+    //         return $this->respond(['msg' => 'Appointment added successfully']);
+    //     } else {
+    //         return $this->respond(['msg' => 'Failed to add appointment']);
+    //     }
+    // }
+
+    public function insertBooking()
     {
-        $appointmentModel = new AppointmentModel(); // Assuming you have a model named AppointmentModel
-
-        $data = [
-            'PatientID' => $PatientID,
-            'Firstname' => $this->request->getVar('firstname'),
-            'Lastname' => $this->request->getVar('lastname'),
-            'Email' => $this->request->getVar('email'),
-            'Phone' => $this->request->getVar('phone'),
-            'Pref_Date' => $this->request->getVar('pref_date'),
-            'Pref_Doctor' => $this->request->getVar('pref_doctor'),
-            'Purpose' => $this->request->getVar('purpose'),
-            'Pref_Location' => $this->request->getVar('pref_location'),
-            'Add_message' => $this->request->getVar('add_message'),
-            'Status' => 'Pending', // Set the initial status as 'Pending' or adjust as needed
-        ];
-
-        $appointment = $appointmentModel->insert($data);
-
-        if ($appointment) {
-            return $this->respond(['msg' => 'Appointment added successfully']);
+        // Load necessary models and libraries
+        $session = session();
+        $appointmentModel = new AppointmentModel();
+    
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+    
+            // Check if the user has a 'PatientID' key
+            if (isset($userData['PatientID'])) {
+                // Retrieve the PatientID
+                $patientID = $userData['PatientID'];
+    
+                // Prepare data to insert into the database
+                $data = [
+                    'PatientID' => $patientID,
+                    'Firstname' => $this->request->getVar('firstname'),
+                    'Lastname' => $this->request->getVar('lastname'),
+                    'Email' => $this->request->getVar('email'),
+                    'Phone' => $this->request->getVar('phone'),
+                    'Pref_Date' => $this->request->getVar('pref_date'),
+                    'Pref_Time_Start' => $this->request->getVar('pref_time_start'),
+                    'Pref_Time_End' => $this->request->getVar('pref_time_end'),
+                    'Pref_Doctor' => 'Dra. Ashley Cabudsan',
+                    'Purpose' => $this->request->getVar('purpose'),
+                    'Pref_Location' => $this->request->getVar('pref_location'),
+                    'Add_message' => $this->request->getVar('add_message'),
+                    'Status' => 'Pending', // Set the initial status as 'Pending' or adjust as needed
+                ];
+    
+                // Insert the appointment data into the database
+                $appointment = $appointmentModel->insert($data);
+    
+                // Check if insertion was successful
+                if ($appointment) {
+                    return $this->respond(['msg' => 'Appointment added successfully']);
+                } else {
+                    return $this->respond(['msg' => 'Failed to add appointment']);
+                }
+            } else {
+                return view('error', ['error' => 'PatientID not found']);
+            }
         } else {
-            return $this->respond(['msg' => 'Failed to add appointment']);
+            return view('error', ['error' => 'User data not found in session']);
         }
     }
+    
 
     //
 

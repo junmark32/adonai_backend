@@ -165,7 +165,7 @@
 								<div class="card-body">
 								
 									<!-- Checkout Form -->
-									<form action="https://dreamguys.co.in/demo/doccure/booking-success.html">
+									<form action="<?= base_url('patient/insertBooking') ?>">
 									
 										<!-- Personal Information -->
 										<div class="info-widget">
@@ -174,87 +174,63 @@
 												<div class="col-md-6 col-sm-12">
 													<div class="form-group card-label">
 														<label>First Name</label>
-														<input class="form-control" type="text">
+														<input class="form-control" type="text" name="firstname">
 													</div>
 												</div>
 												<div class="col-md-6 col-sm-12">
 													<div class="form-group card-label">
 														<label>Last Name</label>
-														<input class="form-control" type="text">
+														<input class="form-control" type="text" name="lastname">
 													</div>
 												</div>
 												<div class="col-md-6 col-sm-12">
 													<div class="form-group card-label">
 														<label>Email</label>
-														<input class="form-control" type="email">
+														<input class="form-control" type="email" name="email">
 													</div>
 												</div>
 												<div class="col-md-6 col-sm-12">
 													<div class="form-group card-label">
 														<label>Phone</label>
-														<input class="form-control" type="text">
+														<input class="form-control" type="text" name="phone">
 													</div>
 												</div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group card-label">
+                                                        <label>Purpose</label>
+                                                        <select class="form-control" name="purpose">
+                                                            <option value="Check-Up">Check-Up</option>
+                                                            <option value="Cataract">Cataract</option>
+                                                            <option value="Eyecare">Eyecare</option>
+                                                            <option value="Followed_Checkup">Followed_Checkup</option>
+                                                            <!-- Add more options as needed -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group card-label">
+                                                        <label>Location</label>
+                                                        <select class="form-control" name="pref_location">
+                                                            <option value="Adonai-1 Xentro Mall, Calapan">Adonai-1 Xentro Mall, Calapan</option>
+                                                            <option value="Adonai-2">Adonai-2</option>
+                                                            <option value="Adonai-3">Adonai-3</option>
+                                                            <option value="Adonai-4">Adonai-4</option>
+                                                            <!-- Add more options as needed -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group card-label">
+                                                        <label>Addtional Message</label>
+                                                        <input class="form-control" type="text" name="add_message">
+                                                    </div>
+                                                </div>
+
 											</div>
-											<div class="exist-customer">Existing Customer? <a href="#">Click here to login</a></div>
 										</div>
 										<!-- /Personal Information -->
 										
 										<div class="payment-widget">
-											<h4 class="card-title">Payment Method</h4>
-											
-											<!-- Credit Card Payment -->
-											<div class="payment-list">
-												<label class="payment-radio credit-card-option">
-													<input type="radio" name="radio" checked>
-													<span class="checkmark"></span>
-													Credit card
-												</label>
-												<div class="row">
-													<div class="col-md-6">
-														<div class="form-group card-label">
-															<label for="card_name">Name on Card</label>
-															<input class="form-control" id="card_name" type="text">
-														</div>
-													</div>
-													<div class="col-md-6">
-														<div class="form-group card-label">
-															<label for="card_number">Card Number</label>
-															<input class="form-control" id="card_number" placeholder="1234  5678  9876  5432" type="text">
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="form-group card-label">
-															<label for="expiry_month">Expiry Month</label>
-															<input class="form-control" id="expiry_month" placeholder="MM" type="text">
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="form-group card-label">
-															<label for="expiry_year">Expiry Year</label>
-															<input class="form-control" id="expiry_year" placeholder="YY" type="text">
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="form-group card-label">
-															<label for="cvv">CVV</label>
-															<input class="form-control" id="cvv" type="text">
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- /Credit Card Payment -->
-											
-											<!-- Paypal Payment -->
-											<div class="payment-list">
-												<label class="payment-radio paypal-option">
-													<input type="radio" name="radio">
-													<span class="checkmark"></span>
-													Paypal
-												</label>
-											</div>
-											<!-- /Paypal Payment -->
-											
 											<!-- Terms Accept -->
 											<div class="terms-accept">
 												<div class="custom-checkbox">
@@ -312,8 +288,10 @@
 									<div class="booking-summary">
 										<div class="booking-item-wrap">
 											<ul class="booking-date">
-                                                <li>Date <span id="selectedDate"></span></li>
+                                                <li>Date <span id="selectedDate" name="pref_date"></span></li>
                                                 <li>Time <span id="selectedTime"></span></li>
+                                                    <input type="hidden" name="pref_time_start" id="pref_time_start_input">
+                                                    <input type="hidden" name="pref_time_end" id="pref_time_end_input">
 											</ul>
 											<ul class="booking-fee">
 												<li>Consulting Fee <span>₱100</span></li>
@@ -491,9 +469,16 @@
         const selectedDate = localStorage.getItem('selectedDate');
         const selectedTime = localStorage.getItem('selectedTime');
 
+        // Trim the selectedTime
+const trimmedSelectedTime = selectedTime.trim();
+
         // Display selected values in the booking summary
         document.getElementById('selectedDate').textContent = selectedDate;
-        document.getElementById('selectedTime').textContent = selectedTime;
+        document.getElementById('selectedTime').textContent = trimmedSelectedTime;
+
+        // Set the value of hidden input fields for Pref_Time_Start and Pref_Time_End
+document.getElementById('pref_time_start_input').value = trimmedSelectedTime;
+document.getElementById('pref_time_end_input').value = trimmedSelectedTime;
     </script>
         
 		<!-- jQuery & Bootstrap JS

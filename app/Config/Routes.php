@@ -20,7 +20,7 @@ $routes->match(['post','get'],'/fn_login', 'UserController::fn_login');
 
 
 //patient
-$routes->match(['post','get'],'patient/insertBooking/(:num)', 'PatientController::insertBooking/$1');
+$routes->match(['post','get'],'patient/insertBooking', 'PatientController::insertBooking');
 //appointmet
 $routes->match(['post','get'],'booking/booked-dates', 'PatientController::getBookedDates');
 $routes->match(['post','get'],'available-time-slots', 'PatientController::getAvailableTimeSlots');
