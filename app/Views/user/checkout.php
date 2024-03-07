@@ -239,6 +239,9 @@
 												</div>
 											</div>
 											<!-- /Terms Accept -->
+                                            <input type="hidden" name="pref_date" id="pref_date_input">
+                                            <input type="hidden" name="pref_time_start" id="pref_time_start_input">
+                                            <input type="hidden" name="pref_time_end" id="pref_time_end_input">
 											
 											<!-- Submit Section -->
 											<div class="submit-section mt-4">
@@ -287,12 +290,11 @@
 									
 									<div class="booking-summary">
 										<div class="booking-item-wrap">
-											<ul class="booking-date">
-                                                <li>Date <span id="selectedDate" name="pref_date"></span></li>
-                                                <li>Time <span id="selectedTime"></span></li>
-                                                    <input type="hidden" name="pref_time_start" id="pref_time_start_input">
-                                                    <input type="hidden" name="pref_time_end" id="pref_time_end_input">
-											</ul>
+                                        <ul class="booking-date">
+                                            <li>Date <span id="selectedDate"></span></li>
+                                            <li>Time <span id="selectedTime"></span></li>
+                                            
+                                        </ul>
 											<ul class="booking-fee">
 												<li>Consulting Fee <span>₱100</span></li>
 												<li>Booking Fee <span>₱10</span></li>
@@ -470,16 +472,23 @@
         const selectedTime = localStorage.getItem('selectedTime');
 
         // Trim the selectedTime
-const trimmedSelectedTime = selectedTime.trim();
+        const trimmedSelectedTime = selectedTime.trim();
 
         // Display selected values in the booking summary
         document.getElementById('selectedDate').textContent = selectedDate;
         document.getElementById('selectedTime').textContent = trimmedSelectedTime;
 
+        // Set the value of the hidden input field for pref_date
+        document.getElementById('pref_date_input').value = selectedDate;
+
+        // Extract start and end times
+        const [prefTimeStart, prefTimeEnd] = trimmedSelectedTime.split(' - ');
+
         // Set the value of hidden input fields for Pref_Time_Start and Pref_Time_End
-document.getElementById('pref_time_start_input').value = trimmedSelectedTime;
-document.getElementById('pref_time_end_input').value = trimmedSelectedTime;
-    </script>
+        document.getElementById('pref_time_start_input').value = prefTimeStart;
+        document.getElementById('pref_time_end_input').value = prefTimeEnd;
+
+        </script>
         
 		<!-- jQuery & Bootstrap JS
 	  

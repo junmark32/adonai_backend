@@ -61,8 +61,8 @@ class PatientController extends ResourceController
                 // Retrieve the PatientID
                 $patientID = $userData['PatientID'];
     
-                // Prepare data to insert into the database
-                $data = [
+                // Retrieve data from the request
+                $requestData = [
                     'PatientID' => $patientID,
                     'Firstname' => $this->request->getVar('firstname'),
                     'Lastname' => $this->request->getVar('lastname'),
@@ -78,20 +78,24 @@ class PatientController extends ResourceController
                     'Status' => 'Pending', // Set the initial status as 'Pending' or adjust as needed
                 ];
     
-                // Insert the appointment data into the database
-                $appointment = $appointmentModel->insert($data);
+                // Insert appointment data
+                $appointment = $appointmentModel->insert($requestData);
     
-                // Check if insertion was successful
+                // Check if the appointment was successfully inserted
                 if ($appointment) {
-                    return $this->respond(['msg' => 'Appointment added successfully']);
+                    // Redirect to a success view
+                    return redirect()->to('/');
                 } else {
-                    return $this->respond(['msg' => 'Failed to add appointment']);
+                    // Handle insertion failure
+                    return $this->respond(['error' => 'Failed to add appointment']);
                 }
             } else {
-                return view('error', ['error' => 'PatientID not found']);
+                // Handle missing PatientID
+                return $this->respond(['error' => 'PatientID not found']);
             }
         } else {
-            return view('error', ['error' => 'User data not found in session']);
+            // Handle missing user data in session
+            return $this->respond(['error' => 'User data not found in session']);
         }
     }
     
