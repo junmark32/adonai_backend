@@ -32,6 +32,14 @@ class UserController extends ResourceController
       return view('login');
     }
 
+    public function store()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      return view('user/store');
+    }
+
     public function checkout()
     {
         // Get the doctor ID from the URL parameter

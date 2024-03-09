@@ -10,6 +10,7 @@ use CodeIgniter\Router\RouteCollection;
 //user
 $routes->get('/login', 'Usercontroller::login');
 $routes->get('/', 'Usercontroller::index');
+$routes->match(['post','get'],'/store', 'UserController::store');
 $routes->get('/booking', 'Usercontroller::booking');
 $routes->get('/doctor/getDoctorDetails/(:num)', 'UserController::getDoctorDetails/$1');
 $routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');

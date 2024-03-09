@@ -1,15 +1,14 @@
 <!DOCTYPE html> 
 <html lang="en">
 	
-<!-- doccure/  30 Nov 2019 04:11:34 GMT -->
+<!-- doccure/blank-page.html  30 Nov 2019 04:12:20 GMT -->
 <head>
-
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+		<meta charset="utf-8">
 		<title>Doccure</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 		
 		<!-- Favicons -->
-		<link type="image/x-icon" href="assets/img/favicon.png" rel="icon">
+		<link href="assets/img/favicon.png" rel="icon">
 		
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -58,11 +57,11 @@
 							</a>
 						</div>
 						<ul class="main-nav">
-							<li class="active">
-								<a href="<?php echo site_url('/')?>">Home</a>
+							<li>
+								<a href="index-2.html">Home</a>
 							</li>
-                            <li >
-                                <a href="<?php echo site_url('/store')?>">Store</a>
+							<li class="active">
+								<a href="index-2.html">Store</a>
 							</li>
 							<li class="has-submenu">
 								<a href="#">Doctors <i class="fas fa-chevron-down"></i></a>
@@ -109,7 +108,7 @@
 											<li><a href="invoice-view.html">Invoice View</a></li>
 										</ul>
 									</li>
-									<li><a href="blank-page.html">Starter Page</a></li>
+									<li class="active"><a href="blank-page.html">Starter Page</a></li>
 									<li><a href="login.html">Login</a></li>
 									<li><a href="register.html">Register</a></li>
 									<li><a href="forgot-password.html">Forgot Password</a></li>
@@ -121,7 +120,7 @@
 							<li class="login-link">
 								<a href="login.html">Login / Signup</a>
 							</li>
-						</ul>		 
+						</ul>
 					</div>		 
 					<ul class="nav header-navbar-rht">
 						<li class="nav-item contact-item">
@@ -140,6 +139,24 @@
 				</nav>
 			</header>
 			<!-- /Header -->
+			
+			<!-- Breadcrumb -->
+			<div class="breadcrumb-bar">
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-md-12 col-12">
+							<nav aria-label="breadcrumb" class="page-breadcrumb">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Store</li>
+								</ol>
+							</nav>
+							<h2 class="breadcrumb-title">Eyewear</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /Breadcrumb -->
 			
 			<!-- Home Banner -->
 			<section class="section section-search">
@@ -160,212 +177,117 @@
 				</div>
 			</section>
 			<!-- /Home Banner -->
-			  
-			<!-- Clinic and Specialities -->
-			<section class="section section-specialities">
-				<div class="container-fluid">
-					<div class="section-header text-center">
-						<h2>Clinic and Specialities</h2>
-						<p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-md-9">
-							<!-- Slider -->
-							<div class="specialities-slider slider">
-							
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-01.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>
-									<p>Urology</p>
-								</div>	
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-02.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>
-									<p>Neurology</p>	
-								</div>							
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-03.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>	
-									<p>Orthopedic</p>	
-								</div>							
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-04.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>	
-									<p>Cardiologist</p>	
-								</div>							
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-05.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>	
-									<p>Dentist</p>
-								</div>							
-								<!-- /Slider Item -->
-								
-							</div>
-							<!-- /Slider -->
-							
-						</div>
-					</div>
-				</div>   
-			</section>	 
-			<!-- Clinic and Specialities -->
-		  
-			<!-- Popular Section -->
-            <section class="section section-doctor">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="section-header ">
-                                <h2>Book Our Doctors</h2>
-                                <p>Lorem Ipsum is simply dummy text </p>
-                            </div>
-                            <div class="about-content">
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.</p>
-                                <p>Web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes</p>
-                                <a href="javascript:;">Read More..</a>
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="doctor-slider slider">
-                                <?php foreach ($doctors as $doctor): ?>
-                                    <!-- Doctor Widget -->
-                                    <div class="profile-widget">
-                                        <div class="doc-img">
-                                            <a href="<?= site_url('doctor-profile/' . $doctor['DoctorID']) ?>">
-                                                <img class="img-fluid" alt="User Image" src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>">
-                                            </a>
-                                            <a href="javascript:void(0)" class="fav-btn">
-                                                <i class="far fa-bookmark"></i>
-                                            </a>
-                                        </div>
-                                        <div class="pro-content">
-                                            <h3 class="title">
-                                                <a href="<?= site_url('doctor-profile/' . $doctor['DoctorID']) ?>">Dra. <?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></a>
-                                                <?php if ($doctor['Verified']): ?>
-                                                    <i class="fas fa-check-circle verified"></i>
-                                                <?php endif; ?>
-                                            </h3>
-                                            <p class="speciality"><?= $doctor['Specialization'] ?></p>
-                                            <div class="rating">
-                                                <?php for ($i = 0; $i < $doctor['Rating']; $i++): ?>
-                                                    <i class="fas fa-star filled"></i>
-                                                <?php endfor; ?>
-                                                <span class="d-inline-block average-rating">(<?= $doctor['Rating_count'] ?>)</span>
-                                            </div>
-                                            <ul class="available-info">
-                                                <li>
-                                                    <i class="fas fa-map-marker-alt"></i> <?= $doctor['Location'] ?>
-                                                </li>
-                                                <!-- <li>
-                                                    <i class="far fa-clock"></i> 
-                                                </li> -->
-                                                <li>
-                                                    <i class="far fa-money-bill-alt"></i> <?= $doctor['Fees_range'] ?>
-                                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="<?= $doctor['Fees_info'] ?>"></i>
-                                                </li>
-                                            </ul>
-                                            <div class="row row-sm">
-                                                <div class="col-6">
-                                                    <a href="<?= site_url('doctor-profile/' . $doctor['DoctorID']) ?>" class="btn view-btn">View Profile</a>
-                                                </div>
-                                                <div class="col-6">
-                                                    <a href="<?= site_url('/booking?doctor_id=' . $doctor['DoctorID']) ?>" class="btn book-btn">Book Now</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Doctor Widget -->
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-		   
-		   <!-- Availabe Features -->
-		   <section class="section section-features">
+			<!-- Page Content -->
+			<div class="content">
 				<div class="container-fluid">
-				   <div class="row">
-						<div class="col-md-5 features-img">
-							<img src="assets/img/features/feature.png" class="img-fluid" alt="Feature">
+					<!-- <div class="row">
+						<div class="col-12">
+							<h5>Blank Page</h5>
 						</div>
-						<div class="col-md-7">
-							<div class="section-header">	
-								<h2 class="mt-2">Availabe Features in Our Clinic</h2>
-								<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </p>
-							</div>	
-							<div class="features-slider slider">
-								<!-- Slider Item -->
-								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-01.jpg" class="img-fluid" alt="Feature">
-									<p>Patient Ward</p>
+					</div> -->
+
+					<!-- Cards -->
+					<section class="comp-section comp-cards">
+
+						<div class="row">
+							<div class="col-12 col-md-6 col-lg-4 d-flex">
+								<div class="comp-header">
+									<h3 class="comp-title">Women</h3>
+									<div class="line"></div>
 								</div>
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-02.jpg" class="img-fluid" alt="Feature">
-									<p>Test Room</p>
+							</div>
+
+							<div class="col-12 col-md-6 col-lg-4 d-flex">
+								<div class="comp-header">
+									<h3 class="comp-title">Men</h3>
+									<div class="line"></div>
 								</div>
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-03.jpg" class="img-fluid" alt="Feature">
-									<p>ICU</p>
+							</div>
+
+							<div class="col-12 col-md-6 col-lg-4 d-flex">
+								<div class="comp-header">
+									<h3 class="comp-title">Accesories</h3>
+									<div class="line"></div>
 								</div>
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-04.jpg" class="img-fluid" alt="Feature">
-									<p>Laboratory</p>
-								</div>
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-05.jpg" class="img-fluid" alt="Feature">
-									<p>Operation</p>
-								</div>
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-06.jpg" class="img-fluid" alt="Feature">
-									<p>Medical</p>
-								</div>
-								<!-- /Slider Item -->
 							</div>
 						</div>
-				   </div>
+
+						<div class="row">
+							<div class="col-12 col-md-6 col-lg-4 d-flex">
+								<div class="card flex-fill">
+									<img alt="Card Image" src="uploads/women.jpg" class="card-img-top">
+									<!-- <div class="card-header">
+										<button type="button" class="btn btn-primary">Women</button>
+									</div> -->
+								</div>
+							</div>
+							
+
+							<div class="col-12 col-md-6 col-lg-4 d-flex">
+								<div class="card flex-fill">
+									<img alt="Card Image" src="uploads/men.jpg" class="card-img-top">
+									<!-- <div class="card-header">
+										<button type="button" class="btn btn-primary">Women</button>
+									</div> -->
+								</div>
+							</div>
+
+							<div class="col-12 col-md-6 col-lg-4 d-flex">
+								<div class="card flex-fill">
+									<img alt="Card Image" src="uploads/accesories.jpg" class="card-img-top">
+									<!-- <div class="card-header">
+										<button type="button" class="btn btn-primary">Women</button>
+									</div> -->
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<div class="row">
+						<div class="col-12">
+							<h1><strong>PRODUCT OVERVIEW</strong></h1>
+						</div>
+					</div>
+
+					<div class="row">
+								<div class="col-md-12">
+									<div class="card">
+										<div class="card-body">
+											<ul class="nav nav-tabs nav-tabs-bottom">
+												<li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
+												<li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-toggle="tab">Women</a></li>
+												<li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-toggle="tab">Men</a></li>
+												<li class="nav-item"><a class="nav-link" href="#bottom-tab4" data-toggle="tab">Accesories</a></li>
+											</ul>
+
+											<div class="tab-content">
+												<div class="tab-pane show active" id="bottom-tab1">
+													All Products
+												</div>
+												<div class="tab-pane" id="bottom-tab2">
+													Women
+												</div>
+												<div class="tab-pane" id="bottom-tab3">
+													Men
+												</div>
+												<div class="tab-pane" id="bottom-tab4">
+													Accesories
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+					</div>
+
+
+
+						
+						<!-- /Cards -->
 				</div>
-			</section>		
-			<!-- Availabe Features -->
-			
+			</div>		
+			<!-- /Page Content -->
+   
 			<!-- Footer -->
 			<footer class="footer">
 				
@@ -505,8 +427,8 @@
 			</footer>
 			<!-- /Footer -->
 		   
-	   </div>
-	   <!-- /Main Wrapper -->
+		</div>
+		<!-- /Main Wrapper -->
 	  
 		<!-- jQuery -->
 		<script src="assets/js/jquery.min.js"></script>
@@ -515,13 +437,10 @@
 		<script src="assets/js/popper.min.js"></script>
 		<script src="assets/js/bootstrap.min.js"></script>
 		
-		<!-- Slick JS -->
-		<script src="assets/js/slick.js"></script>
-		
 		<!-- Custom JS -->
 		<script src="assets/js/script.js"></script>
 		
 	</body>
 
-<!-- doccure/  30 Nov 2019 04:11:53 GMT -->
+<!-- doccure/blank-page.html  30 Nov 2019 04:12:20 GMT -->
 </html>
