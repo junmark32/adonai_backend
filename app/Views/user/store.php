@@ -251,34 +251,93 @@
 					</div>
 
 					<div class="row">
-								<div class="col-md-12">
-									<div class="card">
-										<div class="card-body">
-											<ul class="nav nav-tabs nav-tabs-bottom">
-												<li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
-												<li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-toggle="tab">Women</a></li>
-												<li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-toggle="tab">Men</a></li>
-												<li class="nav-item"><a class="nav-link" href="#bottom-tab4" data-toggle="tab">Accesories</a></li>
-											</ul>
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body">
+									<ul class="nav nav-tabs nav-tabs-bottom">
+										<li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
+										<li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-toggle="tab">Women</a></li>
+										<li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-toggle="tab">Men</a></li>
+										<li class="nav-item"><a class="nav-link" href="#bottom-tab4" data-toggle="tab">Accessories</a></li>
+									</ul>
 
-											<div class="tab-content">
-												<div class="tab-pane show active" id="bottom-tab1">
-													All Products
+									<div class="tab-content">
+										<div class="tab-pane show active" id="bottom-tab1">
+											<div class="row">
+												<!-- Product containers for All Products tab -->
+												<div class="col-md-3 mb-4">
+													<div class="card product-card">
+														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 1 Image">
+														<div class="card-body ">
+															<h5 class="card-title">Rounded Eyeglasses</h5>
+															<p class="card-text">₱ 100.00</p>
+															<hr>
+															<div class="d-flex justify-content-center"> <!-- Wrapping div for centering the button -->
+																<button type="button" class="btn btn-rounded btn-outline-primary" href="#quickViewButton" data-toggle="modal">Quick View</button>
+															</div>
+														</div>
+													</div>
 												</div>
-												<div class="tab-pane" id="bottom-tab2">
-													Women
+												<!-- Repeat the above structure for additional product cards -->
+												
+											</div>
+										</div>
+										<!-- Add tabs for Women, Men, and Accessories -->
+										<div class="tab-pane" id="bottom-tab2">
+											<div class="row">
+												<div class="col-md-3 mb-4">
+													<div class="card product-card">
+														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 4 Image">
+														<div class="card-body">
+															<h5 class="card-title">Product 4 Women</h5>
+															<p class="card-text">Description of Product 4</p>
+														</div>
+													</div>
 												</div>
-												<div class="tab-pane" id="bottom-tab3">
-													Men
+												<!-- Product containers for Women tab -->
+												<!-- Add your product containers here -->
+											</div>
+										</div>
+										<div class="tab-pane" id="bottom-tab3">
+											<div class="row">
+												<div class="col-md-3 mb-4">
+													<div class="card product-card">
+														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 4 Image">
+														<div class="card-body">
+															<h5 class="card-title">Product 4 Men</h5>
+															<p class="card-text">Description of Product 4</p>
+														</div>
+													</div>
 												</div>
-												<div class="tab-pane" id="bottom-tab4">
-													Accesories
+												<!-- Product containers for Men tab -->
+												<!-- Add your product containers here -->
+											</div>
+										</div>
+										<div class="tab-pane" id="bottom-tab4">
+											<div class="row">
+												<div class="col-md-3 mb-4">
+													<div class="card product-card">
+														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 4 Image">
+														<div class="card-body">
+															<h5 class="card-title">Product 4 Accesories</h5>
+															<p class="card-text">Description of Product 4</p>
+														</div>
+													</div>
 												</div>
+												<!-- Product containers for Accessories tab -->
+												<!-- Add your product containers here -->
 											</div>
 										</div>
 									</div>
 								</div>
+							</div>
+						</div>
 					</div>
+
+
+				</section>
+				<!-- End Bottom Tabs Section -->
+
 
 
 
