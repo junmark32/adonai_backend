@@ -241,7 +241,7 @@
                         renderCalendar();
                     }
 
-                    function selectTimeSlot(day, date, timeSlot) {
+                    function selectTimeSlot(day, date, timeSlot, timeslotId) {
                         // Calculate the selected date based on the current week's starting date (currentDate)
                         const selectedDate = new Date(currentDate);
                         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -255,6 +255,7 @@
                         localStorage.setItem('selectedDay', day);
                         localStorage.setItem('selectedDate', formattedDate);
                         localStorage.setItem('selectedTime', timeSlot); // Store the selected timeslot
+                        localStorage.setItem('selectedTimeslotId', timeslotId); // Store the selected timeslot ID
 
                         // Redirect to the checkout page
                         window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
@@ -289,7 +290,7 @@
                                         <?php // Merge the start time and end time ?>
                                         <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
                                         <?php $formattedDate = date('F j, Y', strtotime("next $day", strtotime("next Sunday", strtotime("now")))); ?>
-                                        <a class="timing" href="#" onclick="selectTimeSlot('<?= $day ?>', '<?= $formattedDate ?>', '<?= $mergedTime ?>')">
+                                        <a class="timing" href="#" onclick="selectTimeSlot('<?= $day ?>', '<?= $formattedDate ?>', '<?= $mergedTime ?>', '<?= $timing['id'] ?>')">
                                             <span><?= $mergedTime ?></span>
                                         </a>
                                     <?php endif; ?>
@@ -306,6 +307,7 @@
 
 </div>
 <!-- /Schedule Widget -->
+
 
 
 

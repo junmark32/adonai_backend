@@ -282,52 +282,8 @@
 												
 											</div>
 										</div>
-										<!-- Add tabs for Women, Men, and Accessories -->
-										<div class="tab-pane" id="bottom-tab2">
-											<div class="row">
-												<div class="col-md-3 mb-4">
-													<div class="card product-card">
-														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 4 Image">
-														<div class="card-body">
-															<h5 class="card-title">Product 4 Women</h5>
-															<p class="card-text">Description of Product 4</p>
-														</div>
-													</div>
-												</div>
-												<!-- Product containers for Women tab -->
-												<!-- Add your product containers here -->
-											</div>
-										</div>
-										<div class="tab-pane" id="bottom-tab3">
-											<div class="row">
-												<div class="col-md-3 mb-4">
-													<div class="card product-card">
-														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 4 Image">
-														<div class="card-body">
-															<h5 class="card-title">Product 4 Men</h5>
-															<p class="card-text">Description of Product 4</p>
-														</div>
-													</div>
-												</div>
-												<!-- Product containers for Men tab -->
-												<!-- Add your product containers here -->
-											</div>
-										</div>
-										<div class="tab-pane" id="bottom-tab4">
-											<div class="row">
-												<div class="col-md-3 mb-4">
-													<div class="card product-card">
-														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 4 Image">
-														<div class="card-body">
-															<h5 class="card-title">Product 4 Accesories</h5>
-															<p class="card-text">Description of Product 4</p>
-														</div>
-													</div>
-												</div>
-												<!-- Product containers for Accessories tab -->
-												<!-- Add your product containers here -->
-											</div>
-										</div>
+										
+										
 									</div>
 								</div>
 							</div>

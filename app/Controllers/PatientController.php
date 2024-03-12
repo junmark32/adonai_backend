@@ -7,6 +7,7 @@ use CodeIgniter\Restful\ResourceController;
 use App\Models\PatientModel;
 use App\Models\UserModel;
 use App\Models\AppointmentModel;
+use App\Models\ScheduleModel;
 
 class PatientController extends ResourceController
 {
@@ -50,17 +51,18 @@ class PatientController extends ResourceController
         // Load necessary models and libraries
         $session = session();
         $appointmentModel = new AppointmentModel();
-    
+        $scheduleModel = new ScheduleModel();
+
         // Check if 'user_data' exists in the session
         if ($session->has('user_data')) {
             // Retrieve user data from session
             $userData = $session->get('user_data');
-    
+
             // Check if the user has a 'PatientID' key
             if (isset($userData['PatientID'])) {
                 // Retrieve the PatientID
                 $patientID = $userData['PatientID'];
-    
+
                 // Retrieve data from the request
                 $requestData = [
                     'PatientID' => $patientID,
@@ -71,18 +73,24 @@ class PatientController extends ResourceController
                     'Pref_Date' => $this->request->getVar('pref_date'),
                     'Pref_Time_Start' => $this->request->getVar('pref_time_start'),
                     'Pref_Time_End' => $this->request->getVar('pref_time_end'),
+                    'Pref_Day' => $this->request->getVar('pref_day'),
+                    'Pref_Timeslot_ID' => $this->request->getVar('pref_timeslot_id'),
                     'Pref_Doctor' => 'Dra. Ashley Cabudsan',
                     'Purpose' => $this->request->getVar('purpose'),
                     'Pref_Location' => $this->request->getVar('pref_location'),
                     'Add_message' => $this->request->getVar('add_message'),
-                    'Status' => 'Pending', // Set the initial status as 'Pending' or adjust as needed
+                    'Status' => 'Available', // Set the initial status as 'Pending' or adjust as needed
                 ];
-    
+
                 // Insert appointment data
                 $appointment = $appointmentModel->insert($requestData);
-    
+
                 // Check if the appointment was successfully inserted
                 if ($appointment) {
+                    // Update the ScheduleModel status to 'Reserved'
+                    $scheduleID = $this->request->getVar('pref_timeslot_id');
+                    $scheduleModel->update($scheduleID, ['status' => 'Reserved']);
+
                     // Redirect to a success view
                     return redirect()->to('/');
                 } else {
@@ -98,6 +106,7 @@ class PatientController extends ResourceController
             return $this->respond(['error' => 'User data not found in session']);
         }
     }
+
     
 
     //

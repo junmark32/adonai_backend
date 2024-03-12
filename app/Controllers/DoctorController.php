@@ -43,7 +43,8 @@ class DoctorController extends ResourceController
                     'day' => $this->request->getVar('day'),
                     // 'slot_duration' => $this->request->getVar('slot_duration'),
                     'start_time' => $this->request->getVar('start_time'),
-                    'end_time' => $this->request->getVar('end_time')
+                    'end_time' => $this->request->getVar('end_time'),
+                    'status' => 'Available',
                 ];
     
                 $model->insert($data);
@@ -87,7 +88,7 @@ class DoctorController extends ResourceController
             if ($doctor) {
                 // Fetch schedule timings for the doctor
                 $scheduleTimings = $scheduleModel
-                    ->select('day, slot_duration, start_time, end_time')
+                    ->select('id, day, slot_duration, start_time, end_time')
                     ->where('doctor_id', $doctorID)
                     ->findAll();
 

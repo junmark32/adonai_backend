@@ -242,6 +242,8 @@
                                             <input type="hidden" name="pref_date" id="pref_date_input">
                                             <input type="hidden" name="pref_time_start" id="pref_time_start_input">
                                             <input type="hidden" name="pref_time_end" id="pref_time_end_input">
+											<input type="hidden" name="pref_day" id="pref_day_input">
+											<input type="hidden" name="pref_timeslot_id" id="pref_timeslotid_input">
 											
 											<!-- Submit Section -->
 											<div class="submit-section mt-4">
@@ -292,6 +294,8 @@
 										<div class="booking-item-wrap">
                                         <ul class="booking-date">
                                             <li>Date <span id="selectedDate"></span></li>
+											<li>Day <span id="selectedDay"></span></li>
+											<li>Time ID <span id="selectedTimeslotId"></span></li>
                                             <li>Time <span id="selectedTime"></span></li>
                                             
                                         </ul>
@@ -470,15 +474,20 @@
         const selectedDay = localStorage.getItem('selectedDay');
         const selectedDate = localStorage.getItem('selectedDate');
         const selectedTime = localStorage.getItem('selectedTime');
+		const selectedTimeslotId = localStorage.getItem('selectedTimeslotId');
 
         // Trim the selectedTime
         const trimmedSelectedTime = selectedTime.trim();
 
         // Display selected values in the booking summary
+		document.getElementById('selectedDay').textContent = selectedDay;
         document.getElementById('selectedDate').textContent = selectedDate;
+		document.getElementById('selectedTimeslotId').textContent = selectedTimeslotId;
         document.getElementById('selectedTime').textContent = trimmedSelectedTime;
 
         // Set the value of the hidden input field for pref_date
+		document.getElementById('pref_timeslotid_input').value = selectedTimeslotId;
+		document.getElementById('pref_day_input').value = selectedDay;
         document.getElementById('pref_date_input').value = selectedDate;
 
         // Extract start and end times

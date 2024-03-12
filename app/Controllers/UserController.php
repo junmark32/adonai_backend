@@ -64,7 +64,7 @@ class UserController extends ResourceController
     
         // Fetch all schedule timings for the doctor
         $scheduleModel = new ScheduleModel();
-        $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->findAll();
+        $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->where('status', 'Available')->findAll();
 
         // $data = [
                 //     'doctor' => $doctor,
