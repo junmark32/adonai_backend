@@ -26,8 +26,8 @@ $routes->match(['post','get'],'patient/insertBooking', 'PatientController::inser
 $routes->match(['post','get'],'booking/booked-dates', 'PatientController::getBookedDates');
 $routes->match(['post','get'],'available-time-slots', 'PatientController::getAvailableTimeSlots');
 
-//doctor
-$routes->get('/Doctor/Dashboard', 'Usercontroller::db_doctor');
+// doctor
+$routes->get('/Doctor/Dashboard', 'UserController::db_doctor');
 $routes->get('/Doctor/Dashboard/Schedule', 'Doctorcontroller::schedule_timings');
 $routes->get('/session', 'Usercontroller::checkSessionData');
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');
@@ -37,3 +37,10 @@ $routes->match(['post','get'],'getPatients', 'DoctorController::getPatients');
 $routes->match(['post','get'],'getAppointmentsByDoctorUsername/(:any)', 'DoctorController::getAppointmentsByDoctorUsername/$1');
 $routes->match(['post','get'],'approveAppointment/(:any)/(:any)', 'DoctorController::approveAppointment/$1/$2');
 $routes->match(['post','get'],'sendApprovalEmail', 'DoctorController::sendApprovalEmail');
+
+//admin//
+$routes->get('/Admin/Dashboard', 'UserController::db_admin');
+//products
+$routes->match(['post','get'],'/Admin/Products', 'AdminController::showProducts');
+$routes->match(['post','get'],'/Admin/Products/Add_Product', 'AdminController::addProduct');
+$routes->match(['post','get'],'/Admin/Products/insert_Product', 'AdminController::insertProduct');

@@ -1,0 +1,96 @@
+CRITICAL - 2024-03-14 14:45:53 --> Undefined array key "PatientID"
+in APPPATH\Controllers\UserController.php on line 417.
+ 1 APPPATH\Controllers\UserController.php(417): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "PatientID"', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 417)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->checkSessionData()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 14:46:39 --> Undefined array key "AdminID"
+in APPPATH\Controllers\UserController.php on line 419.
+ 1 APPPATH\Controllers\UserController.php(419): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "AdminID"', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 419)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->checkSessionData()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:11:44 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:02 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:03 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:03 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:03 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:04 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:04 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-03-14 16:12:23 --> Invalid file: "error.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('error.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('error', [], true)
+ 3 APPPATH\Controllers\UserController.php(398): view('error', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->db_admin()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')

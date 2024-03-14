@@ -8,6 +8,7 @@ use App\Models\PatientModel;
 use App\Models\UserModel;
 use App\Models\DoctorModel;
 use App\Models\ScheduleModel;
+use App\Models\AdminModel;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -119,6 +120,7 @@ class UserController extends ResourceController
         }
 
     }
+
 
     public function getDoctorDetails($DoctorID)
     {
@@ -322,14 +324,18 @@ class UserController extends ResourceController
                         break;
 
                     case 'admin':
+                        $adminModel = new AdminModel();
+                        $adminData = $adminModel->where('UserID', $userData['UserID'])->first();
+
                         $response = [
                             'msg' => 'okay',
                             'token' => $userData['token'],
                             'UserID' => $userData['UserID'],
                             'Username' => $userData['Username'],
+                            'AdminID' => $adminData['AdminID'],
                             'Role' => $role,
                         ];
-                        $redirectURL = 'admin.php';
+                        $redirectURL = '/Admin/Dashboard';
                         break;
 
                     default:
@@ -355,6 +361,49 @@ class UserController extends ResourceController
     }
 }
 
+//admin
+
+public function db_admin()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+    //   return view('doctor/doctor_dashboard');
+
+        // Load the session service
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/admin_dashboard', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+
+    }
+
+
     
 public function checkSessionData()
     {
@@ -370,8 +419,9 @@ public function checkSessionData()
             echo "User ID: " . $userData['UserID'] . "<br>";
             echo "Username: " . $userData['Username'] . "<br>";
             echo "Role: " . $userData['Role'] . "<br>";
-            echo "Patient ID: " . $userData['PatientID'] . "<br>";
+            // echo "Patient ID: " . $userData['PatientID'] . "<br>";
             // echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
+            echo "Admin ID: " . $userData['AdminID'] . "<br>";
 
             // You can add more data if needed
         } else {
