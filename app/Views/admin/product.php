@@ -313,41 +313,43 @@
 					</div>
 
                     <div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <ul class="nav nav-tabs nav-tabs-bottom">
-                    <li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
-                    <!-- Add more tabs as needed for Women, Men, Accessories, etc. -->
-                </ul>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <ul class="nav nav-tabs nav-tabs-bottom">
+                                    <li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
+                                    <!-- Add more tabs as needed for Women, Men, Accessories, etc. -->
+                                </ul>
 
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="bottom-tab1">
-                        <div class="row">
-                            <!-- Loop through products and generate product cards -->
-                            <?php foreach ($products as $product): ?>
-                            <div class="col-md-3 mb-4">
-                                <div class="card product-card">
-                                    <img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?= $product['Name'] ?></h5>
-                                        <p class="card-text">₱ <?= $product['Price'] ?></p>
-                                        <hr>
-                                        <div class="d-flex justify-content-center">
-                                            <button type="button" class="btn btn-rounded btn-outline-primary" href="#quickViewButton" data-toggle="modal">Quick View</button>
+                                <div class="tab-content">
+                                    <div class="tab-pane show active" id="bottom-tab1">
+                                        <div class="row">
+                                            <!-- Loop through products and generate product cards -->
+                                            <?php foreach ($products as $product): ?>
+                                            <div class="col-md-3 mb-4">
+                                                <div class="card product-card">
+                                                    <img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><?= $product['Name'] ?></h5>
+                                                        <p class="card-text">₱ <?= $product['Price'] ?></p>
+                                                        <hr>
+                                                        <div class="d-flex justify-content-center">
+                                                            <!-- Update button with product ID as parameter -->
+                                                            <a href="<?= base_url('/Admin/Products/Edit_Product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Update</a>
+                                                            <button type="button" class="btn btn-rounded btn-danger">Disable</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
+                                    <!-- Add more tab panes for other product categories -->
                                 </div>
                             </div>
-                            <?php endforeach; ?>
                         </div>
                     </div>
-                    <!-- Add more tab panes for other product categories -->
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 					
 				</div>			

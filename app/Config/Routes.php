@@ -14,6 +14,8 @@ $routes->match(['post','get'],'/store', 'UserController::store');
 $routes->get('/booking', 'Usercontroller::booking');
 $routes->get('/doctor/getDoctorDetails/(:num)', 'UserController::getDoctorDetails/$1');
 $routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');
+//prod
+$routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProdDetails/$1');
 ///
 $routes->match(['post','get'],'/register', 'UserController::register');
 $routes->match(['post','get'],'/verify-code/(:num)', 'UserController::verifyCode/$1');
@@ -44,3 +46,5 @@ $routes->get('/Admin/Dashboard', 'UserController::db_admin');
 $routes->match(['post','get'],'/Admin/Products', 'AdminController::showProducts');
 $routes->match(['post','get'],'/Admin/Products/Add_Product', 'AdminController::addProduct');
 $routes->match(['post','get'],'/Admin/Products/insert_Product', 'AdminController::insertProduct');
+$routes->match(['post','get'],'/Admin/Products/Edit_Product/(:num)', 'AdminController::editProduct/$1');
+$routes->match(['post','get'],'/Admin/Products/update_Product', 'AdminController::updateProduct');

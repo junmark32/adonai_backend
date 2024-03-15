@@ -133,9 +133,31 @@
 								<p class="contact-info-header"> +1 315 369 5943</p>
 							</div>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link header-login" href="login.html">login / Signup </a>
+						<!-- User Menu -->
+						<li class="nav-item dropdown has-arrow logged-item">
+                            <?php foreach ($doctors as $doctor): ?>
+                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    <span class="user-img">
+                                        <img class="rounded-circle" src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" width="31" alt="Darren Elder">
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="user-header">
+                                        <div class="avatar avatar-sm">
+                                            <img src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image" class="avatar-img rounded-circle">
+                                        </div>
+                                        <div class="user-text">
+                                            <h6><?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></h6>
+                                            <p class="text-muted mb-0">Doctor</p>
+                                        </div>
+                                    </div>
+                                    <a class="dropdown-item" href="doctor-dashboard.html">Dashboard</a>
+                                    <a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
+                                    <a class="dropdown-item" href="login.html">Logout</a>
+                                </div>
+                            <?php endforeach; ?>
 						</li>
+						<!-- /User Menu -->
 					</ul>
 				</nav>
 			</header>

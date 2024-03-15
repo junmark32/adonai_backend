@@ -264,26 +264,27 @@
 									<div class="tab-content">
 										<div class="tab-pane show active" id="bottom-tab1">
 											<div class="row">
-												<!-- Product containers for All Products tab -->
+												<!-- Loop through products and generate product cards -->
+												<?php foreach ($products as $product): ?>
 												<div class="col-md-3 mb-4">
 													<div class="card product-card">
-														<img src="uploads/accesories.jpg" class="card-img-top" alt="Product 1 Image">
-														<div class="card-body ">
-															<h5 class="card-title">Rounded Eyeglasses</h5>
-															<p class="card-text">₱ 100.00</p>
+														<img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
+														<div class="card-body">
+															<h5 class="card-title"><?= $product['Name'] ?></h5>
+															<p class="card-text">₱ <?= $product['Price'] ?></p>
 															<hr>
-															<div class="d-flex justify-content-center"> <!-- Wrapping div for centering the button -->
-																<button type="button" class="btn btn-rounded btn-outline-primary" href="#quickViewButton" data-toggle="modal">Quick View</button>
+															<div class="d-flex justify-content-center">
+																<!-- Update button with product ID as parameter -->
+																<a href="<?= base_url('/store/product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Quick View</a>
+																
 															</div>
 														</div>
 													</div>
 												</div>
-												<!-- Repeat the above structure for additional product cards -->
-												
+												<?php endforeach; ?>
 											</div>
 										</div>
-										
-										
+										<!-- Add more tab panes for other product categories -->
 									</div>
 								</div>
 							</div>

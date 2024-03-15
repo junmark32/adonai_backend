@@ -9,6 +9,7 @@ use App\Models\UserModel;
 use App\Models\DoctorModel;
 use App\Models\ScheduleModel;
 use App\Models\AdminModel;
+use App\Models\ProductModel;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -19,6 +20,7 @@ class UserController extends ResourceController
 {
     public function index()
     {
+        
         $doctorModel = new DoctorModel();
         $data['doctors'] = $doctorModel->findAll();
 
@@ -35,10 +37,17 @@ class UserController extends ResourceController
 
     public function store()
     {
-    //   $productModel = new ProductModel();
-    //   $data['products'] = $productModel->findAll();
+     // Load the ProductModel
+     $productModel = new ProductModel();
 
-      return view('user/store');
+     // Retrieve all products from the database
+     $products = $productModel->findAll();
+
+     // Pass the products data to the view
+     $data['products'] = $products;
+
+     return view('user/store', $data);
+
     }
 
     public function checkout()
@@ -429,6 +438,29 @@ public function checkSessionData()
         }
     }
 
+//ordering
+
+public function showProdDetails($productID)
+    {
+        // Load the product model
+        $productModel = new ProductModel();
+
+        // Retrieve the product data based on the product ID
+        $product = $productModel->find($productID);
+
+        // Dump the contents and type of the $products variable
+        // var_dump($products);
+
+
+        // Check if the product exists
+        // if (!$product) {
+        //     // Product not found, redirect or show error message
+        //     return redirect()->to('/admin/products')->with('error', 'Product not found');
+        // }
+
+        // Pass the product data to the view for editing
+        return view('user/show_product', ['product' => $product]);
+    }
 
 
   
