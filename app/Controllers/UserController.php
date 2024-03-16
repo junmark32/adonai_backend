@@ -10,6 +10,8 @@ use App\Models\DoctorModel;
 use App\Models\ScheduleModel;
 use App\Models\AdminModel;
 use App\Models\ProductModel;
+use App\Models\LensModel;
+use App\Models\CartModel;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -444,9 +446,12 @@ public function showProdDetails($productID)
     {
         // Load the product model
         $productModel = new ProductModel();
+        $lensModel = new LensModel();
 
         // Retrieve the product data based on the product ID
         $product = $productModel->find($productID);
+        // Retrieve all lenses
+        $lens = $lensModel->findAll();
 
         // Dump the contents and type of the $products variable
         // var_dump($products);
@@ -459,8 +464,56 @@ public function showProdDetails($productID)
         // }
 
         // Pass the product data to the view for editing
-        return view('user/show_product', ['product' => $product]);
+        return view('user/show_product', ['product' => $product, 'lens' => $lens]);
     }
+
+
+    public function addToCart()
+{
+    // Load the session service
+    $session = session();
+
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+
+        // Check if the user has a 'UserID' key
+        if (isset($userData['UserID'])) {
+            // Retrieve the UserID
+            $userID = $userData['UserID'];
+
+            // Retrieve data from POST request
+            $productID = $this->request->getPost('productID');
+            $lensID = $this->request->getPost('lensID');
+            $quantity = $this->request->getPost('quantity');
+
+            // Check if all required data is provided
+            if ($productID && $lensID && $quantity) {
+                // Create an instance of CartModel
+                $cartModel = new CartModel();
+
+                // Insert data into the cart table
+                $data = [
+                    'UserID' => $userID,
+                    'ProductID' => $productID,
+                    'LensID' => $lensID,
+                    'Quantity' => $quantity
+                ];
+
+                $cartModel->insert($data);
+
+                // Redirect the user to a different page after adding to the cart
+                return redirect()->to('/');
+            } else {
+                return view('error', ['error' => 'Incomplete data provided']);
+            }
+        } else {
+            return view('error', ['error' => 'UserID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
 
 
   

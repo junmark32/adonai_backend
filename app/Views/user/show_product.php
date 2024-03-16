@@ -192,78 +192,104 @@
                                 <i class="fas fa-box"></i> <?= $product['StockQuantity'] ?> in stock
                             </li>
                         </ul>
+                        <form action="<?= site_url('/store/cart/addToCart') ?>" method="post">
+                            
+                            <input type="hidden" name="productID" value="<?= $product['ProductID'] ?>">
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-2">LENSES:</label>
+                                <div class="col-md-6">
+                                    <select class="form-control" name="lensID">
+                                        <?php foreach ($lens as $lensItem): ?>
+                                            <option value="<?= $lensItem['LensID'] ?>">
+                                                <?= $lensItem['Brand'] . " " . $lensItem['Model'] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-2">Quantity:</label>
+                                <div class="col-md-3">
+                                    <input type="number" class="form-control" name="quantity" value="1" min="1" max="<?= $product['StockQuantity'] ?>">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-10 offset-md-2">
+                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                </div>
+                            </div>
+                        </form>
+
                         <hr>
-                        <div class="form-group row">
-											<label class="col-form-label col-md-2">LENSES:</label>
-											<div class="col-md-10">
-												<select class="form-control">
-													<!-- <option>-- Select --</option> -->
-													<option>Ordinary 500</option>
-													<option>Multicoated 800</option>
-													<option>Blue lens 1500</option>
-													<option>Photochromic 1500</option>
-													<option>Multicoatedkk 1000</option>
-                                                    <option>Multicoated progressive 2000</option>
-													<option>Photochromic kk 2500</option>
-													<option>Photochromic progressive 3500</option>
-													<option>Transition progressive mc 3500</option>
-													<option>Transition progressive blue 3000</option>
-                                                    <option>Photochromic flatop 2500</option>
-												</select>
-											</div>
-										</div>
-                        <div class="row row-sm">
-                            <div class="col-6">
-                                <a href="<?= site_url('product-details/' . $product['ProductID']) ?>" class="btn view-btn">Add to Cart</a>
+
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Product Information</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Brand</th>
+                                                    <td><?= $product['Brand'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Face Shape</th>
+                                                    <td><?= $product['Faceshape'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Frame Shape</th>
+                                                    <td><?= $product['Frameshape'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Material</th>
+                                                    <td><?= $product['Material'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Gender</th>
+                                                    <td><?= $product['Gender'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Frame Age</th>
+                                                    <td><?= $product['Frameage'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Frame Size (mm)</th>
+                                                    <td><?= $product['Framesize'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Full Frame Size (mm)</th>
+                                                    <td><?= $product['Fullframesize'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Nose Bridge Size (mm)</th>
+                                                    <td><?= $product['Nosebridgesize'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Temple Size (mm)</th>
+                                                    <td><?= $product['Templesize'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Note</th>
+                                                    <td><?= $product['Note'] ?></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
             <hr>
-            <div class="col-lg-14">
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Product Information</h4>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center; vertical-align: middle;">Brand</th>
-                            <th style="text-align: center; vertical-align: middle;">Face Shape</th>
-                            <th style="text-align: center; vertical-align: middle;">Frame Shape</th>
-                            <th style="text-align: center; vertical-align: middle;">Material</th>
-                            <th style="text-align: center; vertical-align: middle;">Gender</th>
-                            <th style="text-align: center; vertical-align: middle;">Frame Age</th>
-                            <th style="text-align: center; vertical-align: middle;">Frame Size (mm)</th>
-                            <th style="text-align: center; vertical-align: middle;">Full Frame Size (mm)</th>
-                            <th style="text-align: center; vertical-align: middle;">Nose Bridge Size (mm)</th>
-                            <th style="text-align: center; vertical-align: middle;">Temple Size (mm)</th>
-                            <th style="text-align: center; vertical-align: middle;">Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Brand'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Faceshape'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Frameshape'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Material'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Gender'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Frameage'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Framesize'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Fullframesize'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Nosebridgesize'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Templesize'] ?></td>
-                            <td style="text-align: center; vertical-align: middle;"><?= $product['Note'] ?></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+            
 
         </div>
         <!-- /Product Widget -->
