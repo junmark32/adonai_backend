@@ -21,13 +21,41 @@ use CodeIgniter\Session\Session;
 class UserController extends ResourceController
 {
     public function index()
-    {
-        
-        $doctorModel = new DoctorModel();
-        $data['doctors'] = $doctorModel->findAll();
+{
+    // Load the session service
+    $session = session();
 
-      return view('user/index', $data);
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
     }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+    // Load doctor data
+    $doctorModel = new DoctorModel();
+    $data['doctors'] = $doctorModel->findAll();
+
+    // Pass loggedIn status, role, and patient data to the view
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
+
+    return view('user/index', $data);
+}
+
 
     public function login()
     {
@@ -106,6 +134,9 @@ class UserController extends ResourceController
         if ($session->has('user_data')) {
             // Retrieve user data from session
             $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
 
             // Check if the user has a 'DoctorID' key
             if (isset($userData['DoctorID'])) {
@@ -117,6 +148,9 @@ class UserController extends ResourceController
                 $doctor = $doctorModel->find($doctorID);
 
                 if ($doctor) {
+                            // Pass loggedIn status, role, and doctor data to the view
+                    $data['loggedIn'] = $loggedIn;
+                    $data['role'] = $role;
                     // Pass the doctor data to the view
                     $data['doctors'] = [$doctor]; // Make sure $doctors is an array
                     return view('doctor/doctor_dashboard', $data);
@@ -388,6 +422,9 @@ public function db_admin()
         if ($session->has('user_data')) {
             // Retrieve user data from session
             $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
 
             // Check if the user has a 'DoctorID' key
             if (isset($userData['AdminID'])) {
@@ -399,6 +436,9 @@ public function db_admin()
                 $admin = $adminModel->find($adminID);
 
                 if ($admin) {
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
                     // Pass the doctor data to the view
                     $data['admins'] = [$admin]; // Make sure $doctors is an array
                     return view('admin/admin_dashboard', $data);
@@ -430,9 +470,9 @@ public function checkSessionData()
             echo "User ID: " . $userData['UserID'] . "<br>";
             echo "Username: " . $userData['Username'] . "<br>";
             echo "Role: " . $userData['Role'] . "<br>";
-            // echo "Patient ID: " . $userData['PatientID'] . "<br>";
+            echo "Patient ID: " . $userData['PatientID'] . "<br>";
             // echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
-            echo "Admin ID: " . $userData['AdminID'] . "<br>";
+            // echo "Admin ID: " . $userData['AdminID'] . "<br>";
 
             // You can add more data if needed
         } else {

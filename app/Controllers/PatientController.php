@@ -57,6 +57,7 @@ class PatientController extends ResourceController
         if ($session->has('user_data')) {
             // Retrieve user data from session
             $userData = $session->get('user_data');
+            
 
             // Check if the user has a 'PatientID' key
             if (isset($userData['PatientID'])) {
