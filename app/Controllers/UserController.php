@@ -67,11 +67,37 @@ class UserController extends ResourceController
 
     public function store()
     {
+    // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+    }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
      // Load the ProductModel
      $productModel = new ProductModel();
 
      // Retrieve all products from the database
      $products = $productModel->findAll();
+
+     // Pass loggedIn status, role, and patient data to the view
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
 
      // Pass the products data to the view
      $data['products'] = $products;
@@ -82,42 +108,90 @@ class UserController extends ResourceController
 
     public function checkout()
     {
+        // Load the session service
+        $session = session();
+    
+        // Check if 'user_data' exists in the session
+        $loggedIn = false;
+        $role = null;
+        $userData = [];
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+        }
+    
+        // Load Patients Data
+        $patientModel = new PatientModel();
+        $patients = [];
+        if (!empty($userData['PatientID'])) {
+            // Fetch only the patient associated with the user's session ID
+            $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+        }
+    
         // Get the doctor ID from the URL parameter
         $doctorID = $this->request->getGet('doctor_id');
     
         // Fetch the doctor's data based on the doctor ID
         $doctorModel = new DoctorModel();
         $doctor = $doctorModel->find($doctorID);
-
-        return view('user/checkout', ['doctor'=>$doctor]);
-
+    
+        // Pass the doctor's data, user-related data, and patient data to the view
+        return view('user/checkout', [
+            'doctor' => $doctor,
+            'loggedIn' => $loggedIn,
+            'role' => $role,
+            'patients' => $patients
+        ]);
     }
+    
 
     public function booking()
-    {
-        // Get the doctor ID from the URL parameter
-        $doctorID = $this->request->getGet('doctor_id');
-    
-        // Fetch the doctor's data based on the doctor ID
-        $doctorModel = new DoctorModel();
-        $doctor = $doctorModel->find($doctorID);
-    
-        // Fetch all schedule timings for the doctor
-        $scheduleModel = new ScheduleModel();
-        $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->where('status', 'Available')->findAll();
+{
+    // Load the session service
+    $session = session();
 
-        // $data = [
-                //     'doctor' => $doctor,
-                //     'scheduleTimings' => $scheduleTimings
-                // ];
-
-                // // Return JSON response
-                // return $this->response->setJSON($data);
-
-    
-        // Pass the doctor's data and schedule timings to the view
-        return view('user/booking', ['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings]);
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
     }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+    // Get the doctor ID from the URL parameter
+    $doctorID = $this->request->getGet('doctor_id');
+
+    // Fetch the doctor's data based on the doctor ID
+    $doctorModel = new DoctorModel();
+    $doctor = $doctorModel->find($doctorID);
+
+    // Fetch all schedule timings for the doctor
+    $scheduleModel = new ScheduleModel();
+    $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->where('status', 'Available')->findAll();
+
+    // Pass the doctor's data, schedule timings, and user-related data to the view
+    return view('user/booking', [
+        'doctor' => $doctor,
+        'scheduleTimings' => $scheduleTimings,
+        'loggedIn' => $loggedIn,
+        'role' => $role,
+        'patients' => $patients
+    ]);
+}
+
     
 
     public function db_doctor()
@@ -484,6 +558,28 @@ public function checkSessionData()
 
 public function showProdDetails($productID)
     {
+        // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+    }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
         // Load the product model
         $productModel = new ProductModel();
         $lensModel = new LensModel();
@@ -504,7 +600,13 @@ public function showProdDetails($productID)
         // }
 
         // Pass the product data to the view for editing
-        return view('user/show_product', ['product' => $product, 'lens' => $lens]);
+        return view('user/show_product', [
+            'product' => $product,
+            'lens' => $lens,
+            'loggedIn' => $loggedIn,
+            'role' => $role,
+            'patients' => $patients
+        ]);
     }
 
 

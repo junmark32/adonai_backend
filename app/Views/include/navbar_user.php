@@ -24,13 +24,13 @@
 						</div>
 						<ul class="main-nav">
 							<li>
-								<a href="index-2.html">Home</a>
+								<a href="<?php echo site_url('/')?>">Home</a>
 							</li>
 							<li>
-								<a href="index-2.html">Appointments</a>
+								<a href="<?php echo site_url('/')?>">Appointments</a>
 							</li>
 							<li>
-								<a href="index-2.html">Shop</a>
+								<a href="<?php echo site_url('/store')?>">Shop</a>
 							</li>
 						</ul>	 
 					</div>		 
