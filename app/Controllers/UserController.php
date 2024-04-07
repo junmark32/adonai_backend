@@ -145,6 +145,8 @@ class UserController extends ResourceController
             'patients' => $patients
         ]);
     }
+
+
     
 
     public function booking()
@@ -656,6 +658,59 @@ public function showProdDetails($productID)
         return view('error', ['error' => 'User data not found in session']);
     }
 }
+
+public function viewCart()
+{
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+    }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+    // Check if the user is logged in and has a valid UserID
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartModel = new CartModel();
+
+        // Fetch cart items based on UserID
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+
+        // Pass data to view
+        $data = [
+            'cartItems' => $cartItems
+        ];
+    } else {
+        // If the user is not logged in or does not have a valid UserID, show empty cart
+        $data = [
+            'cartItems' => []
+        ];
+    }
+
+    // Pass loggedIn status, role, and patient data to the view
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
+
+    // Dump the contents of $data['cartItems']
+    // var_dump($data['cartItems']);
+
+    return view('user/cart', $data);
+}
+
 
 
   
