@@ -682,34 +682,49 @@ public function viewCart()
         $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
     }
 
+    // Initialize cart items array
+    $cartItems = [];
+    
     // Check if the user is logged in and has a valid UserID
     if ($loggedIn && isset($userData['UserID'])) {
         $cartModel = new CartModel();
+        $productModel = new ProductModel();
+        $lensModel = new LensModel();
 
-        // Fetch cart items based on UserID
-        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+         // Fetch cart items based on UserID
+         $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
 
-        // Pass data to view
-        $data = [
-            'cartItems' => $cartItems
-        ];
-    } else {
-        // If the user is not logged in or does not have a valid UserID, show empty cart
-        $data = [
-            'cartItems' => []
-        ];
+         // Fetch product and lens data for each cart item
+         foreach ($cartItems as &$item) {
+             // Fetch product data based on ProductID
+             $product = $productModel->find($item['ProductID']);
+             if ($product) {
+                 $item['product'] = $product;
+             }
+ 
+             // Fetch lens data based on LensID
+             $lens = $lensModel->find($item['LensID']);
+             if ($lens) {
+                 $item['lens'] = $lens;
+             }
+         }
+        
     }
 
-    // Pass loggedIn status, role, and patient data to the view
-    $data['loggedIn'] = $loggedIn;
-    $data['role'] = $role;
-    $data['patients'] = $patients;
+    // Dump the contents of $cartItems
+// var_dump($cartItems);
 
-    // Dump the contents of $data['cartItems']
-    // var_dump($data['cartItems']);
+    // Pass loggedIn status, role, and patient data to the view
+    $data = [
+        'loggedIn' => $loggedIn,
+        'role' => $role,
+        'patients' => $patients,
+        'cartItems' => $cartItems
+    ];
 
     return view('user/cart', $data);
 }
+
 
 
 

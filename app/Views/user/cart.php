@@ -32,28 +32,66 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Blank Page</li>
+									<li class="breadcrumb-item active" aria-current="page">Cart</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Blank Page</h2>
+							<h2 class="breadcrumb-title">Cart</h2>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- /Breadcrumb -->
 			
-			<!-- Page Content -->
-			<div class="content">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-12">
-							<h5>Blank Page</h5>
-						</div>
-					</div>
-				</div>
+<!-- Page Content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Product Name &amp; Lens Details</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($cartItems as $item) : ?>
+                                        <tr>
+                                            <td>
+                                                <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
+                                                    <img src="<?= base_url('uploads/' . $item['product']['Image_url']) ?>" alt="Product Image" style="width: 100px;">
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="product-details">
+                                                    <h3 class="product-name"><a href="product-details.php?product=<?= $item['product']['ProductID'] ?>"><?= $item['product']['Name'] ?></a></h3>
+                                                    <p>LENS: <?= $item['lens']['Model'] ?> &nbsp; <?= $item['lens']['Brand'] ?> &nbsp; <?= $item['lens']['LensType'] ?> &nbsp; $<?= $item['lens']['Price'] ?></p>
+                                                </div>
+                                            </td>
+                                            <td>$<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
+                                            <td><?= $item['Quantity'] ?></td>
+                                            <td>$<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Content -->
 
-			</div>		
-			<!-- /Page Content -->
+
+
    
 			<!-- Footer -->
 			<footer class="footer">
