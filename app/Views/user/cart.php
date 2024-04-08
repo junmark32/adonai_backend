@@ -53,30 +53,35 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Image</th>
-                                        <th>Product Name &amp; Lens Details</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
+                                        <th class="align-middle">&nbsp;</th>
+                                        <th class="align-middle">Product Name &amp; Lens Details</th>
+                                        <th class="align-middle text-center">Price</th>
+                                        <th class="align-middle text-center">Quantity</th>
+                                        <th class="align-middle text-center">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($cartItems as $item) : ?>
                                         <tr>
-                                            <td>
+                                            <td class="align-middle">
+                                            <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </td>
+                                            <td class="align-middle">
                                                 <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
                                                     <img src="<?= base_url('uploads/' . $item['product']['Image_url']) ?>" alt="Product Image" style="width: 100px;">
                                                 </a>
                                             </td>
-                                            <td>
+                                            <td class="align-middle">
                                                 <div class="product-details">
-                                                    <h3 class="product-name"><a href="product-details.php?product=<?= $item['product']['ProductID'] ?>"><?= $item['product']['Name'] ?></a></h3>
-                                                    <p>LENS: <?= $item['lens']['Model'] ?> &nbsp; <?= $item['lens']['Brand'] ?> &nbsp; <?= $item['lens']['LensType'] ?> &nbsp; $<?= $item['lens']['Price'] ?></p>
+                                                    <h3 class="product-name"><a href="product-details.php?product=<?= $item['product']['ProductID'] ?>"><?= $item['product']['Name'] ?> - $<?= $item['product']['Price']?></a></h3>
+                                                    <p>LENS: <?= $item['lens']['Model'] ?> &nbsp; <?= $item['lens']['Brand'] ?> &nbsp; <?= $item['lens']['LensType'] ?> - $<?= $item['lens']['Price'] ?></p>
                                                 </div>
                                             </td>
-                                            <td>$<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
-                                            <td><?= $item['Quantity'] ?></td>
-                                            <td>$<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
+                                            <td class="align-middle text-center">$<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
+                                            <td class="align-middle text-center"><?= $item['Quantity'] ?></td>
+                                            <td class="align-middle text-center">$<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -89,6 +94,8 @@
     </div>
 </div>
 <!-- /Page Content -->
+
+
 
 
 

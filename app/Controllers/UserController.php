@@ -725,6 +725,26 @@ public function viewCart()
     return view('user/cart', $data);
 }
 
+// Function to remove item from cart
+public function removeItem($CartID)
+{
+    // Load the cart model
+    $cartModel = new CartModel();
+
+    // Check if the cart item exists
+    $cartItem = $cartModel->find($CartID);
+
+    if ($cartItem) {
+        // Delete the cart item
+        $cartModel->delete($CartID);
+        
+        // Redirect back to the cart page or any other desired page
+        return redirect()->to(base_url('store/cart'))->with('success', 'Item removed from cart successfully.');
+    } else {
+        // Redirect back to the cart page or any other desired page with an error message
+        return redirect()->to(base_url('cart'))->with('error', 'Item not found in the cart.');
+    }
+}
 
 
 

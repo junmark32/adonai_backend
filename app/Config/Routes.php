@@ -18,6 +18,8 @@ $routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');
 $routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProdDetails/$1');
 $routes->match(['post','get'],'/store/cart/addToCart', 'UserController::addToCart');
 $routes->match(['post','get'],'/store/cart', 'UserController::viewCart');
+$routes->match(['post','get'],'/store/cart/remove/(:num)', 'UserController::removeItem/$1');
+
 ///
 $routes->match(['post','get'],'/register', 'UserController::register');
 $routes->match(['post','get'],'/verify-code/(:num)', 'UserController::verifyCode/$1');
