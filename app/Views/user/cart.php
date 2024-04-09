@@ -35,7 +35,7 @@
 									<li class="breadcrumb-item active" aria-current="page">Cart</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Cart</h2>
+							<h2 class="breadcrumb-title">Shopping Cart</h2>
 						</div>
 					</div>
 				</div>
@@ -54,19 +54,21 @@
                                 <thead>
                                     <tr>
                                         <th class="align-middle">&nbsp;</th>
+                                        <th class="align-middle">&nbsp;</th>
                                         <th class="align-middle">Product Name &amp; Lens Details</th>
                                         <th class="align-middle text-center">Price</th>
                                         <th class="align-middle text-center">Quantity</th>
                                         <th class="align-middle text-center">Total</th>
+                                        <th class="align-middle text-center">Select</th> <!-- New column for checkboxes -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($cartItems as $item) : ?>
                                         <tr>
                                             <td class="align-middle">
-                                            <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                                <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </td>
                                             <td class="align-middle">
                                                 <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
@@ -82,10 +84,30 @@
                                             <td class="align-middle text-center">$<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
                                             <td class="align-middle text-center"><?= $item['Quantity'] ?></td>
                                             <td class="align-middle text-center">$<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
+                                            <td class="align-middle text-center">
+                                                <input type="checkbox" name="selectedItems[]" value="<?= $item['CartID'] ?>" onchange="updateCartTotal()">
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
+                            <hr style="border-top: 3px solid black;">
+                            <h3><strong>Cart Total</strong></h3>
+                            <div class="card-body">
+                                <p id="cartTotal">Subtotal: $0</p> <!-- Display cart total here -->
+                            </div>
+                            <div class="card-footer">
+                                <h5><strong>Thank You for Your Purchase! Important Information Regarding Your Eyeglasses</strong></h5>
+                                <h6>Thank you for choosing Adonai for your eyeglass needs. We are committed to ensuring that you receive the best-fitted eyeglasses and optimal vision correction.</h6>
+                                <h6>After checkout, please be aware that the eyeglasses you've selected will be available for pickup at our clinic. Prior to visiting our clinic, we kindly request you to schedule an appointment for an eye test. This step is crucial to ensure the accuracy of your prescription and the suitability of the selected eyeglasses.</h6>
+                                <h6>Once your purchase is complete, you will receive an email containing a downloadable voucher confirming your order and appointment details. Please present this voucher to our clinic staff during your visit for the eye test. Following the test, you can proceed to collect the glasses you've ordered.</h6>
+                                <h6>We appreciate your understanding and cooperation in this process. If you have any inquiries or require assistance, please do not hesitate to contact our customer support team.</h6>
+                                <input type="checkbox" id="confirmCheckout">
+                                <label for="confirmCheckout">I confirm that I have checked the items and want to proceed to checkout.</label>
+                            </div>
+                            <div class="card-footer d-flex justify-content-center"> <!-- Updated to align button to the right -->
+                                <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,6 +116,37 @@
     </div>
 </div>
 <!-- /Page Content -->
+
+
+<script>
+    function updateCartTotal() {
+        var checkboxes = document.getElementsByName('selectedItems[]');
+        var cartTotal = 0;
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                // Get the price of the selected item
+                var price = parseFloat(document.querySelectorAll('tbody tr')[i].querySelectorAll('td')[5].innerText.replace('$', ''));
+                cartTotal += price;
+            }
+        }
+
+        // Update the cart total displayed
+        document.getElementById('cartTotal').innerText = 'Subtotal: $' + cartTotal.toFixed(2);
+    }
+
+    function checkout() {
+        if (document.getElementById('confirmCheckout').checked) {
+            // Proceed with checkout
+            // You can redirect the user to the checkout page or perform other actions here
+            alert('Checkout successful!');
+        } else {
+            alert('Please confirm that you have checked the items before proceeding to checkout.');
+        }
+    }
+</script>
+
+
 
 
 

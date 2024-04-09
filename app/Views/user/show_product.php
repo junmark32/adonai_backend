@@ -61,10 +61,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Blank Page</li>
+									<li class="breadcrumb-item active" aria-current="page">Product</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Blank Page</h2>
+							<h2 class="breadcrumb-title">Product</h2>
 						</div>
 					</div>
 				</div>
@@ -75,9 +75,7 @@
 			<div class="content">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-12">
-							<h5>Blank Page</h5>
-						</div>
+						
 					</div>
 				</div>
 

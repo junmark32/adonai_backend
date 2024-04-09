@@ -53,11 +53,11 @@
 						</li>
 						<!-- Cart icon and link with number of items -->
 						<li class="nav-item">
-            <a class="nav-link" href="cart.html">
-                <i class="fas fa-shopping-cart"></i> 
-                <span class="cart-count">0</span>
-            </a>
-        </li>
+							<a class="nav-link" href="cart.html">
+								<i class="fas fa-shopping-cart"></i> 
+								<span class="cart-count">0</span>
+							</a>
+						</li>
 					</ul>
 				</nav>
 			</header>

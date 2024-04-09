@@ -48,10 +48,22 @@ class UserController extends ResourceController
     $doctorModel = new DoctorModel();
     $data['doctors'] = $doctorModel->findAll();
 
+    // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
     // Pass loggedIn status, role, and patient data to the view
     $data['loggedIn'] = $loggedIn;
     $data['role'] = $role;
     $data['patients'] = $patients;
+     // Pass the cart count to the view
+     $data['cartCount'] = $cartCount;
 
     return view('user/index', $data);
 }
@@ -94,6 +106,16 @@ class UserController extends ResourceController
      // Retrieve all products from the database
      $products = $productModel->findAll();
 
+     // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
      // Pass loggedIn status, role, and patient data to the view
     $data['loggedIn'] = $loggedIn;
     $data['role'] = $role;
@@ -101,6 +123,9 @@ class UserController extends ResourceController
 
      // Pass the products data to the view
      $data['products'] = $products;
+
+     // Pass the cart count to the view
+     $data['cartCount'] = $cartCount;
 
      return view('user/store', $data);
 
@@ -129,6 +154,16 @@ class UserController extends ResourceController
             // Fetch only the patient associated with the user's session ID
             $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
         }
+
+         // Load Cart Data for the logged-in user
+        $cartModel = new CartModel();
+        $cartItems = [];
+        if ($loggedIn && isset($userData['UserID'])) {
+            $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+        }
+
+        // Calculate the count of items in the cart
+        $cartCount = count($cartItems);
     
         // Get the doctor ID from the URL parameter
         $doctorID = $this->request->getGet('doctor_id');
@@ -142,7 +177,8 @@ class UserController extends ResourceController
             'doctor' => $doctor,
             'loggedIn' => $loggedIn,
             'role' => $role,
-            'patients' => $patients
+            'patients' => $patients,
+            'cartCount' => $cartCount
         ]);
     }
 
@@ -173,6 +209,17 @@ class UserController extends ResourceController
         $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
     }
 
+     // Load Cart Data for the logged-in user
+     $cartModel = new CartModel();
+     $cartItems = [];
+     if ($loggedIn && isset($userData['UserID'])) {
+         $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+     }
+
+         // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
+
     // Get the doctor ID from the URL parameter
     $doctorID = $this->request->getGet('doctor_id');
 
@@ -190,7 +237,8 @@ class UserController extends ResourceController
         'scheduleTimings' => $scheduleTimings,
         'loggedIn' => $loggedIn,
         'role' => $role,
-        'patients' => $patients
+        'patients' => $patients,
+        'cartCount' => $cartCount
     ]);
 }
 
@@ -590,6 +638,20 @@ public function showProdDetails($productID)
         $product = $productModel->find($productID);
         // Retrieve all lenses
         $lens = $lensModel->findAll();
+    
+        // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
+    // // Pass the cart count to the view
+    // $data['cartCount'] = $cartCount;
+
 
         // Dump the contents and type of the $products variable
         // var_dump($products);
@@ -607,7 +669,8 @@ public function showProdDetails($productID)
             'lens' => $lens,
             'loggedIn' => $loggedIn,
             'role' => $role,
-            'patients' => $patients
+            'patients' => $patients,
+            'cartCount' => $cartCount
         ]);
     }
 
@@ -647,7 +710,7 @@ public function showProdDetails($productID)
                 $cartModel->insert($data);
 
                 // Redirect the user to a different page after adding to the cart
-                return redirect()->to('/');
+                return redirect()->to('/store');
             } else {
                 return view('error', ['error' => 'Incomplete data provided']);
             }
@@ -688,6 +751,7 @@ public function viewCart()
     // Check if the user is logged in and has a valid UserID
     if ($loggedIn && isset($userData['UserID'])) {
         $cartModel = new CartModel();
+        $cartItems = [];
         $productModel = new ProductModel();
         $lensModel = new LensModel();
 
@@ -707,9 +771,25 @@ public function viewCart()
              if ($lens) {
                  $item['lens'] = $lens;
              }
+
+                  // Calculate the count of items in the cart
+                $cartCount = count($cartItems);
          }
         
     }
+
+     // Load Cart Data for the logged-in user
+    //  $cartModel = new CartModel();
+    //  $cartItems = [];
+    //  if ($loggedIn && isset($userData['UserID'])) {
+    //      $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    //  }
+ 
+    //  // Calculate the count of items in the cart
+    //  $cartCount = count($cartItems);
+
+    //  // Pass the cart count to the view
+    //  $data['cartCount'] = $cartCount;
 
     // Dump the contents of $cartItems
 // var_dump($cartItems);
@@ -719,7 +799,8 @@ public function viewCart()
         'loggedIn' => $loggedIn,
         'role' => $role,
         'patients' => $patients,
-        'cartItems' => $cartItems
+        'cartItems' => $cartItems,
+        'cartCount' => $cartCount
     ];
 
     return view('user/cart', $data);

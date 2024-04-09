@@ -70,7 +70,13 @@
                             <?php endforeach; ?>
 						</li>
 						<!-- /User Menu -->
-						
+						<!-- Cart icon and link with number of items -->
+						<li class="nav-item">
+							<a class="nav-link" href="<?php echo site_url('/store/cart')?>">
+								<i class="fas fa-shopping-cart"></i> 
+								<span class="cart-count"><?= $cartCount ?></span>
+							</a>
+						</li>
 					</ul>
 				</nav>
 			</header>
