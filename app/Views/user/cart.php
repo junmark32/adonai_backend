@@ -101,12 +101,14 @@
                                 <h6>Thank you for choosing Adonai for your eyeglass needs. We are committed to ensuring that you receive the best-fitted eyeglasses and optimal vision correction.</h6>
                                 <h6>After checkout, please be aware that the eyeglasses you've selected will be available for pickup at our clinic. Prior to visiting our clinic, we kindly request you to schedule an appointment for an eye test. This step is crucial to ensure the accuracy of your prescription and the suitability of the selected eyeglasses.</h6>
                                 <h6>Once your purchase is complete, you will receive an email containing a downloadable voucher confirming your order and appointment details. Please present this voucher to our clinic staff during your visit for the eye test. Following the test, you can proceed to collect the glasses you've ordered.</h6>
-                                <h6>We appreciate your understanding and cooperation in this process. If you have any inquiries or require assistance, please do not hesitate to contact our customer support team.</h6>
-                                <input type="checkbox" id="confirmCheckout">
-                                <label for="confirmCheckout">I confirm that I have checked the items and want to proceed to checkout.</label>
+                                <form id="checkoutForm" action="/store/cart/checkout" >
+                                    <input type="checkbox" id="confirmCheckout">
+                                    <label for="confirmCheckout">I confirm that I have checked the items and want to proceed to checkout.</label>
+                                    <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
+                                </form>
                             </div>
                             <div class="card-footer d-flex justify-content-center"> <!-- Updated to align button to the right -->
-                                <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
+                                <!-- This section was removed because the checkout form is now within the previous card-footer -->
                             </div>
                         </div>
                     </div>
@@ -116,6 +118,7 @@
     </div>
 </div>
 <!-- /Page Content -->
+
 
 
 <script>
@@ -135,16 +138,23 @@
         document.getElementById('cartTotal').innerText = 'Subtotal: $' + cartTotal.toFixed(2);
     }
 
-    function checkout() {
-        if (document.getElementById('confirmCheckout').checked) {
-            // Proceed with checkout
-            // You can redirect the user to the checkout page or perform other actions here
-            alert('Checkout successful!');
-        } else {
-            alert('Please confirm that you have checked the items before proceeding to checkout.');
-        }
+	function checkout() {
+    // Check if the confirmation checkbox is checked
+    var confirmationCheckbox = document.getElementById('confirmCheckout');
+    if (confirmationCheckbox.checked) {
+        // Submit the form synchronously
+        document.getElementById('checkoutForm').submit();
+    } else {
+        // If the confirmation checkbox is not checked, prompt the user to confirm
+        alert("Please confirm that you want to proceed to checkout by checking the box.");
     }
+}
+
+
+    
 </script>
+
+
 
 
 

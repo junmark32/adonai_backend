@@ -3,10 +3,10 @@
 			<!-- Logo -->
 			<div class="header-left">
 				<a href="index.html" class="logo">
-					<img src="assets/img/logo.png" alt="Logo">
+				<img src="<?php echo base_url('uploads/logo-adonai.png')?>" class="img-fluid" alt="Logo">
 				</a>
 				<a href="index.html" class="logo logo-small">
-					<img src="assets/img/logo-small.png" alt="Logo" width="30" height="30">
+					<img src="<?php echo base_url('uploads/logo-adonai.png')?>" class="img-fluid" alt="Logo">
 				</a>
 			</div>
 			<!-- /Logo -->

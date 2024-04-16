@@ -10,7 +10,7 @@
 							</span>
 						</a>
 						<a href="index-2.html" class="navbar-brand logo">
-							<img src="<?php echo base_url('assets/img/logo.png')?>" class="img-fluid" alt="Logo">
+							<img src="<?php echo base_url('uploads/logo-adonai.png')?>" class="img-fluid" alt="Logo">
 						</a>
 					</div>
 					<div class="main-menu-wrapper">

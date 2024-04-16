@@ -19,10 +19,14 @@ $routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProd
 $routes->match(['post','get'],'/store/cart/addToCart', 'UserController::addToCart');
 $routes->match(['post','get'],'/store/cart', 'UserController::viewCart');
 $routes->match(['post','get'],'/store/cart/remove/(:num)', 'UserController::removeItem/$1');
+$routes->match(['post','get'],'/store/cart/checkout', 'UserController::item_checkout');
+
 
 ///
-$routes->match(['post','get'],'/register', 'UserController::register');
-$routes->match(['post','get'],'/verify-code/(:num)', 'UserController::verifyCode/$1');
+$routes->get('/register', 'Usercontroller::register');
+$routes->match(['post','get'],'/register-user', 'UserController::register_user');
+$routes->get('/verify-user', 'UserController::verify');
+$routes->match(['post','get'],'/verify-code', 'UserController::verifyCode');
 $routes->match(['post','get'],'/fn_login', 'UserController::fn_login');
 
 

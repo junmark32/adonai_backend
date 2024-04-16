@@ -12,6 +12,7 @@ use App\Models\AdminModel;
 use App\Models\ProductModel;
 use App\Models\LensModel;
 use App\Models\CartModel;
+use App\Models\PurchaseModel;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -75,6 +76,22 @@ class UserController extends ResourceController
     //   $data['products'] = $productModel->findAll();
 
       return view('login');
+    }
+
+    public function register()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      return view('register');
+    }
+
+    public function verify()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      return view('verify');
     }
 
     public function store()
@@ -310,7 +327,8 @@ class UserController extends ResourceController
     }
 
     ///
-    public function register()
+
+    public function register_user()
     {
         try {
             $userModel = new UserModel();
@@ -355,7 +373,8 @@ class UserController extends ResourceController
                     // Send verification email
                     $this->sendVerificationEmail($this->request->getVar('email'), $verificationCode);
     
-                    return $this->respond(['msg' => 'okay', 'token' => $token]);
+                                    // Redirect to a page informing the user to check their email for the verification code
+                return redirect()->to('/verify-user');
                 } else {
                     // If patient data saving fails
                     return $this->respond(['msg' => 'failed to save patient data'], 500);
@@ -411,7 +430,7 @@ class UserController extends ResourceController
         return substr(str_shuffle($str_result), 0, $length);
     }
 
-    public function verifyCode($code)
+    public function verifyCode()
     {
         try {
             // Retrieve the verification code from the request
@@ -419,6 +438,7 @@ class UserController extends ResourceController
 
             // Check if the code exists in the database
             $userModel = new UserModel();
+            $code = $this->request->getVar('verificationCode');
             $user = $userModel->where('verification_code', $code)->first();
 
             if ($user) {
@@ -429,7 +449,7 @@ class UserController extends ResourceController
                 // For example, you can log the user in:
                 // $this->authenticateUser($user['id']);
 
-                return $this->respond(['msg' => 'okay']);
+                return redirect()->to('/login');
             } else {
                 // Verification failed
                 return $this->respond(['msg' => 'Verification failed'], 400);
@@ -778,21 +798,7 @@ public function viewCart()
         
     }
 
-     // Load Cart Data for the logged-in user
-    //  $cartModel = new CartModel();
-    //  $cartItems = [];
-    //  if ($loggedIn && isset($userData['UserID'])) {
-    //      $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
-    //  }
- 
-    //  // Calculate the count of items in the cart
-    //  $cartCount = count($cartItems);
 
-    //  // Pass the cart count to the view
-    //  $data['cartCount'] = $cartCount;
-
-    // Dump the contents of $cartItems
-// var_dump($cartItems);
 
     // Pass loggedIn status, role, and patient data to the view
     $data = [
@@ -827,7 +833,79 @@ public function removeItem($CartID)
     }
 }
 
+public function item_checkout()
+{
+    // Start session if not already started
+    session();
+
+    // Check if the user is logged in
+    if (!session()->has('user_data')) {
+        // If user is not logged in, redirect to login page or any other appropriate action
+        return redirect()->to('login')->with('error', 'Please log in to proceed with checkout.');
+    }
+
+    // Get cart items for the user
+    $cartModel = new CartModel();
+    $cartItems = $cartModel->where('UserID', session('user_data')['UserID'])->findAll();
+
+    if (!empty($cartItems)) {
+        // Initialize total amount
+        $totalAmount = 0;
+
+        // Process each cart item for purchase
+        foreach ($cartItems as $item) {
+            // Load the related product and lens data
+            $productModel = new ProductModel();
+            $product = $productModel->find($item['ProductID']);
+
+            $lensModel = new LensModel();
+            $lens = $lensModel->find($item['LensID']);
+
+            if (!$product || !$lens) {
+                // Redirect back with error message if product or lens data is missing
+                return redirect()->back()->with('error', 'Product or lens data is missing for some cart items.');
+            }
+
+            // Calculate total amount for the item
+            $productPrice = $product['Price'];
+            $lensPrice = $lens['Price'];
+            $itemTotalAmount = $item['Quantity'] * ($productPrice + $lensPrice);
+
+            // Update total amount
+            $totalAmount += $itemTotalAmount;
+
+            // Insert purchase record for each item
+            $purchaseData = [
+                'UserID' => session('user_data')['UserID'],
+                'EyewearID' => $item['ProductID'],
+                'LensID' => $item['LensID'],
+                'PurchaseDate' => date('Y-m-d H:i:s'),
+                'Quantity' => $item['Quantity'],
+                'TotalAmount' => $itemTotalAmount, // Total amount for the item
+                'Status' => 'Pending' // Adjust status as needed
+            ];
+            $purchaseModel = new PurchaseModel();
+            $purchaseModel->insert($purchaseData);
+
+            // Update the stock quantity in the ProductModel
+            $productModel->update($item['ProductID'], ['StockQuantity' => $product['StockQuantity'] - $item['Quantity']]);
+
+            // Update the stock quantity in the LensModel
+            $lensModel->update($item['LensID'], ['StockQuantity' => $lens['StockQuantity'] - $item['Quantity']]);
+
+            // Optionally, you may want to remove the item from the cart after purchase
+            $cartModel->delete($item['CartID']);
+        }
+
+        // Redirect to a success page or display a success message
+        return redirect()->to('success-page')->with('totalAmount', $totalAmount);
+    } else {
+        // If cart is empty, display an error message or redirect to cart page
+        return redirect()->to('cart-page')->with('error', 'Your cart is empty.');
+    }
+}
 
 
-  
+
+
 }

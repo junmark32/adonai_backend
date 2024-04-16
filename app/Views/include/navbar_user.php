@@ -9,13 +9,13 @@
 								<span></span>
 							</span>
 						</a>
-						<a href="index-2.html" class="navbar-brand logo">
-							<img src="<?php echo base_url('assets/img/logo.png')?>" class="img-fluid" alt="Logo">
+						<a href="<?php echo site_url('/')?>" class="navbar-brand logo">
+							<img src="<?php echo base_url('uploads/logo-adonai.png')?>" class="img-fluid" alt="Logo">
 						</a>
 					</div>
 					<div class="main-menu-wrapper">
 						<div class="menu-header">
-							<a href="index-2.html" class="menu-logo">
+							<a href="<?php echo site_url('/')?>" class="menu-logo">
 								<img src="<?php echo base_url('assets/img/logo.png')?>" class="img-fluid" alt="Logo">
 							</a>
 							<a id="menu_close" class="menu-close" href="javascript:void(0);">

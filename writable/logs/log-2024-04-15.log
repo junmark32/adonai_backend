@@ -1,0 +1,32 @@
+CRITICAL - 2024-04-15 01:40:23 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 809.
+ 1 APPPATH\Controllers\UserController.php(809): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 809)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-04-15 02:00:56 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 809.
+ 1 APPPATH\Controllers\UserController.php(809): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 809)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-04-15 05:30:06 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 809.
+ 1 APPPATH\Controllers\UserController.php(809): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 809)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-04-15 05:30:34 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 809.
+ 1 APPPATH\Controllers\UserController.php(809): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 809)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
