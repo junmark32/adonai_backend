@@ -13,6 +13,7 @@ use App\Models\ProductModel;
 use App\Models\LensModel;
 use App\Models\CartModel;
 use App\Models\PurchaseModel;
+use App\Models\AppointmentModel;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -92,6 +93,68 @@ class UserController extends ResourceController
     //   $data['products'] = $productModel->findAll();
 
       return view('verify');
+    }
+
+    public function user_db()
+    {
+       // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+    }
+
+    // Load Appointments Data
+    $appointmentModel = new AppointmentModel();
+    $appointments = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch appointments associated with the user's session PatientID
+        $appointments = $appointmentModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+     // Load the ProductModel
+     $productModel = new ProductModel();
+
+     // Retrieve all products from the database
+     $products = $productModel->findAll();
+
+     // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
+     // Pass loggedIn status, role, and patient data to the view
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
+    $data['appointments'] = $appointments;
+
+     // Pass the products data to the view
+     $data['products'] = $products;
+
+     // Pass the cart count to the view
+     $data['cartCount'] = $cartCount;
+
+     return view('user/user_dashboard', $data);
     }
 
     public function store()

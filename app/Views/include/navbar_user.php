@@ -63,7 +63,7 @@
                                             <p class="text-muted mb-0">User</p>
                                         </div>
                                     </div>
-                                    <a class="dropdown-item" href="doctor-dashboard.html">Dashboard</a>
+                                    <a class="dropdown-item" href="<?php echo site_url('/dashboard')?>">Dashboard</a>
                                     <a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
                                     <a class="dropdown-item" href="login.html">Logout</a>
                                 </div>

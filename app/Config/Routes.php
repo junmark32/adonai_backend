@@ -14,6 +14,7 @@ $routes->match(['post','get'],'/store', 'UserController::store');
 $routes->get('/booking', 'Usercontroller::booking');
 $routes->get('/doctor/getDoctorDetails/(:num)', 'UserController::getDoctorDetails/$1');
 $routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');
+$routes->match(['post','get'],'/dashboard', 'UserController::user_db');
 //prod
 $routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProdDetails/$1');
 $routes->match(['post','get'],'/store/cart/addToCart', 'UserController::addToCart');

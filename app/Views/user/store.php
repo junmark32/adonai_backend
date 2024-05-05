@@ -6,7 +6,7 @@
 		
 			<!-- Header -->
 						<!-- Header -->
-						<?php if (isset($loggedIn) && $loggedIn): ?>
+<?php if (isset($loggedIn) && $loggedIn): ?>
     <?php
     switch ($role) {
         case 'user':

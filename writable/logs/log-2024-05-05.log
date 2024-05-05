@@ -1,0 +1,80 @@
+CRITICAL - 2024-05-05 13:09:30 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 809.
+ 1 APPPATH\Controllers\UserController.php(809): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 809)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 13:09:37 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 809.
+ 1 APPPATH\Controllers\UserController.php(809): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 809)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 13:47:57 --> Undefined variable $products
+in APPPATH\Views\user\user_dashboard.php on line 154.
+ 1 APPPATH\Views\user\user_dashboard.php(154): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $products', 'C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php', 154)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/user_dashboard', [], true)
+ 5 APPPATH\Controllers\UserController.php(102): view('user/user_dashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->user_db()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 15:20:11 --> Undefined array key "PatientID"
+in APPPATH\Controllers\UserController.php on line 625.
+ 1 APPPATH\Controllers\UserController.php(625): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "PatientID"', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 625)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->checkSessionData()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 15:40:06 --> Undefined variable $cartCount
+in APPPATH\Controllers\UserController.php on line 862.
+ 1 APPPATH\Controllers\UserController.php(862): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartCount', 'C:\\laragon\\www\\adonbacked\\app\\Controllers\\UserController.php', 862)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->viewCart()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 16:27:00 --> Undefined array key "Amount"
+in APPPATH\Views\user\user_dashboard.php on line 176.
+ 1 APPPATH\Views\user\user_dashboard.php(176): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Amount"', 'C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php', 176)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/user_dashboard', [], true)
+ 5 APPPATH\Controllers\UserController.php(157): view('user/user_dashboard', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->user_db()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 16:27:27 --> Undefined array key "Follow_Up"
+in APPPATH\Views\user\user_dashboard.php on line 177.
+ 1 APPPATH\Views\user\user_dashboard.php(177): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Follow_Up"', 'C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php', 177)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/user_dashboard', [], true)
+ 5 APPPATH\Controllers\UserController.php(157): view('user/user_dashboard', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->user_db()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+CRITICAL - 2024-05-05 16:33:50 --> Undefined array key "FirstName"
+in APPPATH\Views\user\user_dashboard.php on line 175.
+ 1 APPPATH\Views\user\user_dashboard.php(175): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "FirstName"', 'C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php', 175)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\adonbacked\\app\\Views\\user\\user_dashboard.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/user_dashboard', [], true)
+ 5 APPPATH\Controllers\UserController.php(157): view('user/user_dashboard', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->user_db()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
