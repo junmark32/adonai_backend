@@ -88,6 +88,7 @@
 										<div class="info-widget">
 											<h4 class="card-title">Personal Information</h4>
 											<div class="row">
+												<input type="hidden" name="doctor_id" value="<?= isset($_GET['doctor_id']) ? $_GET['doctor_id'] : '' ?>">
 												<div class="col-md-6 col-sm-12">
 													<div class="form-group card-label">
 														<label>First Name</label>

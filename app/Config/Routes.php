@@ -15,6 +15,7 @@ $routes->get('/booking', 'Usercontroller::booking');
 $routes->get('/doctor/getDoctorDetails/(:num)', 'UserController::getDoctorDetails/$1');
 $routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');
 $routes->match(['post','get'],'/dashboard', 'UserController::user_db');
+
 //prod
 $routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProdDetails/$1');
 $routes->match(['post','get'],'/store/cart/addToCart', 'UserController::addToCart');
@@ -36,6 +37,8 @@ $routes->match(['post','get'],'patient/insertBooking', 'PatientController::inser
 //appointmet
 $routes->match(['post','get'],'booking/booked-dates', 'PatientController::getBookedDates');
 $routes->match(['post','get'],'available-time-slots', 'PatientController::getAvailableTimeSlots');
+$routes->match(['post','get'],'appointments/cancel/(:num)', 'PatientController::cancelAppointment/$1');
+
 
 // doctor
 $routes->get('/Doctor/Dashboard', 'UserController::db_doctor');

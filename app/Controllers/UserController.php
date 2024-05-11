@@ -114,10 +114,30 @@ class UserController extends ResourceController
     // Load Appointments Data
     $appointmentModel = new AppointmentModel();
     $appointments = [];
+
     if (!empty($userData['PatientID'])) {
         // Fetch appointments associated with the user's session PatientID
         $appointments = $appointmentModel->where('PatientID', $userData['PatientID'])->findAll();
+
+        // If appointments are found, fetch doctor data for each appointment
+        if (!empty($appointments)) {
+            // Load Doctor model
+            $doctorModel = new DoctorModel();
+
+            // Loop through appointments to fetch doctor data for each appointment
+            foreach ($appointments as &$appointment) {
+                // Fetch doctor data based on the DoctorID from the appointment
+                $doctor = $doctorModel->find($appointment['DoctorID']);
+
+                // If doctor data is found, assign it to the appointment
+                if (!empty($doctor)) {
+                    $appointment['doctor_data'] = $doctor;
+                }
+            }
+        }
     }
+
+
 
     // Load Patients Data
     $patientModel = new PatientModel();

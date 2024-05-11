@@ -153,6 +153,7 @@
                                                                 <tr>
                                                                     <th>Doctor</th>
                                                                     <th>Patient Name</th>
+																	<th>Purpose</th>
                                                                     <th>Appt Date</th>
                                                                     <th>Booking Date</th>
                                                                     <th>Status</th>
@@ -164,13 +165,16 @@
                                                                     <tr>
                                                                         <td>
                                                                             <h2 class="table-avatar">
-                                                                                <a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-                                                                                    <img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-01.jpg" alt="User Image">
-                                                                                </a>
-                                                                                <a href="doctor-profile.html"><?= $appointment['Pref_Doctor'] ?></a>
+                                                                            <a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+                                                                                <img class="avatar-img rounded-circle" src="<?= base_url('uploads/') . $appointment['doctor_data']['Profile_url'] ?>" alt="User Image">
+                                                                            </a>
+
+
+                                                                                <a href="doctor-profile.html">Dra. <?= $appointment['doctor_data']['FirstName'] ?> <?= $appointment['doctor_data']['LastName'] ?></a>
                                                                             </h2>
                                                                         </td>
                                                                         <td><?= $appointment['Firstname'] ?> <?= $appointment['Lastname'] ?></td>
+																		<td><?= $appointment['Purpose'] ?></td>
                                                                         <td>
                                                                             <?= date('j M Y', strtotime($appointment['Pref_Date'])) ?>
                                                                             <span class="d-block text-info">
@@ -178,17 +182,28 @@
                                                                             </span>
                                                                         </td>
                                                                         <td><?= date('j M Y', strtotime($appointment['created_at'])) ?></td>
-                                                                        <td><span class="badge badge-pill bg-success-light"><?= $appointment['Status'] ?></span></td>
-                                                                        <td class="text-right">
-                                                                            <div class="table-action">
-                                                                                <a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
-                                                                                    <i class="fas fa-print"></i> Print
-                                                                                </a>
-                                                                                <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-                                                                                    <i class="far fa-eye"></i> View
-                                                                                </a>
-                                                                            </div>
-                                                                        </td>
+                                                                        <td>
+																			<?php 
+																			$statusClass = '';
+																			if ($appointment['Status'] == 'Cancelled') {
+																				$statusClass = 'bg-danger-light';
+																			} else {
+																				$statusClass = 'bg-success-light';
+																			}
+																			?>
+																			<span class="badge badge-pill <?= $statusClass ?>"><?= $appointment['Status'] ?></span>
+																		</td>
+																		<td class="text-right">
+																			<div class="table-action">
+																				<form action="<?= site_url('appointments/cancel/' . $appointment['AppointmentID']) ?>" method="post">
+																					<button type="submit" class="btn btn-sm bg-danger text-light">
+																						<i class="fas fa-times"></i> Cancel
+																					</button>
+																				</form>
+																			</div>
+																		</td>
+
+
                                                                     </tr>
                                                                 <?php endforeach; ?>
                                                             </tbody>

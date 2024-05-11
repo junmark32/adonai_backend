@@ -66,6 +66,7 @@ class PatientController extends ResourceController
 
                 // Retrieve data from the request
                 $requestData = [
+                    'DoctorID' => $this->request->getVar('doctor_id'),
                     'PatientID' => $patientID,
                     'Firstname' => $this->request->getVar('firstname'),
                     'Lastname' => $this->request->getVar('lastname'),
@@ -80,7 +81,7 @@ class PatientController extends ResourceController
                     'Purpose' => $this->request->getVar('purpose'),
                     'Pref_Location' => $this->request->getVar('pref_location'),
                     'Add_message' => $this->request->getVar('add_message'),
-                    'Status' => 'Available', // Set the initial status as 'Pending' or adjust as needed
+                    'Status' => 'Scheduled', // Set the initial status as 'Pending' or adjust as needed
                 ];
 
                 // Insert appointment data
@@ -106,6 +107,71 @@ class PatientController extends ResourceController
             // Handle missing user data in session
             return $this->respond(['error' => 'User data not found in session']);
         }
+    }
+
+    ////
+    public function cancelAppointment($appointmentId)
+{
+    $appointmentModel = new AppointmentModel();
+    $scheduleModel = new ScheduleModel();
+
+    // Fetch the appointment from the database
+    $appointment = $appointmentModel->find($appointmentId);
+
+    if ($appointment) {
+        // Update the status to "Cancelled"
+        $appointmentModel->update($appointmentId, ['Status' => 'Cancelled']);
+        
+        // Find the corresponding schedule timing
+        $timeslotId = $appointment['Pref_Timeslot_ID'];
+        $scheduleTiming = $scheduleModel->find($timeslotId);
+
+        if ($scheduleTiming) {
+            // Update the status of the schedule timing to "Available"
+            $scheduleModel->update($timeslotId, ['status' => 'Available']);
+        }
+
+        // Optionally, you can redirect the user back to the appointments page
+        return redirect()->to('/dashboard')->with('success', 'Appointment cancelled successfully');
+    } else {
+        // Appointment not found, you can handle this case accordingly
+        return redirect()->back()->with('error', 'Appointment not found');
+    }
+}
+
+///
+
+public function updateStatusBasedOnSchedule()
+    {
+        // Load AppointmentModel and ScheduleModel
+        $appointmentModel = new AppointmentModel();
+        $scheduleModel = new ScheduleModel();
+
+        // Get the current date and time
+        $currentDate = date('Y-m-d');
+        $currentTime = date('H:i:s');
+
+        // Fetch appointments where Pref_Date matches start_time
+        $appointmentsToUpdate = $appointmentModel
+            ->where('Pref_Date', $currentDate)
+            ->join('schedule', 'appointment.Pref_Timeslot_ID = schedule.id')
+            ->where('schedule.start_time', '<=', $currentTime)
+            ->where('schedule.end_time', '>', $currentTime)
+            ->findAll();
+
+        // If appointments are found, update their status to "Running"
+        if ($appointmentsToUpdate) {
+            foreach ($appointmentsToUpdate as $appointment) {
+                $appointmentModel->update($appointment['AppointmentID'], ['Status' => 'On-Going']);
+            }
+        }
+
+        // Update the status of schedule timings where end_time has passed
+        $scheduleModel->where('end_time <=', $currentTime)
+            ->update(['status' => 'Finished']);
+
+        // Optionally, you can redirect the user or return a response indicating success
+        // return redirect()->to('/dashboard')->with('success', 'Appointment statuses and schedule statuses updated successfully.');
     }
 
     
