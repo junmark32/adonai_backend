@@ -6747,3 +6747,9 @@ html.menu-opened body {
     border-radius: 50%; /* Make it a circle */
     transform: translate(50%, -50%); /* Center it in the upper right corner */
 }
+
+.disabled {
+    pointer-events: none; /* Disable clicking */
+    opacity: 0.5; /* Add visual indication of disabled state */
+    /* Add any other styles for disabled state */
+}

@@ -159,24 +159,38 @@
                     }
 
                     function selectTimeSlot(day, date, timeSlot, timeslotId) {
-                        // Calculate the selected date based on the current week's starting date (currentDate)
-                        const selectedDate = new Date(currentDate);
-                        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        const dayIndex = daysOfWeek.indexOf(day);
-                        selectedDate.setDate(currentDate.getDate() + dayIndex); // Add the day index to get the selected date
+					// Convert time from 12-hour format to 24-hour format
+					const [startTime, endTime] = timeSlot.split(' - ').map(time => {
+						const [timePart, meridiem] = time.split(' ');
+						let [hours, minutes] = timePart.split(':').map(Number);
+						if (meridiem.toLowerCase() === 'pm' && hours !== 12) {
+							hours += 12;
+						} else if (meridiem.toLowerCase() === 'am' && hours === 12) {
+							hours = 0;
+						}
+						return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+					});
 
-                        // Format the selected date
-                        const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
+					// Calculate the selected date based on the current week's starting date (currentDate)
+					const selectedDate = new Date(currentDate);
+					const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+					const dayIndex = daysOfWeek.indexOf(day);
+					selectedDate.setDate(currentDate.getDate() + dayIndex); // Add the day index to get the selected date
 
-                        // Store selected values in local storage
-                        localStorage.setItem('selectedDay', day);
-                        localStorage.setItem('selectedDate', formattedDate);
-                        localStorage.setItem('selectedTime', timeSlot); // Store the selected timeslot
-                        localStorage.setItem('selectedTimeslotId', timeslotId); // Store the selected timeslot ID
+					// Format the selected date
+					const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
 
-                        // Redirect to the checkout page
-                        window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
-                    }
+					// Store selected values in local storage
+					localStorage.setItem('selectedDay', day);
+					localStorage.setItem('selectedDate', formattedDate);
+					localStorage.setItem('selectedTimeStart', startTime); // Store the selected timeslot start time
+					localStorage.setItem('selectedTimeEnd', endTime); // Store the selected timeslot end time
+					localStorage.setItem('selectedTimeslotId', timeslotId); // Store the selected timeslot ID
+
+					// Redirect to the checkout page
+					window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
+				}
+
 
 
 
@@ -191,36 +205,39 @@
     <!-- /Schedule Header -->
 
     <!-- Schedule Content -->
-    <div class="schedule-cont">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Time Slot -->
-                <div class="time-slot">
-                    <ul class="clearfix">
-                        <?php
-                        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        foreach ($daysOfWeek as $day) :
-                            ?>
-                            <li>
-                                <?php foreach ($scheduleTimings as $timing) : ?>
-                                    <?php if ($timing['day'] == $day) : ?>
-                                        <?php // Merge the start time and end time ?>
-                                        <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
-                                        <?php $formattedDate = date('F j, Y', strtotime("next $day", strtotime("next Sunday", strtotime("now")))); ?>
-                                        <a class="timing" href="#" onclick="selectTimeSlot('<?= $day ?>', '<?= $formattedDate ?>', '<?= $mergedTime ?>', '<?= $timing['id'] ?>')">
-                                            <span><?= $mergedTime ?></span>
-                                        </a>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-                <!-- /Time Slot -->
+<div class="schedule-cont">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Time Slot -->
+            <div class="time-slot">
+                <ul class="clearfix">
+                    <?php
+                    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    foreach ($daysOfWeek as $day) :
+                        ?>
+                        <li>
+                            <?php foreach ($scheduleTimings as $timing) : ?>
+                                <?php if ($timing['day'] == $day) : ?>
+                                    <?php // Merge the start time and end time ?>
+                                    <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
+                                    <?php $formattedDate = date('F j, Y', strtotime("next $day", strtotime("next Sunday", strtotime("now")))); ?>
+                                    <?php
+                                    $isReserved = ($timing['status'] == 'Reserved'); // Check if status is Reserved
+                                    ?>
+                                    <a class="timing <?php if ($isReserved) echo 'disabled'; ?>" href="#" onclick="<?php if (!$isReserved) echo "selectTimeSlot('{$day}', '{$formattedDate}', '{$mergedTime}', '{$timing['id']}')"; ?>">
+                                        <span><?= $mergedTime ?></span>
+                                    </a>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
+            <!-- /Time Slot -->
         </div>
     </div>
-    <!-- /Schedule Content -->
+</div>
+<!-- /Schedule Content -->
 
 </div>
 <!-- /Schedule Widget -->

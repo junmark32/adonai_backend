@@ -387,35 +387,45 @@
 		</div>
 		<!-- /Main Wrapper -->
 
-        <script>
-        // Retrieve selected values from local storage
-        const selectedDay = localStorage.getItem('selectedDay');
-        const selectedDate = localStorage.getItem('selectedDate');
-        const selectedTime = localStorage.getItem('selectedTime');
-		const selectedTimeslotId = localStorage.getItem('selectedTimeslotId');
+		<script>
+    // Retrieve selected values from local storage
+    const selectedDay = localStorage.getItem('selectedDay');
+    const selectedDate = localStorage.getItem('selectedDate');
+    const selectedTimeStart = localStorage.getItem('selectedTimeStart'); // Update to selectedTimeStart
+    const selectedTimeEnd = localStorage.getItem('selectedTimeEnd'); // Add selectedTimeEnd
+    const selectedTimeslotId = localStorage.getItem('selectedTimeslotId');
 
-        // Trim the selectedTime
-        const trimmedSelectedTime = selectedTime.trim();
+    // Display selected values in the booking summary
+    document.getElementById('selectedDay').textContent = selectedDay;
+    document.getElementById('selectedDate').textContent = selectedDate;
+    document.getElementById('selectedTimeslotId').textContent = selectedTimeslotId;
+    // Retrieve selected values from local storage
+// const selectedTimeStart = localStorage.getItem('selectedTimeStart');
+// const selectedTimeEnd = localStorage.getItem('selectedTimeEnd');
 
-        // Display selected values in the booking summary
-		document.getElementById('selectedDay').textContent = selectedDay;
-        document.getElementById('selectedDate').textContent = selectedDate;
-		document.getElementById('selectedTimeslotId').textContent = selectedTimeslotId;
-        document.getElementById('selectedTime').textContent = trimmedSelectedTime;
+// Function to convert time to 12-hour format with AM/PM
+function convertTo12Hour(time) {
+    const [hour, minute] = time.split(':').map(Number);
+    const amPm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12; // Convert 0 to 12
+    return `${displayHour}:${minute.toString().padStart(2, '0')} ${amPm}`;
+}
 
-        // Set the value of the hidden input field for pref_date
-		document.getElementById('pref_timeslotid_input').value = selectedTimeslotId;
-		document.getElementById('pref_day_input').value = selectedDay;
-        document.getElementById('pref_date_input').value = selectedDate;
+// Display selected time in 12-hour format with AM/PM
+document.getElementById('selectedTime').textContent = `${convertTo12Hour(selectedTimeStart)} - ${convertTo12Hour(selectedTimeEnd)}`;
 
-        // Extract start and end times
-        const [prefTimeStart, prefTimeEnd] = trimmedSelectedTime.split(' - ');
 
-        // Set the value of hidden input fields for Pref_Time_Start and Pref_Time_End
-        document.getElementById('pref_time_start_input').value = prefTimeStart;
-        document.getElementById('pref_time_end_input').value = prefTimeEnd;
+    // Set the value of the hidden input field for pref_date
+    document.getElementById('pref_timeslotid_input').value = selectedTimeslotId;
+    document.getElementById('pref_day_input').value = selectedDay;
+    document.getElementById('pref_date_input').value = selectedDate;
 
-        </script>
+    // Set the value of hidden input fields for Pref_Time_Start and Pref_Time_End
+    document.getElementById('pref_time_start_input').value = selectedTimeStart;
+    document.getElementById('pref_time_end_input').value = selectedTimeEnd;
+
+</script>
+
         
 		<!-- jQuery & Bootstrap JS
 	  

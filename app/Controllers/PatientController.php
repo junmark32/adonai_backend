@@ -141,38 +141,6 @@ class PatientController extends ResourceController
 
 ///
 
-public function updateStatusBasedOnSchedule()
-    {
-        // Load AppointmentModel and ScheduleModel
-        $appointmentModel = new AppointmentModel();
-        $scheduleModel = new ScheduleModel();
-
-        // Get the current date and time
-        $currentDate = date('Y-m-d');
-        $currentTime = date('H:i:s');
-
-        // Fetch appointments where Pref_Date matches start_time
-        $appointmentsToUpdate = $appointmentModel
-            ->where('Pref_Date', $currentDate)
-            ->join('schedule', 'appointment.Pref_Timeslot_ID = schedule.id')
-            ->where('schedule.start_time', '<=', $currentTime)
-            ->where('schedule.end_time', '>', $currentTime)
-            ->findAll();
-
-        // If appointments are found, update their status to "Running"
-        if ($appointmentsToUpdate) {
-            foreach ($appointmentsToUpdate as $appointment) {
-                $appointmentModel->update($appointment['AppointmentID'], ['Status' => 'On-Going']);
-            }
-        }
-
-        // Update the status of schedule timings where end_time has passed
-        $scheduleModel->where('end_time <=', $currentTime)
-            ->update(['status' => 'Finished']);
-
-        // Optionally, you can redirect the user or return a response indicating success
-        // return redirect()->to('/dashboard')->with('success', 'Appointment statuses and schedule statuses updated successfully.');
-    }
 
     
 

@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+
 use App\Controllers\BaseController;
 use CodeIgniter\Restful\ResourceController;
 use App\Models\PatientModel;
@@ -22,6 +23,7 @@ use CodeIgniter\Session\Session;
 
 class UserController extends ResourceController
 {
+    
     public function index()
 {
     // Load the session service
@@ -329,7 +331,8 @@ class UserController extends ResourceController
 
     // Fetch all schedule timings for the doctor
     $scheduleModel = new ScheduleModel();
-    $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->where('status', 'Available')->findAll();
+    $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->findAll();
+
 
     // Pass the doctor's data, schedule timings, and user-related data to the view
     return view('user/booking', [
@@ -340,7 +343,44 @@ class UserController extends ResourceController
         'patients' => $patients,
         'cartCount' => $cartCount
     ]);
+
 }
+
+///
+// public function updateStatusBasedOnSchedule()
+// {
+//     // Load AppointmentModel and ScheduleModel
+//     $appointmentModel = new AppointmentModel();
+//     $scheduleModel = new ScheduleModel();
+
+//     // Get the current date and time
+//     $currentDate = date('Y-m-d');
+//     $currentTime = date('H:i:s');
+
+//     // Fetch appointments where Pref_Date matches start_time
+//     $appointmentsToUpdate = $appointmentModel
+//         ->where('Pref_Date', $currentDate)
+//         ->join('schedule_timings', 'appointments.Pref_Timeslot_ID = schedule_timings.id')
+//         ->where('schedule_timings.start_time', '<=', $currentTime)
+//         ->where('schedule_timings.end_time', '>', $currentTime)
+//         ->findAll();
+
+//     // If appointments are found, update their status to "Running"
+//     if ($appointmentsToUpdate) {
+//         foreach ($appointmentsToUpdate as $appointment) {
+//             $appointmentModel->update($appointment['id'], ['Status' => 'Running']);
+//         }
+//     }
+
+//     // Update the status of schedule timings where end_time has passed
+//     $scheduleModel->where('end_time <=', $currentTime)
+//         ->update(['Status' => 'Finished']);
+
+        
+// }
+
+
+///
 
     
 
@@ -371,12 +411,34 @@ class UserController extends ResourceController
                 $doctorModel = new DoctorModel();
                 $doctor = $doctorModel->find($doctorID);
 
+
                 if ($doctor) {
+                    
+                    // Fetch appointments based on DoctorID
+                    $appointmentModel = new AppointmentModel();
+                    $appointments = $appointmentModel->where('DoctorID', $doctorID)->findAll();
+
+                    // Initialize an array to hold appointment and patient data
+                    $appointmentData = [];
+
+                    // Fetch patient data for each appointment
+                    $patientModel = new PatientModel();
+                    foreach ($appointments as $appointment) {
+                        $patient = $patientModel->find($appointment['PatientID']);
+                        if ($patient) {
+                            // Combine appointment and patient data
+                            $appointmentData[] = [
+                                'appointment' => $appointment,
+                                'patient' => $patient,
+                            ];
+                        }
+                    }
                             // Pass loggedIn status, role, and doctor data to the view
                     $data['loggedIn'] = $loggedIn;
                     $data['role'] = $role;
                     // Pass the doctor data to the view
                     $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                    $data['appointmentData'] = $appointmentData;
                     return view('doctor/doctor_dashboard', $data);
                 } else {
                     return view('error', ['error' => 'Doctor not found']);

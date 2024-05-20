@@ -5,6 +5,7 @@ namespace Config;
 use CodeIgniter\Events\Events;
 use CodeIgniter\Exceptions\FrameworkException;
 use CodeIgniter\HotReloader\HotReloader;
+use App\Controllers\UserController;
 
 /*
  * --------------------------------------------------------------------
@@ -22,7 +23,10 @@ use CodeIgniter\HotReloader\HotReloader;
  * Example:
  *      Events::on('create', [$myInstance, 'myMethod']);
  */
-
+// Events::on('post_controller_constructor', function () {
+//     $controller = new UserController();
+//     $controller->updateStatusBasedOnSchedule();
+// });
 Events::on('pre_system', static function () {
     if (ENVIRONMENT !== 'testing') {
         if (ini_get('zlib.output_compression')) {
@@ -52,4 +56,5 @@ Events::on('pre_system', static function () {
             });
         }
     }
+    
 });
