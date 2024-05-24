@@ -51,6 +51,7 @@ $routes->match(['post','get'],'getPatients', 'DoctorController::getPatients');
 $routes->match(['post','get'],'getAppointmentsByDoctorUsername/(:any)', 'DoctorController::getAppointmentsByDoctorUsername/$1');
 $routes->match(['post','get'],'approveAppointment/(:any)/(:any)', 'DoctorController::approveAppointment/$1/$2');
 $routes->match(['post','get'],'sendApprovalEmail', 'DoctorController::sendApprovalEmail');
+$routes->match(['post','get'],'/Doctor/Dashboard/Patients-Profile/(:num)', 'DoctorController::getPatients_Profile/$1');
 
 //admin//
 $routes->get('/Admin/Dashboard', 'UserController::db_admin');

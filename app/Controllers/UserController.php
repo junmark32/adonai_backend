@@ -759,8 +759,8 @@ public function checkSessionData()
             echo "User ID: " . $userData['UserID'] . "<br>";
             echo "Username: " . $userData['Username'] . "<br>";
             echo "Role: " . $userData['Role'] . "<br>";
-            echo "Patient ID: " . $userData['PatientID'] . "<br>";
-            // echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
+            // echo "Patient ID: " . $userData['PatientID'] . "<br>";
+            echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
             // echo "Admin ID: " . $userData['AdminID'] . "<br>";
 
             // You can add more data if needed

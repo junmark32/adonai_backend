@@ -234,22 +234,24 @@
                             <th>Patient Name</th>
                             <th>Appt Date</th>
                             <th>Purpose</th>
+							<th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($appointmentData as $data): ?>
                             <tr>
-                                <td>
-                                    <h2 class="table-avatar">
-                                        <a href="patient-profile.html" class="avatar avatar-sm mr-2">
-                                            <img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image">
-                                        </a>
-                                        <a href="patient-profile.html">
-                                            <?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span>
-                                        </a>
-                                    </h2>
-                                </td>
+								<td>
+									<h2 class="table-avatar">
+										<a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>" class="avatar avatar-sm mr-2">
+											<img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image">
+										</a>
+										<a href="<?= base_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>">
+											<?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span>
+										</a>
+									</h2>
+								</td>
+
                                 <td>
                                     <?= date('d M Y', strtotime($data['appointment']['Pref_Date'])) ?> 
                                     <span class="d-block text-info"><?= date('h.i A', strtotime($data['appointment']['Pref_Time_Start'])) ?></span>
@@ -257,6 +259,7 @@
 
                                 </td>
                                 <td><?= $data['appointment']['Purpose'] ?></td>
+								<td><?= $data['appointment']['Status'] ?></td>
                                 <td class="text-right">
                                     <div class="table-action">
                                         <a href="javascript:void(0);" class="btn btn-sm bg-info-light">

@@ -170,6 +170,79 @@ class DoctorController extends ResourceController
         return $this->response->setJSON($patients);
     }
 
+    public function getPatients_Profile($patientID)
+    {
+        // Start session
+        $session = session();
+        
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true; // Assume logged in if 'user_data' exists
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+    
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['DoctorID'])) {
+                // Retrieve the DoctorID
+                $doctorID = $userData['DoctorID'];
+    
+                // Fetch doctor's data based on DoctorID
+                $doctorModel = new DoctorModel();
+                $doctor = $doctorModel->find($doctorID);
+    
+                // Check if the doctor data is found
+                if ($doctor) {
+                    // Load the PatientModel
+                    $patientModel = new PatientModel();
+                    // Fetch patient data based on the patientId
+                    $patientData = $patientModel->find($patientID);
+    
+                    // Load the AppointmentModel
+                    $appointmentModel = new AppointmentModel();
+                    // Fetch appointment data based on PatientID and DoctorID
+                    $appointments = $appointmentModel->where('PatientID', $patientID)
+                                                      ->where('DoctorID', $doctorID)
+                                                      ->findAll();
+    
+                    $data['loggedIn'] = $loggedIn;
+                    $data['role'] = $role;
+                    $data['doctors'] = [$doctor]; // Make sure $doctors is an 
+                    $data['patient_data'] = [$patientData];
+                    
+                    // Merge doctor and appointment data
+                    $mergedData = [];
+                    foreach ($appointments as $appointment) {
+                        $mergedData[] = [
+                            'doctor' => $doctor,
+                            'appointment' => $appointment
+                        ];
+                    }
+    
+                    // Pass the merged data to the view
+                    $data['merged_data'] = $mergedData;
+                    // Pass the $data array to the view
+                    return view('doctor/patients_profile', $data);
+                } else {
+                    // Handle the case when no data is found (optional)
+                    return redirect()->to('/Doctor/Dashboard')->with('error', 'Patient not found.');
+                }
+            } else {
+                // Handle the case when 'DoctorID' is not set in user data
+                return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor ID not found in session.');
+            }
+        } else {
+            // User is not logged in
+            $loggedIn = false;
+            // Handle the case when 'user_data' is not in session
+            return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
+        }
+    }
+    
+
+    
+
     public function getAppointmentsByDoctorUsername($doctorUsername)
     {
         // Assuming you have a model for appointments, adjust accordingly

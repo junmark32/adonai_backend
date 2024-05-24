@@ -16,6 +16,9 @@
 		<!-- Fontawesome CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/fontawesome.min.css') ?>">
 		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/all.min.css') ?>">
+
+				<!-- Datetimepicker CSS -->
+				<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap-datetimepicker.min.css') ?>">
 		
 		<!-- Main CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css') ?>">
