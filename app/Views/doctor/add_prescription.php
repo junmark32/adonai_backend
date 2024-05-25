@@ -44,255 +44,248 @@
 			<!-- /Breadcrumb -->
 			
 			<!-- Page Content -->
-			<div class="content">
-				<div class="container-fluid">
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+                <!-- Profile Widget -->
+                <div class="card widget-profile pat-widget-profile">
+                    <?php foreach ($patient_data as $patient): ?>
+                    <div class="card-body">
+                        <div class="pro-widget-content">
+                            <div class="profile-info-widget">
+                                <a href="#" class="booking-doc-img">
+                                    <img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image">
+                                </a>
+                                <div class="profile-det-info">
+                                    <h3><?= $patient['FirstName'] ?> <?= $patient['LastName'] ?></h3>
+                                    <div class="patient-details">
+                                        <h5><b>Patient ID :</b> <?= $patient['PatientID'] ?></h5>
+                                        <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> <?= $patient['Address'] ?></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="patient-info">
+                            <ul>
+                                <li>Phone <span><?= $patient['Phone'] ?></span></li>
+                                <li>Age <span>38 Years, Male</span></li>
+                                <li>Blood Group <span>AB+</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <!-- /Profile Widget -->
+            </div>
 
-					<div class="row">
-						<div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
-						
-							<!-- Profile Widget -->
-							<div class="card widget-profile pat-widget-profile">
-								<?php foreach($patient_data as $patient): ?>
-									<div class="card-body">
-										<div class="pro-widget-content">
-											<div class="profile-info-widget">
-												<a href="#" class="booking-doc-img">
-													
-													<img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image">
-												</a>
-												<div class="profile-det-info">
-													<h3><?= $patient['FirstName'] ?> <?= $patient['LastName'] ?></h3>
-													
-													<div class="patient-details">
-														<h5><b>Patient ID :</b> <?= $patient['PatientID'] ?></h5>
-														<h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> <?= $patient['Address'] ?></h5>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="patient-info">
-											<ul>
-												<li>Phone <span><?= $patient['Phone'] ?></span></li>
-												<li>Age <span>38 Years, Male</span></li>
-												<li>Blood Group <span>AB+</span></li>
-											</ul>
-										</div>
-									</div>
-								<?php endforeach; ?>
-							</div>
-							<!-- /Profile Widget -->
-							
-						</div>
+            <div class="col-md-7 col-lg-8 col-xl-9">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Add Prescription</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="header-logo">
+                                <div>RX</div>
+                                <div><img src="<?php echo base_url('uploads/logo-adonai.png'); ?>" alt="Adonai Logo"></div>
+                                <div>PO no. _________</div>
+                            </div>
+                            
+                            <form action="/Doctor/Dashboard/Insert-Prescription/Patients-Profile/<?= $patient['PatientID'] ?>" method="post" enctype="multipart/form-data">
+                                <h5>Personal Information</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td class="col-sm-2 col-form-label">Name:</td>
+                                            <td class="col-sm-10">
+                                                <input type="text" class="form-control" name="name">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-sm-2 col-form-label">Sex:</td>
+                                            <td class="col-sm-1">
+                                                <select class="form-control" name="sex">
+                                                    <option>M</option>
+                                                    <option>F</option>
+                                                </select>
+                                            </td>
+                                            <td class="col-sm-1 col-form-label">Date:</td>
+                                            <td class="col-sm-2">
+                                                <input type="date" class="form-control" name="date">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-sm-2 col-form-label">Address:</td>
+                                            <td class="col-sm-10">
+                                                <input type="text" class="form-control" name="address">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-sm-1 col-form-label">Age:</td>
+                                            <td class="col-sm-1">
+                                                <input type="number" class="form-control" name="age">
+                                            </td>
+                                            <td class="col-sm-1 col-form-label">B-day:</td>
+                                            <td class="col-sm-3">
+                                                <input type="date" class="form-control" name="birthday">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-sm-2 col-form-label">Occupation:</td>
+                                            <td class="col-sm-10">
+                                                <input type="text" class="form-control" name="occupation">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-sm-2 col-form-label">CP#:</td>
+                                            <td class="col-sm-10">
+                                                <input type="text" class="form-control" name="cp">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <h5>Best Corrected Optical Power</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>SPH</th>
+                                                <th>CYL</th>
+                                                <th>AX</th>
+                                                <th>ADD</th>
+                                                <th>VA</th>
+                                                <th>PD</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>OD</td>
+                                                <td><input type="text" class="form-control" name="bc_od_sph"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_cyl"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_ax"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_add"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_va"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_pd"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>OS</td>
+                                                <td><input type="text" class="form-control" name="bc_os_sph"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_cyl"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_ax"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_add"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_va"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_pd"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Ocular History:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="ocular_history" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <h5>Lens Power Prescribed</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>SPH</th>
+                                                <th>CYL</th>
+                                                <th>AX</th>
+                                                <th>ADD</th>
+                                                <th>PD</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>OD</td>
+                                                <td><input type="text" class="form-control" name="lp_od_sph"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_cyl"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_ax"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_add"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_pd"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>OS</td>
+                                                <td><input type="text" class="form-control" name="lp_os_sph"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_cyl"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_ax"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_add"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_pd"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-						<div class="col-md-7 col-lg-8 col-xl-9">
-							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title mb-0">Add Prescription</h4>
-								</div>
-								<div class="card-body">
-                                <div class="container">
-    <div class="header-logo">
-        <div>RX</div>
-        <div><img src="<?php echo base_url('uploads/logo-adonai.png'); ?>" alt="Adonai Logo"></div>
-        <div>PO no. _________</div>
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Frame:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="frame">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">Lens:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="lens">
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Total:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="total">
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Diagnosis:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="diagnosis" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Remarks:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="remarks" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Management:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="management" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-row">
+                                    <label class="col-sm-2 col-form-label">Follow Up:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" name="follow_up" rows="2"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Section -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="submit-section">
+                                            <button type="submit" class="btn btn-primary submit-btn">Save</button>
+                                            <button type="reset" class="btn btn-secondary submit-btn">Clear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Submit Section -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    <form>
-        <h5>Personal Information</h5>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <tr>
-                    <td class="col-sm-2 col-form-label">Name:</td>
-                    <td class="col-sm-10">
-                        <input type="text" class="form-control" name="name">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-sm-2 col-form-label">Sex:</td>
-                    <td class="col-sm-1">
-                        <select class="form-control" name="sex">
-                            <option>M</option>
-                            <option>F</option>
-                        </select>
-                    </td>
-                    <td class="col-sm-1 col-form-label">Date:</td>
-                    <td class="col-sm-2">
-                        <input type="date" class="form-control" name="date">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-sm-2 col-form-label">Address:</td>
-                    <td class="col-sm-10">
-                        <input type="text" class="form-control" name="address">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-sm-1 col-form-label">Age:</td>
-                    <td class="col-sm-1">
-                        <input type="number" class="form-control" name="age">
-                    </td>
-                    <td class="col-sm-1 col-form-label">B-day:</td>
-                    <td class="col-sm-3">
-                        <input type="date" class="form-control" name="birthday">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-sm-2 col-form-label">Occupation:</td>
-                    <td class="col-sm-10">
-                        <input type="text" class="form-control" name="occupation">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-sm-2 col-form-label">CP#:</td>
-                    <td class="col-sm-10">
-                        <input type="text" class="form-control" name="cp">
-                    </td>
-                </tr>
-            </table>
-        </div>
-        
-        <h5>Best Corrected Optical Power</h5>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>SPH</th>
-                        <th>CYL</th>
-                        <th>AX</th>
-                        <th>ADD</th>
-                        <th>VA</th>
-                        <th>PD</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>OD</td>
-                        <td><input type="text" class="form-control" name="bc_od_sph"></td>
-                        <td><input type="text" class="form-control" name="bc_od_cyl"></td>
-                        <td><input type="text" class="form-control" name="bc_od_ax"></td>
-                        <td><input type="text" class="form-control" name="bc_od_add"></td>
-                        <td><input type="text" class="form-control" name="bc_od_va"></td>
-                        <td><input type="text" class="form-control" name="bc_od_pd"></td>
-                    </tr>
-                    <tr>
-                        <td>OS</td>
-                        <td><input type="text" class="form-control" name="bc_os_sph"></td>
-                        <td><input type="text" class="form-control" name="bc_os_cyl"></td>
-                        <td><input type="text" class="form-control" name="bc_os_ax"></td>
-                        <td><input type="text" class="form-control" name="bc_os_add"></td>
-                        <td><input type="text" class="form-control" name="bc_os_va"></td>
-                        <td><input type="text" class="form-control" name="bc_os_pd"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Ocular History:</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="ocular_history" rows="3"></textarea>
-            </div>
-        </div>
-        
-        <h5>Lens Power Prescribed</h5>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>SPH</th>
-                        <th>CYL</th>
-                        <th>AX</th>
-                        <th>ADD</th>
-                        <th>PD</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>OD</td>
-                        <td><input type="text" class="form-control" name="lp_od_sph"></td>
-                        <td><input type="text" class="form-control" name="lp_od_cyl"></td>
-                        <td><input type="text" class="form-control" name="lp_od_ax"></td>
-                        <td><input type="text" class="form-control" name="lp_od_add"></td>
-                        <td><input type="text" class="form-control" name="lp_od_pd"></td>
-                    </tr>
-                    <tr>
-                        <td>OS</td>
-                        <td><input type="text" class="form-control" name="lp_os_sph"></td>
-                        <td><input type="text" class="form-control" name="lp_os_cyl"></td>
-                        <td><input type="text" class="form-control" name="lp_os_ax"></td>
-                        <td><input type="text" class="form-control" name="lp_os_add"></td>
-                        <td><input type="text" class="form-control" name="lp_os_pd"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Frame:</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" name="frame">
-            </div>
-            <label class="col-sm-2 col-form-label">Lens:</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" name="lens">
-            </div>
-        </div>
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Total:</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control" name="total">
-            </div>
-        </div>
-
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Diagnosis:</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="diagnosis" rows="2"></textarea>
-            </div>
-        </div>
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Remarks:</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="remarks" rows="2"></textarea>
-            </div>
-        </div>
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Management:</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="management" rows="2"></textarea>
-            </div>
-        </div>
-        <div class="form-group form-group-row">
-            <label class="col-sm-2 col-form-label">Follow Up:</label>
-            <div class="col-sm-10">
-                <textarea class="form-control" name="follow_up" rows="2"></textarea>
-            </div>
-        </div>
-    </form>
 </div>
-									
-									<!-- Submit Section -->
-									<div class="row">
-										<div class="col-md-12">
-											<div class="submit-section">
-												<button type="submit" class="btn btn-primary submit-btn">Save</button>
-												<button type="reset" class="btn btn-secondary submit-btn">Clear</button>
-											</div>
-										</div>
-									</div>
-									<!-- /Submit Section -->
-									
-								</div>
-							</div>
-						</div>
-					</div>
+<!-- /Page Content -->
 
-				</div>
-
-			</div>		
-			<!-- /Page Content -->
    
 			<!-- Footer -->
 			<footer class="footer">

@@ -112,8 +112,6 @@
 																	<th>Doctor</th>
 																	<th>Appt Date</th>
 																	<th>Booking Date</th>
-																	<th>Amount</th>
-																	<th>Follow Up</th>
 																	<th>Status</th>
 																	<th></th>
 																</tr>
@@ -151,62 +149,63 @@
 										<!-- /Appointment Tab -->
 										
 										<!-- Prescription Tab -->
-										<div class="tab-pane fade" id="pres">
-										<?php foreach($patient_data as $patient): ?>
-											<div class="text-right">
-												<a href="<?= site_url('/Doctor/Dashboard/Add-Prescription/Patients-Profile/' . $patient['PatientID']) ?>" class="add-new-btn">Add Prescription</a>
-											</div>
-											<div class="card card-table mb-0">
-												<div class="card-body">
-													<div class="table-responsive">
-														<table class="table table-hover table-center mb-0">
-															<thead>
-																<tr>
-																	<th>Date </th>
-																	<th>Name</th>									
-																	<th>Created by </th>
-																	<th></th>
-																</tr>     
-															</thead>
-															<tbody>
-																
-																<tr>
-																	<td>13 Nov 2019</td>
-																	<td>Prescription 2</td>
-																	<td>
-																		<h2 class="table-avatar">
-																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image">
-																			</a>
-																			<a href="doctor-profile.html">Dr. Darren Elder <span>Dental</span></a>
-																		</h2>
-																	</td>
-																	<td class="text-right">
-																		<div class="table-action">
-																			<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
-																				<i class="fas fa-print"></i> Print
-																			</a>
-																			<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																				<i class="far fa-eye"></i> View
-																			</a>
-																			<a href="edit-prescription.html" class="btn btn-sm bg-success-light">
-																				<i class="fas fa-edit"></i> Edit
-																			</a>
-																			<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																				<i class="far fa-trash-alt"></i> Delete
-																			</a>
-																		</div>
-																	</td>
-																</tr>
-																
-															</tbody>	
-														</table>
-													</div>
-												</div>
-											</div>
-											<?php endforeach; ?>
-										</div>
-										<!-- /Prescription Tab -->
+<div class="tab-pane fade" id="pres">
+    <?php foreach($patient_data as $patient): ?>
+        <div class="text-right">
+            <a href="<?= site_url('/Doctor/Dashboard/Add-Prescription/Patients-Profile/' . $patient['PatientID']) ?>" class="add-new-btn">Add Prescription</a>
+        </div>
+        <div class="card card-table mb-0">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-center mb-0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Created by</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($merged_datas as $mergedItems): ?>
+                            <tr>
+                                <td><?= date('d M Y', strtotime($mergedItems['prescription']['created_at'])) ?></td>
+                                <td>Prescription <?= $mergedItems['prescription']['PrescriptionID'] ?></td>
+                                <td>
+                                    <h2 class="table-avatar">
+                                        <a href="doctor-profile.html" class="avatar avatar-sm mr-2">
+                                            <img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $mergedItems['doctor']['Profile_url']) ?>" alt="User Image">
+                                        </a>
+                                        <a href="doctor-profile.html">Dr. <?= $mergedItems['doctor']['FirstName'] ?> <?= $mergedItems['doctor']['LastName'] ?> <span><?= $mergedItem['doctor']['Specialization'] ?></span></a>
+                                    </h2>
+                                </td>
+                                <td class="text-right">
+                                    <div class="table-action">
+                                        <a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+                                            <i class="fas fa-print"></i> Print
+                                        </a>
+                                        <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+                                            <i class="far fa-eye"></i> View
+                                        </a>
+                                        <a href="edit-prescription.html" class="btn btn-sm bg-success-light">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+                                            <i class="far fa-trash-alt"></i> Delete
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+<!-- /Prescription Tab -->
+
 
 										
 												
