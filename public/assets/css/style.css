@@ -6753,3 +6753,23 @@ html.menu-opened body {
     opacity: 0.5; /* Add visual indication of disabled state */
     /* Add any other styles for disabled state */
 }
+
+.header-logo {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+.header-logo img {
+	height: 50px;
+}
+.header-logo div {
+	font-weight: bold;
+	font-size: 24px;
+}
+.form-group-row {
+	margin-bottom: 1rem;
+}
+.table-bordered td, .table-bordered th {
+	border: 1px solid #dee2e6;
+}
