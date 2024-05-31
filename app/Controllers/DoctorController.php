@@ -426,6 +426,183 @@ class DoctorController extends ResourceController
     }
 }
 
+
+public function edit_prof_pres($presID, $patientID)
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      
+      // Start session
+      $session = session();
+        
+      // Check if 'user_data' exists in the session
+      if ($session->has('user_data')) {
+          // Retrieve user data from session
+          $userData = $session->get('user_data');
+          $loggedIn = true; // Assume logged in if 'user_data' exists
+          // var_dump($userData);
+          $role = $userData['Role']; // Assuming 'role' is stored in the session
+  
+          // Check if the user has a 'DoctorID' key
+          if (isset($userData['DoctorID'])) {
+              // Retrieve the DoctorID
+              $doctorID = $userData['DoctorID'];
+  
+              // Fetch doctor's data based on DoctorID
+              $doctorModel = new DoctorModel();
+              $doctor = $doctorModel->find($doctorID);
+  
+              // Check if the doctor data is found
+              if ($doctor) {
+                  // Load the PatientModel
+                  $patientModel = new PatientModel();
+                  // Fetch patient data based on the patientId
+                  $patientData = $patientModel->find($patientID);
+                
+                                                     // Load the AppointmentModel
+                  $prescriptionModel = new PrescriptionModel();
+                  // Fetch appointment data based on PatientID and DoctorID
+                  $prescriptions = $prescriptionModel->where('PatientID', $patientID)
+                                                    ->where('DoctorID', $doctorID)
+                                                    ->where('PrescriptionID', $presID)
+                                                    ->findAll();
+  
+                  $data['loggedIn'] = $loggedIn;
+                  $data['role'] = $role;
+                  $data['doctors'] = [$doctor]; // Make sure $doctors is an 
+                  $data['patient_data'] = [$patientData];
+                  $data['prescription_data'] = $prescriptions;
+                  
+                  // Pass the $data array to the view
+                  return view('doctor/edit_prescription', $data);
+              } else {
+                  // Handle the case when no data is found (optional)
+                  return redirect()->to('/Doctor/Dashboard')->with('error', 'Patient not found.');
+              }
+          } else {
+              // Handle the case when 'DoctorID' is not set in user data
+              return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor ID not found in session.');
+          }
+      } else {
+          // User is not logged in
+          $loggedIn = false;
+          // Handle the case when 'user_data' is not in session
+          return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
+      }
+    }
+
+
+
+public function update_prof_pres($presID, $patientID)
+{
+    // Start session
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true; // Assume logged in if 'user_data' exists
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // Check if the doctor data is found
+            if ($doctor) {
+                // Load the PatientModel
+                $patientModel = new PatientModel();
+                // Fetch patient data based on the patientId
+                $patientData = $patientModel->find($patientID);
+
+                // Load the PrescriptionModel
+                $prescriptionModel = new PrescriptionModel();
+                // Check if a prescription exists for the given PatientID and DoctorID
+                $existingPrescription = $prescriptionModel->where('PatientID', $patientID)
+                                                          ->where('DoctorID', $doctorID)
+                                                          ->where('PrescriptionID', $presID)
+                                                          ->first();
+
+                // Gather data for update
+                $postData = [
+                    'DoctorID' => $doctorID,
+                    'PatientID' => $patientID,
+                    'Name' => $this->request->getVar('name'),
+                    'Gender' => $this->request->getVar('sex'),
+                    'Date' => $this->request->getVar('date'),
+                    'Address' => $this->request->getVar('address'),
+                    'Age' => $this->request->getVar('age'),
+                    'DateOfBirth' => $this->request->getVar('birthday'),
+                    'Occupation' => $this->request->getVar('occupation'),
+                    'Phone' => $this->request->getVar('cp'),
+                    'B_OD_SPH' => $this->request->getVar('bc_od_sph'),
+                    'B_OD_CYL' => $this->request->getVar('bc_od_cyl'),
+                    'B_OD_AX' => $this->request->getVar('bc_od_ax'),
+                    'B_OD_ADD' => $this->request->getVar('bc_od_add'),
+                    'B_OD_VA' => $this->request->getVar('bc_od_va'),
+                    'B_OD_PD' => $this->request->getVar('bc_od_pd'),
+                    'B_OS_SPH' => $this->request->getVar('bc_os_sph'),
+                    'B_OS_CYL' => $this->request->getVar('bc_os_cyl'),
+                    'B_OS_AX' => $this->request->getVar('bc_os_ax'),
+                    'B_OS_ADD' => $this->request->getVar('bc_os_add'),
+                    'B_OS_VA' => $this->request->getVar('bc_os_va'),
+                    'B_OS_PD' => $this->request->getVar('bc_os_pd'),
+                    'Ocular_History' => $this->request->getVar('ocular_history'),
+                    'L_OD_SPH' => $this->request->getVar('lp_od_sph'),
+                    'L_OD_CYL' => $this->request->getVar('lp_od_cyl'),
+                    'L_OD_AX' => $this->request->getVar('lp_od_ax'),
+                    'L_OD_ADD' => $this->request->getVar('lp_od_add'),
+                    'L_OD_PD' => $this->request->getVar('lp_od_pd'),
+                    'L_OS_SPH' => $this->request->getVar('lp_os_sph'),
+                    'L_OS_CYL' => $this->request->getVar('lp_os_cyl'),
+                    'L_OS_AX' => $this->request->getVar('lp_os_ax'),
+                    'L_OS_ADD' => $this->request->getVar('lp_os_add'),
+                    'L_OS_PD' => $this->request->getVar('lp_os_pd'),
+                    'Frame' => $this->request->getVar('frame'),
+                    'Lens' => $this->request->getVar('lens'),
+                    'Total' => $this->request->getVar('total'),
+                    'Diagnosis' => $this->request->getVar('diagnosis'),
+                    'Remarks' => $this->request->getVar('remarks'),
+                    'Management' => $this->request->getVar('management'),
+                    'Follow_Up' => $this->request->getVar('follow_up'),
+                ];
+
+                // If the prescription exists, update it; otherwise, handle the error
+                if ($existingPrescription) {
+                    $prescriptionModel->update($existingPrescription['PrescriptionID'], $postData);
+
+                    $data['loggedIn'] = $loggedIn;
+                    $data['role'] = $role;
+                    $data['doctors'] = [$doctor];
+                    $data['patient_data'] = [$patientData];
+                    
+                    // Pass the $data array to the view
+                    return redirect()->to('/Doctor/Dashboard/Edit-Prescription/'. $presID . '/Patients-Profile/' . $patientID)->with('success', 'Prescription updated successfully.');
+                } else {
+                    // Handle the case when no existing prescription is found
+                    return redirect()->to('/Doctor/Dashboard/Patients-Profile/' . $patientID)->with('error', 'No existing prescription found to update.');
+                }
+            } else {
+                // Handle the case when no doctor data is found
+                return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor not found.');
+            }
+        } else {
+            // Handle the case when 'DoctorID' is not set in user data
+            return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor ID not found in session.');
+        }
+    } else {
+        // User is not logged in
+        return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
+    }
+}
+
     
 
     

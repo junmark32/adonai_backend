@@ -129,7 +129,7 @@
 																		</td>
 																		<td><?= date('d M Y', strtotime($mergedItem['appointment']['Pref_Date'])) ?> <span class="d-block text-info"><?= date('h.i A', strtotime($mergedItem['appointment']['Pref_Time_Start'])) ?></span></td>
 																		<td><?= date('d M Y', strtotime($mergedItem['appointment']['created_at'])) ?></td>
-																		<td><span class="badge badge-pill bg-info-light">Completed</span></td>
+																		<td><span class="badge badge-pill bg-info-light"><?= $mergedItem['appointment']['Status'] ?></span></td>
 																		<td class="text-right">
 																			<div class="table-action">
 																				<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
@@ -187,7 +187,8 @@
                                         <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
                                             <i class="far fa-eye"></i> View
                                         </a>
-                                        <a href="edit-prescription.html" class="btn btn-sm bg-success-light">
+                                        <a href="<?= site_url('/Doctor/Dashboard/Edit-Prescription/' . $mergedItems['prescription']['PrescriptionID'] . '/Patients-Profile/' . $patient['PatientID']) ?>
+" class="btn btn-sm bg-success-light">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">

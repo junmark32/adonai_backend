@@ -36,14 +36,14 @@
 									<li class="breadcrumb-item active" aria-current="page">Add Prescription</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Add Prescription</h2>
+							<h2 class="breadcrumb-title">Edit Prescription</h2>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- /Breadcrumb -->
 			
-			<!-- Page Content -->
+<!-- Page Content -->
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -82,65 +82,67 @@
             <div class="col-md-7 col-lg-8 col-xl-9">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Add Prescription</h4>
+                        <h4 class="card-title mb-0">Edit Prescription</h4>
                     </div>
                     <div class="card-body">
+                    <?php foreach ($prescription_data as $prescription): ?>
                         <div class="container">
                             <div class="header-logo">
                                 <div>RX</div>
                                 <div><img src="<?php echo base_url('uploads/logo-adonai.png'); ?>" alt="Adonai Logo"></div>
-                                <div>PO no. _________</div>
+                                <div>PO no. <?= $prescription['PrescriptionID'] ?></div>
                             </div>
                             
-                            <form action="/Doctor/Dashboard/Insert-Prescription/Patients-Profile/<?= $patient['PatientID'] ?>" method="post" enctype="multipart/form-data">
+                            
+                            <form action="/Doctor/Dashboard/Update-Prescription/<?= $prescription['PrescriptionID'] ?>/Patients-Profile/<?= $patient['PatientID'] ?>" method="post" enctype="multipart/form-data">
                                 <h5>Personal Information</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <tr>
                                             <td class="col-sm-2 col-form-label">Name:</td>
                                             <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="name">
+                                                <input type="text" class="form-control" name="name" value="<?= $prescription['Name'] ?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="col-sm-2 col-form-label">Sex:</td>
                                             <td class="col-sm-1">
                                                 <select class="form-control" name="sex">
-                                                    <option>M</option>
-                                                    <option>F</option>
+                                                    <option <?= $prescription['Gender'] == 'M' ? 'selected' : '' ?>>M</option>
+                                                    <option <?= $prescription['Gender'] == 'F' ? 'selected' : '' ?>>F</option>
                                                 </select>
                                             </td>
                                             <td class="col-sm-1 col-form-label">Date:</td>
                                             <td class="col-sm-2">
-                                                <input type="date" class="form-control" name="date">
+                                                <input type="date" class="form-control" name="date" value="<?= $prescription['Date'] ?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="col-sm-2 col-form-label">Address:</td>
                                             <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="address">
+                                                <input type="text" class="form-control" name="address" value="<?= $prescription['Address'] ?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="col-sm-1 col-form-label">Age:</td>
                                             <td class="col-sm-1">
-                                                <input type="number" class="form-control" name="age">
+                                                <input type="number" class="form-control" name="age" value="<?= $prescription['Age'] ?>">
                                             </td>
                                             <td class="col-sm-1 col-form-label">B-day:</td>
                                             <td class="col-sm-3">
-                                                <input type="date" class="form-control" name="birthday">
+                                                <input type="date" class="form-control" name="birthday" value="<?= $prescription['DateOfBirth'] ?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="col-sm-2 col-form-label">Occupation:</td>
                                             <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="occupation">
+                                                <input type="text" class="form-control" name="occupation" value="<?= $prescription['Occupation'] ?>">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="col-sm-2 col-form-label">CP#:</td>
                                             <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="cp">
+                                                <input type="text" class="form-control" name="cp" value="<?= $prescription['Phone'] ?>">
                                             </td>
                                         </tr>
                                     </table>
@@ -163,21 +165,21 @@
                                         <tbody>
                                             <tr>
                                                 <td>OD</td>
-                                                <td><input type="text" class="form-control" name="bc_od_sph"></td>
-                                                <td><input type="text" class="form-control" name="bc_od_cyl"></td>
-                                                <td><input type="text" class="form-control" name="bc_od_ax"></td>
-                                                <td><input type="text" class="form-control" name="bc_od_add"></td>
-                                                <td><input type="text" class="form-control" name="bc_od_va"></td>
-                                                <td><input type="text" class="form-control" name="bc_od_pd"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_sph" value="<?= $prescription['B_OD_SPH'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_cyl" value="<?= $prescription['B_OD_CYL'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_ax" value="<?= $prescription['B_OD_AX'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_add" value="<?= $prescription['B_OD_ADD'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_va" value="<?= $prescription['B_OD_VA'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_od_pd" value="<?= $prescription['B_OD_PD'] ?>"></td>
                                             </tr>
                                             <tr>
                                                 <td>OS</td>
-                                                <td><input type="text" class="form-control" name="bc_os_sph"></td>
-                                                <td><input type="text" class="form-control" name="bc_os_cyl"></td>
-                                                <td><input type="text" class="form-control" name="bc_os_ax"></td>
-                                                <td><input type="text" class="form-control" name="bc_os_add"></td>
-                                                <td><input type="text" class="form-control" name="bc_os_va"></td>
-                                                <td><input type="text" class="form-control" name="bc_os_pd"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_sph" value="<?= $prescription['B_OS_SPH'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_cyl" value="<?= $prescription['B_OS_CYL'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_ax" value="<?= $prescription['B_OS_AX'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_add" value="<?= $prescription['B_OS_ADD'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_va" value="<?= $prescription['B_OS_VA'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="bc_os_pd" value="<?= $prescription['B_OS_PD'] ?>"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -186,7 +188,7 @@
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Ocular History:</label>
                                     <div class="col-sm-10">
-                                        <textarea class="form-control" name="ocular_history" rows="3"></textarea>
+                                        <textarea class="form-control" name="ocular_history" rows="3"><?= $prescription['Ocular_History'] ?></textarea>
                                     </div>
                                 </div>
                                 
@@ -206,19 +208,19 @@
                                         <tbody>
                                             <tr>
                                                 <td>OD</td>
-                                                <td><input type="text" class="form-control" name="lp_od_sph"></td>
-                                                <td><input type="text" class="form-control" name="lp_od_cyl"></td>
-                                                <td><input type="text" class="form-control" name="lp_od_ax"></td>
-                                                <td><input type="text" class="form-control" name="lp_od_add"></td>
-                                                <td><input type="text" class="form-control" name="lp_od_pd"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_sph" value="<?= $prescription['L_OD_SPH'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_cyl" value="<?= $prescription['L_OD_CYL'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_ax" value="<?= $prescription['L_OD_AX'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_add" value="<?= $prescription['L_OD_ADD'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_od_pd" value="<?= $prescription['L_OD_PD'] ?>"></td>
                                             </tr>
                                             <tr>
                                                 <td>OS</td>
-                                                <td><input type="text" class="form-control" name="lp_os_sph"></td>
-                                                <td><input type="text" class="form-control" name="lp_os_cyl"></td>
-                                                <td><input type="text" class="form-control" name="lp_os_ax"></td>
-                                                <td><input type="text" class="form-control" name="lp_os_add"></td>
-                                                <td><input type="text" class="form-control" name="lp_os_pd"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_sph" value="<?= $prescription['L_OS_SPH'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_cyl" value="<?= $prescription['L_OS_CYL'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_ax" value="<?= $prescription['L_OS_AX'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_add" value="<?= $prescription['L_OS_ADD'] ?>"></td>
+                                                <td><input type="text" class="form-control" name="lp_os_pd" value="<?= $prescription['L_OS_PD'] ?>"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -227,42 +229,42 @@
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Frame:</label>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="frame">
+                                        <input type="text" class="form-control" name="frame" value="<?= $prescription['Frame'] ?>">
                                     </div>
                                     <label class="col-sm-2 col-form-label">Lens:</label>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="lens">
+                                        <input type="text" class="form-control" name="lens" value="<?= $prescription['Lens'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Total:</label>
                                     <div class="col-sm-4">
-                                        <input type="text" class="form-control" name="total">
+                                        <input type="text" class="form-control" name="total" value="<?= $prescription['Total'] ?>">
                                     </div>
                                 </div>
 
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Diagnosis:</label>
                                     <div class="col-sm-10">
-                                        <textarea class="form-control" name="diagnosis" rows="2"></textarea>
+                                        <textarea class="form-control" name="diagnosis" rows="2"><?= $prescription['Diagnosis'] ?></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Remarks:</label>
                                     <div class="col-sm-10">
-                                        <textarea class="form-control" name="remarks" rows="2"></textarea>
+                                        <textarea class="form-control" name="remarks" rows="2"><?= $prescription['Remarks'] ?></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Management:</label>
                                     <div class="col-sm-10">
-                                        <textarea class="form-control" name="management" rows="2"></textarea>
+                                        <textarea class="form-control" name="management" rows="2"><?= $prescription['Management'] ?></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Follow Up:</label>
                                     <div class="col-sm-10">
-                                        <textarea class="form-control" name="follow_up" rows="2"></textarea>
+                                        <textarea class="form-control" name="follow_up" rows="2"><?= $prescription['Follow_Up'] ?></textarea>
                                     </div>
                                 </div>
 
@@ -277,7 +279,9 @@
                                 </div>
                                 <!-- /Submit Section -->
                             </form>
+                            
                         </div>
+                    <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -285,6 +289,7 @@
     </div>
 </div>
 <!-- /Page Content -->
+
 
    
 			<!-- Footer -->
