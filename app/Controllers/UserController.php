@@ -111,6 +111,7 @@ class UserController extends ResourceController
         $userData = $session->get('user_data');
         $loggedIn = true;
         $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $userID = $userData['UserID'];
     }
 
     // Load Appointments Data
@@ -176,7 +177,8 @@ class UserController extends ResourceController
      // Pass the cart count to the view
      $data['cartCount'] = $cartCount;
 
-     return view('user/user_dashboard', $data);
+     return view('user/user_dashboard', ['userID' => $userID] + $data);
+
     }
 
     public function store()
@@ -612,6 +614,7 @@ class UserController extends ResourceController
     $user = new UserModel();
     $username = $this->request->getVar('username');
     $password = $this->request->getVar('password');
+    $onesignal = $this->request->getVar('onesignal_subscription_id');
     $userData = $user->where('Username', $username)->first();
 
     if ($userData) {
@@ -625,6 +628,16 @@ class UserController extends ResourceController
                 // User is active, proceed with login
                 $role = $userData['role']; // Adjust column name based on your database schema
                 $response = [];
+
+                 // Check if OneSignal subscription ID exists
+                 if (empty($userData['onesignal_subscription_id'])) {
+                    // Insert new OneSignal subscription ID
+                    $userData['onesignal_subscription_id'] = $onesignal;
+                    $user->update($userData['UserID'], $userData);
+                } else {
+                    // Update existing OneSignal subscription ID
+                    $user->where('UserID', $userData['UserID'])->set('onesignal_subscription_id', $onesignal)->update();
+                }
 
                 switch ($role) {
                     case 'user':

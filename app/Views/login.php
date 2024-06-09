@@ -27,6 +27,7 @@
 											<h3>Login <span>Doccure</span></h3>
 										</div>
 										<form action="<?= base_url('/fn_login') ?>">
+										<input type="hidden" name="onesignal_subscription_id" id="onesignal_subscription_id" value="">
 											<div class="form-group form-focus">
 												<input type="text" class="form-control floating" name="username">
 												<label class="focus-label">Email</label>
@@ -207,6 +208,8 @@
 		   
 		</div>
 		<!-- /Main Wrapper -->
+
+
 	  
 		<!-- jQuery -->
 		<script src="assets/js/jquery.min.js"></script>

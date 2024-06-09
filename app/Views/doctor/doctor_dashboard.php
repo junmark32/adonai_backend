@@ -97,25 +97,14 @@
 													<span>Schedule Timings</span>
 												</a>
 											</li>
-											<li>
-												<a href="invoices.html">
-													<i class="fas fa-file-invoice"></i>
-													<span>Invoices</span>
-												</a>
-											</li>
+										
 											<li>
 												<a href="reviews.html">
 													<i class="fas fa-star"></i>
 													<span>Reviews</span>
 												</a>
 											</li>
-											<li>
-												<a href="chat-doctor.html">
-													<i class="fas fa-comments"></i>
-													<span>Message</span>
-													<small class="unread-msg">23</small>
-												</a>
-											</li>
+										
 											<li>
 												<a href="doctor-profile-settings.html">
 													<i class="fas fa-user-cog"></i>
@@ -234,32 +223,34 @@
                             <th>Patient Name</th>
                             <th>Appt Date</th>
                             <th>Purpose</th>
-							<th>Status</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($appointmentData as $data): ?>
+                        <?php 
+                        $today = date('Y-m-d');
+                        foreach ($appointmentData as $data): 
+                            if (date('Y-m-d', strtotime($data['appointment']['Pref_Date'])) > $today):
+                        ?>
                             <tr>
-								<td>
-									<h2 class="table-avatar">
-										<a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>" class="avatar avatar-sm mr-2">
-											<img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image">
-										</a>
-										<a href="<?= base_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>">
-											<?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span>
-										</a>
-									</h2>
-								</td>
+                                <td>
+                                    <h2 class="table-avatar">
+                                        <a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>" class="avatar avatar-sm mr-2">
+                                            <img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image">
+                                        </a>
+                                        <a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>">
+                                            <?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span>
+                                        </a>
+                                    </h2>
+                                </td>
 
                                 <td>
                                     <?= date('d M Y', strtotime($data['appointment']['Pref_Date'])) ?> 
                                     <span class="d-block text-info"><?= date('h.i A', strtotime($data['appointment']['Pref_Time_Start'])) ?></span>
-
-
                                 </td>
                                 <td><?= $data['appointment']['Purpose'] ?></td>
-								<td><?= $data['appointment']['Status'] ?></td>
+                                <td><?= $data['appointment']['Status'] ?></td>
                                 <td class="text-right">
                                     <div class="table-action">
                                         <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
@@ -274,7 +265,10 @@
                                     </div>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php 
+                            endif;
+                        endforeach; 
+                        ?>    
                     </tbody>
                 </table>        
             </div>
@@ -283,187 +277,66 @@
 </div>
 <!-- /Upcoming Appointment Tab -->
 
+
 									   
 											<!-- Today Appointment Tab -->
-											<div class="tab-pane" id="today-appointments">
-												<div class="card card-table mb-0">
-													<div class="card-body">
-														<div class="table-responsive">
-															<table class="table table-hover table-center mb-0">
-																<thead>
-																	<tr>
-																		<th>Patient Name</th>
-																		<th>Appt Date</th>
-																		<th>Purpose</th>
-																		<th>Type</th>
-																		<th class="text-center">Paid Amount</th>
-																		<th></th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr>
-																		<td>
-																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/patients/patient6.jpg" alt="User Image"></a>
-																				<a href="patient-profile.html">Elsie Gilley <span>#PT0006</span></a>
-																			</h2>
-																		</td>
-																		<td>14 Nov 2019 <span class="d-block text-info">6.00 PM</span></td>
-																		<td>Fever</td>
-																		<td>Old Patient</td>
-																		<td class="text-center">$300</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																					<i class="far fa-eye"></i> View
-																				</a>
-																				
-																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-																					<i class="fas fa-check"></i> Accept
-																				</a>
-																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																					<i class="fas fa-times"></i> Cancel
-																				</a>
-																			</div>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/patients/patient7.jpg" alt="User Image"></a>
-																				<a href="patient-profile.html">Joan Gardner <span>#PT0006</span></a>
-																			</h2>
-																		</td>
-																		<td>14 Nov 2019 <span class="d-block text-info">5.00 PM</span></td>
-																		<td>General</td>
-																		<td>Old Patient</td>
-																		<td class="text-center">$100</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																					<i class="far fa-eye"></i> View
-																				</a>
-																				
-																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-																					<i class="fas fa-check"></i> Accept
-																				</a>
-																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																					<i class="fas fa-times"></i> Cancel
-																				</a>
-																			</div>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/patients/patient8.jpg" alt="User Image"></a>
-																				<a href="patient-profile.html">Daniel Griffing <span>#PT0007</span></a>
-																			</h2>
-																		</td>
-																		<td>14 Nov 2019 <span class="d-block text-info">3.00 PM</span></td>
-																		<td>General</td>
-																		<td>New Patient</td>
-																		<td class="text-center">$75</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																					<i class="far fa-eye"></i> View
-																				</a>
-																				
-																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-																					<i class="fas fa-check"></i> Accept
-																				</a>
-																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																					<i class="fas fa-times"></i> Cancel
-																				</a>
-																			</div>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/patients/patient9.jpg" alt="User Image"></a>
-																				<a href="patient-profile.html">Walter Roberson <span>#PT0008</span></a>
-																			</h2>
-																		</td>
-																		<td>14 Nov 2019 <span class="d-block text-info">1.00 PM</span></td>
-																		<td>General</td>
-																		<td>Old Patient</td>
-																		<td class="text-center">$350</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																					<i class="far fa-eye"></i> View
-																				</a>
-																				
-																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-																					<i class="fas fa-check"></i> Accept
-																				</a>
-																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																					<i class="fas fa-times"></i> Cancel
-																				</a>
-																			</div>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/patients/patient10.jpg" alt="User Image"></a>
-																				<a href="patient-profile.html">Robert Rhodes <span>#PT0010</span></a>
-																			</h2>
-																		</td>
-																		<td>14 Nov 2019 <span class="d-block text-info">10.00 AM</span></td>
-																		<td>General</td>
-																		<td>New Patient</td>
-																		<td class="text-center">$175</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																					<i class="far fa-eye"></i> View
-																				</a>
-																				
-																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-																					<i class="fas fa-check"></i> Accept
-																				</a>
-																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																					<i class="fas fa-times"></i> Cancel
-																				</a>
-																			</div>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>
-																			<h2 class="table-avatar">
-																				<a href="patient-profile.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/patients/patient11.jpg" alt="User Image"></a>
-																				<a href="patient-profile.html">Harry Williams <span>#PT0011</span></a>
-																			</h2>
-																		</td>
-																		<td>14 Nov 2019 <span class="d-block text-info">11.00 AM</span></td>
-																		<td>General</td>
-																		<td>New Patient</td>
-																		<td class="text-center">$450</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-																					<i class="far fa-eye"></i> View
-																				</a>
-																				
-																				<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-																					<i class="fas fa-check"></i> Accept
-																				</a>
-																				<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-																					<i class="fas fa-times"></i> Cancel
-																				</a>
-																			</div>
-																		</td>
-																	</tr>
-																</tbody>
-															</table>		
-														</div>	
-													</div>	
-												</div>	
-											</div>
-											<!-- /Today Appointment Tab -->
+<div class="tab-pane" id="today-appointments">
+	<div class="card card-table mb-0">
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-hover table-center mb-0">
+					<thead>
+						<tr>
+							<th>Patient Name</th>
+							<th>Appt Date</th>
+							<th>Purpose</th>
+							<th>Type</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php 
+					$today = date('Y-m-d');
+					foreach ($appointmentData as $data): 
+						if (date('Y-m-d', strtotime($data['appointment']['Pref_Date'])) == $today):
+					?>
+						<tr>
+							<td>
+								<h2 class="table-avatar">
+									<a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image"></a>
+									<a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>"><?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span></a>
+								</h2>
+							</td>
+							<td><?= date('d M Y', strtotime($data['appointment']['Pref_Date'])) ?> <span class="d-block text-info"><?= date('h.i A', strtotime($data['appointment']['Pref_Time_Start'])) ?></span></td>
+							<td><?= $data['appointment']['Purpose'] ?></td>
+							<td><?= $data['appointment']['Status'] ?></td>
+							<td class="text-right">
+								<div class="table-action">
+									<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+										<i class="far fa-eye"></i> View
+									</a>
+									
+									<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
+										<i class="fas fa-check"></i> Accept
+									</a>
+									<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
+										<i class="fas fa-times"></i> Cancel
+									</a>
+								</div>
+							</td>
+						</tr>
+					<?php 
+						endif;
+					endforeach; 
+					?>	
+					</tbody>
+				</table>		
+			</div>	
+		</div>	
+	</div>	
+</div>
+<!-- /Today Appointment Tab -->
+
 											
 										</div>
 									</div>
@@ -619,6 +492,42 @@
 		   
 		</div>
 		<!-- /Main Wrapper -->
+
+
+		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
+		<script>
+    // Enable Pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('66016c500af8a7ce62eb', {
+      cluster: 'ap1',
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      // Handle the notification data here
+      // You can update the UI, show an alert, etc.
+      console.log('Received data:', data);
+      
+      // Example: Display notification in an alert
+      alert('Notification: ' + data.message);
+
+      // Example: Update a section in the webpage
+      // Assuming you have a div with id 'notification-area'
+      var notificationArea = document.getElementById('notification-area');
+      if (notificationArea) {
+        var notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+        notificationElement.innerText = 'Notification: ' + data.message;
+        notificationArea.appendChild(notificationElement);
+      }
+    });
+  </script>
+
+
+
 	  
 		<!-- jQuery -->
 		<script src="<?php echo base_url('assets/js/jquery.min.js')?>"></script>

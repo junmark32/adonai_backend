@@ -8,6 +8,9 @@ use App\Models\PatientModel;
 use App\Models\UserModel;
 use App\Models\AppointmentModel;
 use App\Models\ScheduleModel;
+use App\Models\DoctorModel;
+use App\Controllers\NotificationController;
+use Config\Pusher;
 
 class PatientController extends ResourceController
 {
@@ -52,6 +55,18 @@ class PatientController extends ResourceController
         $session = session();
         $appointmentModel = new AppointmentModel();
         $scheduleModel = new ScheduleModel();
+        $patientModel = new PatientModel();
+        $pusherConfig = new Pusher();
+        $pusher = new \Pusher\Pusher(
+            $pusherConfig->key,
+            $pusherConfig->secret,
+            $pusherConfig->app_id,
+            [
+                'cluster' => $pusherConfig->cluster,
+                'useTLS' => $pusherConfig->useTLS
+            ]
+        );
+    
 
         // Check if 'user_data' exists in the session
         if ($session->has('user_data')) {
@@ -63,6 +78,9 @@ class PatientController extends ResourceController
             if (isset($userData['PatientID'])) {
                 // Retrieve the PatientID
                 $patientID = $userData['PatientID'];
+
+                  // Retrieve patient details from the database
+                  $patient = $patientModel->find($patientID);
 
                 // Retrieve data from the request
                 $requestData = [
@@ -92,6 +110,12 @@ class PatientController extends ResourceController
                     // Update the ScheduleModel status to 'Reserved'
                     $scheduleID = $this->request->getVar('pref_timeslot_id');
                     $scheduleModel->update($scheduleID, ['status' => 'Reserved']);
+
+                     // Send notification using Pusher
+                     $data['message'] = 'A new booking has been made by ' . $patient['FirstName'] . '.';
+                     $pusher->trigger('my-channel', 'my-event', $data);
+
+                    
 
                     // Redirect to a success view
                     return redirect()->to('/');

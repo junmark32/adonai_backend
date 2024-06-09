@@ -17,7 +17,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 //
-
+use Config\Pusher;
 class DoctorController extends ResourceController
 {
     public function index()
@@ -324,6 +324,16 @@ class DoctorController extends ResourceController
 
     public function insert_prof_pres($patientID)
 {
+    $pusherConfig = new Pusher();
+        $pusher = new \Pusher\Pusher(
+            $pusherConfig->key,
+            $pusherConfig->secret,
+            $pusherConfig->app_id,
+            [
+                'cluster' => $pusherConfig->cluster,
+                'useTLS' => $pusherConfig->useTLS
+            ]
+        );
     // Start session
     $session = session();
     
@@ -410,6 +420,9 @@ class DoctorController extends ResourceController
                 $data['doctors'] = [$doctor];
                 $data['patient_data'] = [$patientData];
                 
+                // Send notification using Pusher
+                $data['message'] = 'A new Precription has been made by ' . $doctor['FirstName'] . '.';
+                $pusher->trigger('my-channel', 'my-event', $data);
                 // Pass the $data array to the view
                 return redirect()->to('/Doctor/Dashboard/Patients-Profile/' . $patientID)->with('success', 'Prescription added successfully.');
             } else {

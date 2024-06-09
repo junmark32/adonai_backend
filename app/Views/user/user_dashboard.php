@@ -1151,6 +1151,37 @@
 		   
 		</div>
 		<!-- /Main Wrapper -->
+		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
+		<script>
+    // Enable Pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('66016c500af8a7ce62eb', {
+      cluster: 'ap1',
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      // Handle the notification data here
+      // You can update the UI, show an alert, etc.
+      console.log('Received data:', data);
+      
+      // Example: Display notification in an alert
+      alert('Notification: ' + data.message);
+
+      // Example: Update a section in the webpage
+      // Assuming you have a div with id 'notification-area'
+      var notificationArea = document.getElementById('notification-area');
+      if (notificationArea) {
+        var notificationElement = document.createElement('div');
+        notificationElement.className = 'notification';
+        notificationElement.innerText = 'Notification: ' + data.message;
+        notificationArea.appendChild(notificationElement);
+      }
+    });
+  </script>
 	  
 		<!-- jQuery -->
 		<script src="assets/js/jquery.min.js"></script>

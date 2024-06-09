@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Username', 'PasswordHash', 'verification_code', 'role', 'status', 'token'];
+    protected $allowedFields    = ['Username', 'PasswordHash', 'verification_code', 'role', 'status', 'token', 'onesignal_subscription_id'];
 
     // Dates
     protected $useTimestamps = false;

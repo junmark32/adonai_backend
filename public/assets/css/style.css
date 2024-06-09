@@ -6773,3 +6773,21 @@ html.menu-opened body {
 .table-bordered td, .table-bordered th {
 	border: 1px solid #dee2e6;
 }
+
+/*  */
+
+/* Example styling for notifications */
+#notification-area {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+}
+.notification {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+}

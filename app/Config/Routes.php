@@ -56,6 +56,8 @@ $routes->match(['post','get'],'/Doctor/Dashboard/Add-Prescription/Patients-Profi
 $routes->match(['post','get'],'/Doctor/Dashboard/Insert-Prescription/Patients-Profile/(:num)', 'DoctorController::insert_prof_pres/$1');
 $routes->match(['post','get'],'/Doctor/Dashboard/Edit-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::edit_prof_pres/$1/$2');
 $routes->match(['post','get'],'/Doctor/Dashboard/Update-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::update_prof_pres/$1/$2');
+//
+$routes->post('send-notification', 'NotificationController::send');
 
 
 //admin//
