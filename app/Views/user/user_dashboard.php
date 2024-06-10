@@ -1154,7 +1154,10 @@
 		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
 		<script>
+			// Make the userID available in JavaScript
+			var token = '<?php echo $token; ?>';
     // Enable Pusher logging - don't include this in production
+	console.log("User Token:", token);
     Pusher.logToConsole = true;
 
     var pusher = new Pusher('66016c500af8a7ce62eb', {
@@ -1162,8 +1165,8 @@
       encrypted: true
     });
 
-    var channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', function(data) {
+    var channel = pusher.subscribe('user-token-' + token);
+    channel.bind('prescription-notification', function(data) {
       // Handle the notification data here
       // You can update the UI, show an alert, etc.
       console.log('Received data:', data);

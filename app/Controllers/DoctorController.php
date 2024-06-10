@@ -420,9 +420,25 @@ class DoctorController extends ResourceController
                 $data['doctors'] = [$doctor];
                 $data['patient_data'] = [$patientData];
                 
-                // Send notification using Pusher
-                $data['message'] = 'A new Precription has been made by ' . $doctor['FirstName'] . '.';
-                $pusher->trigger('my-channel', 'my-event', $data);
+                // Fetch user's token using UserID
+                $userModel = new UserModel();
+                                // Load the PatientModel
+                $patientModel = new PatientModel();
+
+                // Retrieve the patient data based on the patientId
+                $patientData = $patientModel->find($patientID);
+                 // Retrieve the UserID from the patient data
+                 $userID = $patientData['UserID'];
+                // Fetch user's token using UserID
+                $user = $userModel->find($userID);
+                $token = $user['token'];
+
+                // // Output the token for debugging
+                // var_dump($token);
+
+                // Send notification using Pusher to specific user based on token
+                $data['message'] = 'A new Prescription has been made by ' . $doctor['FirstName'] . '.';
+                $pusher->trigger('user-token-' . $token, 'prescription-notification', $data);
                 // Pass the $data array to the view
                 return redirect()->to('/Doctor/Dashboard/Patients-Profile/' . $patientID)->with('success', 'Prescription added successfully.');
             } else {

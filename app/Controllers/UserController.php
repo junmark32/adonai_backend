@@ -111,7 +111,7 @@ class UserController extends ResourceController
         $userData = $session->get('user_data');
         $loggedIn = true;
         $role = $userData['Role']; // Assuming 'role' is stored in the session
-        $userID = $userData['UserID'];
+        $token = $userData['token'];
     }
 
     // Load Appointments Data
@@ -177,7 +177,7 @@ class UserController extends ResourceController
      // Pass the cart count to the view
      $data['cartCount'] = $cartCount;
 
-     return view('user/user_dashboard', ['userID' => $userID] + $data);
+     return view('user/user_dashboard', ['token' => $token] + $data);
 
     }
 
@@ -772,6 +772,7 @@ public function checkSessionData()
             echo "User ID: " . $userData['UserID'] . "<br>";
             echo "Username: " . $userData['Username'] . "<br>";
             echo "Role: " . $userData['Role'] . "<br>";
+            echo "Token: " . $userData['token'] . "<br>";
             // echo "Patient ID: " . $userData['PatientID'] . "<br>";
             echo "Doctor ID: " . $userData['DoctorID'] . "<br>";
             // echo "Admin ID: " . $userData['AdminID'] . "<br>";
