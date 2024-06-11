@@ -105,15 +105,29 @@ class PatientController extends ResourceController
                 // Insert appointment data
                 $appointment = $appointmentModel->insert($requestData);
 
+                
                 // Check if the appointment was successfully inserted
                 if ($appointment) {
                     // Update the ScheduleModel status to 'Reserved'
                     $scheduleID = $this->request->getVar('pref_timeslot_id');
                     $scheduleModel->update($scheduleID, ['status' => 'Reserved']);
 
-                     // Send notification using Pusher
-                     $data['message'] = 'A new booking has been made by ' . $patient['FirstName'] . '.';
-                     $pusher->trigger('my-channel', 'my-event', $data);
+                    // Fetch user's token using UserID
+                    $userModel = new UserModel();
+                    $doctorModel = new DoctorModel();
+
+                    // Retrieve the doctor data based on the doctorId
+                    $doctorData = $doctorModel->find($this->request->getVar('doctor_id'));
+                    // Retrieve the UserID from the doctor data
+                    $userID = $doctorData['UserID'];
+
+                    // Fetch user's token using UserID
+                    $user = $userModel->find($userID);
+                    $token = $user['token'];
+
+                    // Send notification using Pusher to specific user based on token
+                    $data['message'] = 'A new booking has been made by ' . $patient['FirstName'] . '.';
+                    $pusher->trigger('user-token-' . $token, 'booking-notification', $data);
 
                     
 

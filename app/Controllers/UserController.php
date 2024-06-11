@@ -403,6 +403,7 @@ class UserController extends ResourceController
             $loggedIn = true;
             // var_dump($userData);
             $role = $userData['Role']; // Assuming 'role' is stored in the session
+            $token = $userData['token'];
 
             // Check if the user has a 'DoctorID' key
             if (isset($userData['DoctorID'])) {
@@ -441,7 +442,7 @@ class UserController extends ResourceController
                     // Pass the doctor data to the view
                     $data['doctors'] = [$doctor]; // Make sure $doctors is an array
                     $data['appointmentData'] = $appointmentData;
-                    return view('doctor/doctor_dashboard', $data);
+                    return view('doctor/doctor_dashboard', ['token' => $token] + $data);
                 } else {
                     return view('error', ['error' => 'Doctor not found']);
                 }
