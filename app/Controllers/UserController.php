@@ -38,6 +38,7 @@ class UserController extends ResourceController
         $userData = $session->get('user_data');
         $loggedIn = true;
         $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
     }
 
     // Load Patients Data
@@ -69,7 +70,7 @@ class UserController extends ResourceController
      // Pass the cart count to the view
      $data['cartCount'] = $cartCount;
 
-    return view('user/index', $data);
+    return view('user/index',['token' => $token] + $data);
 }
 
 
