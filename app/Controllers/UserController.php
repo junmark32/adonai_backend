@@ -422,11 +422,25 @@ class UserController extends ResourceController
                     $appointmentModel = new AppointmentModel();
                     $appointments = $appointmentModel->where('DoctorID', $doctorID)->findAll();
 
+                    $appointmentCount = $appointmentModel->where('DoctorID', $doctorID)->countAllResults();
+
+                    date_default_timezone_set('Asia/Manila'); // Adjust according to your location
+                    // Get the current date
+                    $currentDate = date('d, M Y');
+                    // Get the current date in MySQL-compatible format
+                    $currentDates = date('Y-m-d'); // Example output: '2024-06-17'
+
                     // Initialize an array to hold appointment and patient data
                     $appointmentData = [];
 
                     // Fetch patient data for each appointment
                     $patientModel = new PatientModel();
+                    $patientCount = $patientModel->countAll();
+                    // Query to count patients created on the current date
+                    $patientToday = $patientModel
+                    ->where('DATE(created_at)', $currentDates)
+                    ->countAllResults();
+
                     foreach ($appointments as $appointment) {
                         $patient = $patientModel->find($appointment['PatientID']);
                         if ($patient) {
@@ -443,6 +457,10 @@ class UserController extends ResourceController
                     // Pass the doctor data to the view
                     $data['doctors'] = [$doctor]; // Make sure $doctors is an array
                     $data['appointmentData'] = $appointmentData;
+                    $data['appointmentCount'] = $appointmentCount;
+                    $data['patientCount'] = $patientCount;
+                    $data['patientToday'] = $patientToday;
+                    $data['currentDate'] = $currentDate;
                     return view('doctor/doctor_dashboard', ['token' => $token] + $data);
                 } else {
                     return view('error', ['error' => 'Doctor not found']);

@@ -63,38 +63,39 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($cartItems as $item) : ?>
-                                        <tr>
-                                            <td class="align-middle">
-                                                <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </td>
-                                            <td class="align-middle">
-                                                <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
-                                                    <img src="<?= base_url('uploads/' . $item['product']['Image_url']) ?>" alt="Product Image" style="width: 100px;">
-                                                </a>
-                                            </td>
-                                            <td class="align-middle">
-                                                <div class="product-details">
-                                                    <h3 class="product-name"><a href="product-details.php?product=<?= $item['product']['ProductID'] ?>"><?= $item['product']['Name'] ?> - $<?= $item['product']['Price']?></a></h3>
-                                                    <p>LENS: <?= $item['lens']['Model'] ?> &nbsp; <?= $item['lens']['Brand'] ?> &nbsp; <?= $item['lens']['LensType'] ?> - $<?= $item['lens']['Price'] ?></p>
-                                                </div>
-                                            </td>
-                                            <td class="align-middle text-center">$<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
-                                            <td class="align-middle text-center"><?= $item['Quantity'] ?></td>
-                                            <td class="align-middle text-center">$<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
-                                            <td class="align-middle text-center">
-                                                <input type="checkbox" name="selectedItems[]" value="<?= $item['CartID'] ?>" onchange="updateCartTotal()">
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
+    <?php foreach ($cartItems as $item) : ?>
+        <tr>
+            <td class="align-middle">
+                <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </td>
+            <td class="align-middle">
+                <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
+                    <img src="<?= base_url('uploads/' . $item['product']['Image_url']) ?>" alt="Product Image" style="width: 100px;">
+                </a>
+            </td>
+            <td class="align-middle">
+                <div class="product-details">
+                    <h3 class="product-name"><a href="product-details.php?product=<?= $item['product']['ProductID'] ?>"><?= $item['product']['Name'] ?> - ₱<?= $item['product']['Price']?></a></h3>
+                    <p>LENS: <?= $item['lens']['Model'] ?> &nbsp; <?= $item['lens']['Brand'] ?> &nbsp; <?= $item['lens']['LensType'] ?> - ₱<?= $item['lens']['Price'] ?></p>
+                </div>
+            </td>
+            <td class="align-middle text-center">₱<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
+            <td class="align-middle text-center"><?= $item['Quantity'] ?></td>
+            <td class="align-middle text-center">₱<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
+            <td class="align-middle text-center">
+                <input type="checkbox" name="selectedItems[]" value="<?= $item['CartID'] ?>" onchange="updateCartTotal()">
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
                             </table>
                             <hr style="border-top: 3px solid black;">
                             <h3><strong>Cart Total</strong></h3>
                             <div class="card-body">
-                                <p id="cartTotal">Subtotal: $0</p> <!-- Display cart total here -->
+                                <p id="cartTotal">Subtotal: ₱0</p> <!-- Display cart total here -->
                             </div>
                             <div class="card-footer">
                                 <h5><strong>Thank You for Your Purchase! Important Information Regarding Your Eyeglasses</strong></h5>
@@ -129,31 +130,27 @@
         for (var i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 // Get the price of the selected item
-                var price = parseFloat(document.querySelectorAll('tbody tr')[i].querySelectorAll('td')[5].innerText.replace('$', ''));
+                var price = parseFloat(document.querySelectorAll('tbody tr')[i].querySelectorAll('td')[5].innerText.replace('₱', ''));
                 cartTotal += price;
             }
         }
 
         // Update the cart total displayed
-        document.getElementById('cartTotal').innerText = 'Subtotal: $' + cartTotal.toFixed(2);
+        document.getElementById('cartTotal').innerText = 'Subtotal: ₱' + cartTotal.toFixed(2);
     }
 
-	function checkout() {
-    // Check if the confirmation checkbox is checked
-    var confirmationCheckbox = document.getElementById('confirmCheckout');
-    if (confirmationCheckbox.checked) {
-        // Submit the form synchronously
-        document.getElementById('checkoutForm').submit();
-    } else {
-        // If the confirmation checkbox is not checked, prompt the user to confirm
-        alert("Please confirm that you want to proceed to checkout by checking the box.");
+    function checkout() {
+        // Check if the confirmation checkbox is checked
+        var confirmationCheckbox = document.getElementById('confirmCheckout');
+        if (confirmationCheckbox.checked) {
+            // Submit the form synchronously
+            document.getElementById('checkoutForm').submit();
+        } else {
+            // If the confirmation checkbox is not checked, prompt the user to confirm
+            alert("Please confirm that you want to proceed to checkout by checking the box.");
+        }
     }
-}
-
-
-    
 </script>
-
 
 
 

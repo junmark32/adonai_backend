@@ -166,13 +166,14 @@
                                                 <li>
                                                     <i class="fas fa-map-marker-alt"></i> <?= $doctor['Location'] ?>
                                                 </li>
-                                                <!-- <li>
-                                                    <i class="far fa-clock"></i> 
-                                                </li> -->
                                                 <li>
-                                                    <i class="far fa-money-bill-alt"></i> <?= $doctor['Fees_range'] ?>
-                                                    <i class="fas fa-info-circle" data-toggle="tooltip" title="<?= $doctor['Fees_info'] ?>"></i>
+                                                    <i class="far fa-clock"></i>Mon-Sun: 9:00 AM - 9:00 PM
                                                 </li>
+                                                <li>
+													<i class="far fa-money-bill-alt"></i> ₱<?= $doctor['Fees_range'] ?>
+													<i class="fas fa-info-circle" data-toggle="tooltip" title="<?= $doctor['Fees_info'] ?>"></i>
+												</li>
+
                                             </ul>
                                             <div class="row row-sm">
                                                 <div class="col-6">
