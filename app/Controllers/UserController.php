@@ -451,6 +451,23 @@ class UserController extends ResourceController
                             ];
                         }
                     }
+
+                    
+                    // Assuming $appointmentData is an array of appointment details
+                    $upcomingCount = 0;
+                    $todayCount = 0;
+
+                    foreach ($appointmentData as $data) {
+                        $appointmentDate = date('Y-m-d', strtotime($data['appointment']['Pref_Date']));
+                        if ($appointmentDate > $currentDates) {
+                            $upcomingCount++;
+                        } elseif ($appointmentDate == $currentDates) {
+                            $todayCount++;
+                        }
+                    }
+                    
+
+
                             // Pass loggedIn status, role, and doctor data to the view
                     $data['loggedIn'] = $loggedIn;
                     $data['role'] = $role;
@@ -461,6 +478,9 @@ class UserController extends ResourceController
                     $data['patientCount'] = $patientCount;
                     $data['patientToday'] = $patientToday;
                     $data['currentDate'] = $currentDate;
+                    // Pass these counts to your view
+                    $data['upcomingCount'] = $upcomingCount;
+                    $data['todayCount'] = $todayCount;
                     return view('doctor/doctor_dashboard', ['token' => $token] + $data);
                 } else {
                     return view('error', ['error' => 'Doctor not found']);
