@@ -201,13 +201,25 @@
 											<i class="fe fe-users"></i>
 										</span>
 										<div class="dash-count">
-											<h3>168</h3>
+											<h3><?php echo $doctorCount; ?></h3>
 										</div>
 									</div>
 									<div class="dash-widget-info">
 										<h6 class="text-muted">Doctors</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-primary w-50"></div>
+											<?php
+											// Example maximum count (you can adjust this according to your needs)
+											$maxCount = 1000;
+
+											// Calculate percentage
+											$percentage = ($doctorCount / $maxCount) * 100;
+											
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-primary" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
@@ -221,14 +233,26 @@
 											<i class="fe fe-credit-card"></i>
 										</span>
 										<div class="dash-count">
-											<h3>487</h3>
+											<h3><?php echo $patientCount; ?></h3>
 										</div>
 									</div>
 									<div class="dash-widget-info">
 										
 										<h6 class="text-muted">Patients</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-success w-50"></div>
+											<?php
+											// Example maximum count (you can adjust this according to your needs)
+											$maxCount = 1000;
+
+											// Calculate percentage
+											$percentage = ($patientCount / $maxCount) * 100;
+											
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-success" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
@@ -242,14 +266,26 @@
 											<i class="fe fe-money"></i>
 										</span>
 										<div class="dash-count">
-											<h3>485</h3>
+											<h3><?php echo $appointmentCount; ?></h3>
 										</div>
 									</div>
 									<div class="dash-widget-info">
 										
 										<h6 class="text-muted">Appointment</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-danger w-50"></div>
+											<?php
+											// Example maximum count (you can adjust this according to your needs)
+											$maxCount = 1000;
+
+											// Calculate percentage
+											$percentage = ($appointmentCount / $maxCount) * 100;
+											
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-danger" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
@@ -260,17 +296,28 @@
 								<div class="card-body">
 									<div class="dash-widget-header">
 										<span class="dash-widget-icon text-warning border-warning">
-											<i class="fe fe-folder"></i>
+											<i class="fe fe-cart"></i>
 										</span>
 										<div class="dash-count">
-											<h3>$62523</h3>
+											<h3><?php echo $productCount; ?></h3>
 										</div>
 									</div>
 									<div class="dash-widget-info">
-										
-										<h6 class="text-muted">Revenue</h6>
+										<h6 class="text-muted">Products</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-warning w-50"></div>
+											<?php
+											// Example maximum count (you can adjust this according to your needs)
+											$maxCount = 1000;
+
+											// Calculate percentage
+											$percentage = ($productCount / $maxCount) * 100;
+											
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-warning" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
@@ -279,11 +326,64 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12 col-lg-6">
+							
+							<!-- Invoice Chart -->
+<div class="card card-chart">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="card-title">Patient Status</h4>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Interval
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" onclick="updateChart('daily')">Daily</a>
+                <a class="dropdown-item" href="#" onclick="updateChart('monthly')">Monthly</a>
+                <a class="dropdown-item" href="#" onclick="updateChart('yearly')">Yearly</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="morrisLine"></div>
+    </div>
+</div>
+<!-- /Invoice Chart -->
+
+<script>
+function updateChart(interval) {
+    // You will need to implement this function to update your chart
+    // based on the selected interval (daily, monthly, yearly).
+    console.log('Selected interval:', interval);
+    
+    // Example: Use AJAX to fetch data based on interval and update the chart
+    fetch(`/get-patient-status?interval=${interval}`)
+        .then(response => response.json())
+        .then(data => {
+            // Assuming you're using Morris.js or another chart library
+            // Replace the chart data here
+            Morris.Line({
+                element: 'morrisLine',
+                data: data,
+                xkey: 'date',
+                ykeys: ['value'],
+                labels: ['Patients']
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+// Initial load of the chart with default interval (e.g., daily)
+updateChart('daily');
+</script>
+
+							
+						</div>	
+
+						<div class="col-md-12 col-lg-6">
 						
 							<!-- Sales Chart -->
 							<div class="card card-chart">
 								<div class="card-header">
-									<h4 class="card-title">Revenue</h4>
+									<h4 class="card-title">Product Sales</h4>
 								</div>
 								<div class="card-body">
 									<div id="morrisArea"></div>
@@ -292,20 +392,7 @@
 							<!-- /Sales Chart -->
 							
 						</div>
-						<div class="col-md-12 col-lg-6">
 						
-							<!-- Invoice Chart -->
-							<div class="card card-chart">
-								<div class="card-header">
-									<h4 class="card-title">Status</h4>
-								</div>
-								<div class="card-body">
-									<div id="morrisLine"></div>
-								</div>
-							</div>
-							<!-- /Invoice Chart -->
-							
-						</div>	
 					</div>
 					<div class="row">
 						<div class="col-md-6 d-flex">

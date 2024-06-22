@@ -778,6 +778,22 @@ public function db_admin()
                 $admin = $adminModel->find($adminID);
 
                 if ($admin) {
+
+                    $doctorModel = new DoctorModel();
+                    $patientModel = new PatientModel();
+                    $appointmentModel = new AppointmentModel();
+                    $productModel = new ProductModel();
+
+                    // $patientCount = $patientModel->countAll();
+                    $doctorCount = $doctorModel->countAll();
+                    $patientCount = $patientModel->countAll();
+                    $appointmentCount = $appointmentModel->countAll();
+                    $productCount = $productModel->countAll();
+
+                    $data['doctorCount'] = $doctorCount;
+                    $data['patientCount'] = $patientCount;
+                    $data['appointmentCount'] = $appointmentCount;
+                    $data['productCount'] = $productCount;
                      // Pass loggedIn status, role, and doctor data to the view
                      $data['loggedIn'] = $loggedIn;
                      $data['role'] = $role;
