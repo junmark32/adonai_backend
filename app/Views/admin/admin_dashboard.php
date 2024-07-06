@@ -23,6 +23,9 @@
 		
 		<!-- Main CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 		
 		<!--[if lt IE 9]>
 			<script src="assets/js/html5shiv.min.js"></script>
@@ -349,31 +352,50 @@
 <!-- /Invoice Chart -->
 
 <script>
-function updateChart(interval) {
-    // You will need to implement this function to update your chart
-    // based on the selected interval (daily, monthly, yearly).
-    console.log('Selected interval:', interval);
-    
-    // Example: Use AJAX to fetch data based on interval and update the chart
-    fetch(`/get-patient-status?interval=${interval}`)
-        .then(response => response.json())
-        .then(data => {
-            // Assuming you're using Morris.js or another chart library
-            // Replace the chart data here
-            Morris.Line({
-                element: 'morrisLine',
-                data: data,
-                xkey: 'date',
-                ykeys: ['value'],
-                labels: ['Patients']
-            });
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
+        $(function(){
+            // Initial data (e.g., yearly)
+            const yearlyData = <?php echo json_encode($yearlyData); ?>;
+            const monthlyData = <?php echo json_encode($monthlyData); ?>;
+            const dailyData = <?php echo json_encode($dailyData); ?>;
 
-// Initial load of the chart with default interval (e.g., daily)
-updateChart('daily');
-</script>
+            window.mL = Morris.Line({
+                element: 'morrisLine',
+                data: yearlyData,
+                xkey: 'y',
+                ykeys: ['a'],
+                labels: ['Patients'],
+                lineColors: ['#ff9d00'],
+                lineWidth: 1,
+                gridTextSize: 10,
+                hideHover: 'auto',
+                resize: true,
+                redraw: true
+            });
+
+            $(window).on("resize", function(){
+                mL.redraw();
+            });
+
+            window.updateChart = function(interval) {
+                let newData;
+                switch(interval) {
+                    case 'daily':
+                        newData = dailyData;
+                        break;
+                    case 'monthly':
+                        newData = monthlyData;
+                        break;
+                    case 'yearly':
+                        newData = yearlyData;
+                        break;
+                    default:
+                        newData = yearlyData;
+                        break;
+                }
+                mL.setData(newData);
+            };
+        });
+    </script>
 
 							
 						</div>	
@@ -769,6 +791,7 @@ updateChart('daily');
 		<script src="assets/plugins/raphael/raphael.min.js"></script>    
 		<script src="assets/plugins/morris/morris.min.js"></script>  
 		<script src="assets/js/chart.morris.js"></script>
+		
 		
 		<!-- Custom JS -->
 		<script  src="assets/js/script.js"></script>

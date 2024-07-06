@@ -794,6 +794,24 @@ public function db_admin()
                     $data['patientCount'] = $patientCount;
                     $data['appointmentCount'] = $appointmentCount;
                     $data['productCount'] = $productCount;
+
+                    //
+                    // Fetch data and group by the required intervals
+                    $dailyData = $patientModel->select('DATE(created_at) as y, COUNT(PatientID) as a')
+                    ->groupBy('DATE(created_at)')
+                    ->findAll();
+
+                    $monthlyData = $patientModel->select('DATE_FORMAT(created_at, "%Y-%m") as y, COUNT(PatientID) as a')
+                    ->groupBy('DATE_FORMAT(created_at, "%Y-%m")')
+                    ->findAll();
+
+                    $yearlyData = $patientModel->select('YEAR(created_at) as y, COUNT(PatientID) as a')
+                    ->groupBy('YEAR(created_at)')
+                    ->findAll();
+
+                    $data['dailyData'] = $dailyData;
+                    $data['monthlyData'] = $monthlyData;
+                    $data['yearlyData'] = $yearlyData;
                      // Pass loggedIn status, role, and doctor data to the view
                      $data['loggedIn'] = $loggedIn;
                      $data['role'] = $role;
