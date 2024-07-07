@@ -796,7 +796,7 @@ public function db_admin()
                     $data['productCount'] = $productCount;
 
                     //
-                    // Fetch data and group by the required intervals
+                    // Fetch patient data
                     $dailyData = $patientModel->select('DATE(created_at) as y, COUNT(PatientID) as a')
                     ->groupBy('DATE(created_at)')
                     ->findAll();
@@ -812,6 +812,33 @@ public function db_admin()
                     $data['dailyData'] = $dailyData;
                     $data['monthlyData'] = $monthlyData;
                     $data['yearlyData'] = $yearlyData;
+
+                    // Fetch appointment data
+                    $appointmentDailyData = $appointmentModel->select('DATE(created_at) as y, COUNT(AppointmentID) as b')
+                    ->groupBy('DATE(created_at)')
+                    ->findAll();
+
+                    $appointmentMonthlyData = $appointmentModel->select('DATE_FORMAT(created_at, "%Y-%m") as y, COUNT(AppointmentID) as b')
+                    ->groupBy('DATE_FORMAT(created_at, "%Y-%m")')
+                    ->findAll();
+
+                    $appointmentYearlyData = $appointmentModel->select('YEAR(created_at) as y, COUNT(AppointmentID) as b')
+                    ->groupBy('YEAR(created_at)')
+                    ->findAll();
+
+                    $data['appointmentDailyData'] = $appointmentDailyData;
+                    $data['appointmentMonthlyData'] = $appointmentMonthlyData;
+                    $data['appointmentYearlyData'] = $appointmentYearlyData;
+
+
+                    // // Format datetime fields to ISO 8601 format for Morris.js compatibility
+                    // function formatDataForMorris($data) {
+                    // foreach ($data as &$entry) {
+                    // $entry['y'] = date('Y-m-d', strtotime($entry['y'])); // Adjust format as needed
+                    // }
+                    // return $data;
+                    // }
+
                      // Pass loggedIn status, role, and doctor data to the view
                      $data['loggedIn'] = $loggedIn;
                      $data['role'] = $role;

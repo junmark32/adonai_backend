@@ -352,50 +352,91 @@
 <!-- /Invoice Chart -->
 
 <script>
-        $(function(){
-            // Initial data (e.g., yearly)
-            const yearlyData = <?php echo json_encode($yearlyData); ?>;
-            const monthlyData = <?php echo json_encode($monthlyData); ?>;
-            const dailyData = <?php echo json_encode($dailyData); ?>;
+$(function(){
+    // Initial data (e.g., yearly)
+    const yearlyData = <?php echo json_encode($yearlyData); ?>;
+    const monthlyData = <?php echo json_encode($monthlyData); ?>;
+    const dailyData = <?php echo json_encode($dailyData); ?>;
+    
+    // Appointment data
+    const appointmentYearlyData = <?php echo json_encode($appointmentYearlyData); ?>;
+    const appointmentMonthlyData = <?php echo json_encode($appointmentMonthlyData); ?>;
+    const appointmentDailyData = <?php echo json_encode($appointmentDailyData); ?>;
 
-            window.mL = Morris.Line({
-                element: 'morrisLine',
-                data: yearlyData,
-                xkey: 'y',
-                ykeys: ['a'],
-                labels: ['Patients'],
-                lineColors: ['#ff9d00'],
-                lineWidth: 1,
-                gridTextSize: 10,
-                hideHover: 'auto',
-                resize: true,
-                redraw: true
-            });
-
-            $(window).on("resize", function(){
-                mL.redraw();
-            });
-
-            window.updateChart = function(interval) {
-                let newData;
-                switch(interval) {
-                    case 'daily':
-                        newData = dailyData;
-                        break;
-                    case 'monthly':
-                        newData = monthlyData;
-                        break;
-                    case 'yearly':
-                        newData = yearlyData;
-                        break;
-                    default:
-                        newData = yearlyData;
-                        break;
-                }
-                mL.setData(newData);
-            };
+    function mergeData(patientData, appointmentData) {
+        const mergedData = {};
+        
+        // Combine patient data
+        patientData.forEach(item => {
+            mergedData[item.y] = { y: item.y, a: item.a, b: 0 };
         });
-    </script>
+
+        // Combine appointment data
+        appointmentData.forEach(item => {
+            if (mergedData[item.y]) {
+                mergedData[item.y].b = item.b;
+            } else {
+                mergedData[item.y] = { y: item.y, a: 0, b: item.b };
+            }
+        });
+
+        return Object.values(mergedData);
+    }
+
+    // Merge the data initially for yearly, monthly, and daily
+    const mergedYearlyData = mergeData(yearlyData, appointmentYearlyData);
+    const mergedMonthlyData = mergeData(monthlyData, appointmentMonthlyData);
+    const mergedDailyData = mergeData(dailyData, appointmentDailyData);
+
+    window.mL = Morris.Line({
+        element: 'morrisLine',
+        data: mergedYearlyData, // Initial data set to mergedYearlyData
+        xkey: 'y',
+        ykeys: ['a', 'b'], // 'a' for patients, 'b' for appointments
+        labels: ['Patients', 'Appointments'],
+        lineColors: ['#ff9d00', '#4CAF50'], // Different colors for patients and appointments
+        lineWidth: 1,
+        gridTextSize: 10,
+        hideHover: 'auto',
+        resize: true,
+        redraw: true
+    });
+
+    $(window).on("resize", function(){
+        mL.redraw();
+    });
+
+    window.updateChart = function(interval) {
+        let newData, xLabel;
+        switch(interval) {
+            case 'daily':
+                newData = mergedDailyData;
+                xLabel = 'Day';
+                break;
+            case 'monthly':
+                newData = mergedMonthlyData;
+                xLabel = 'Month';
+                break;
+            case 'yearly':
+                newData = mergedYearlyData;
+                xLabel = 'Year';
+                break;
+            default:
+                newData = mergedYearlyData;
+                xLabel = 'Year';
+                break;
+        }
+        mL.options.labels = ['Patients', 'Appointments'];
+        mL.options.xkey = 'y';
+        mL.options.ykeys = ['a', 'b'];
+        mL.options.parseTime = false; // Prevents Morris.js from parsing the xkey as a date
+        mL.setData(newData);
+        // Update the x-axis label
+        mL.options.labels = ['Patients', 'Appointments'];
+    };
+});
+</script>
+
 
 							
 						</div>	
