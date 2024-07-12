@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\AdminModel;
 use App\Models\ProductModel;
+use App\Models\PurchaseModel;
 
 class AdminController extends BaseController
 {
@@ -17,9 +18,28 @@ class AdminController extends BaseController
     {
         // Load the ProductModel
         $productModel = new ProductModel();
+        $purchaseModel = new PurchaseModel();
 
         // Retrieve all products from the database
         $products = $productModel->findAll();
+        // Count products where StockQuantity is 0
+$soldCount = $productModel->where('StockQuantity', 0)->countAllResults();
+
+
+       // Count purchases where Status is 'Pending'
+        $purchaseCount = $purchaseModel->where('Status', 'Pending')->countAllResults();
+
+        // Count purchases where Status is 'On-Process'
+        $onprocessCount = $purchaseModel->where('Status', 'On-Process')->countAllResults();
+
+        // Count purchases where Status is 'Returned'
+        $returnedCount = $purchaseModel->where('Status', 'Returned')->countAllResults();
+
+        // Assign counts to data array
+        $data['purchaseCount'] = $purchaseCount;
+        $data['onprocessCount'] = $onprocessCount;
+        $data['returnedCount'] = $returnedCount;
+        $data['soldCount'] = $soldCount;
 
         // Pass the products data to the view
         $data['products'] = $products;

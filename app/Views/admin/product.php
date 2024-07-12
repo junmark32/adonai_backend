@@ -302,6 +302,110 @@
 						</div>
 					</div>
 					<!-- /Page Header -->
+
+					<div class="row">
+						<div class="col-xl-3 col-sm-6 col-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="dash-widget-header">
+										<span class="dash-widget-icon text-primary border-primary">
+											<i class="fa fa-shopping-cart"></i>
+										</span>
+										<div class="dash-count">
+											<h3><?php echo $purchaseCount; ?></h3>
+										</div>
+									</div>
+									<div class="dash-widget-info">
+										<h6 class="text-muted">Pending Orders</h6>
+										<div class="progress progress-sm">
+											<?php
+											// Ensure $purchaseCount is not negative to avoid division by zero or negative percentages
+											$purchaseCount = max(0, $purchaseCount);
+
+											// Calculate percentage
+											$percentage = ($purchaseCount / $purchaseCount) * 100; // Since $purchaseCount is the actual count
+
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-primary" style="width: ' . $percentage . '%;"></div>';
+											?>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-sm-6 col-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="dash-widget-header">
+										<span class="dash-widget-icon text-success">
+										<i class="fe fe-clock"></i>
+
+										</span>
+										<div class="dash-count">
+											<h3><?php echo $onprocessCount; ?></h3>
+										</div>
+									</div>
+									<div class="dash-widget-info">
+										
+										<h6 class="text-muted">On Process</h6>
+										<div class="progress progress-sm">
+											<div class="progress-bar bg-success w-50"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-sm-6 col-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="dash-widget-header">
+										<span class="dash-widget-icon text-danger border-danger">
+										<i class="fa fa-reply"></i>
+
+										</span>
+										<div class="dash-count">
+											<h3><?php echo $returnedCount; ?></h3>
+										</div>
+									</div>
+									<div class="dash-widget-info">
+										
+										<h6 class="text-muted">Returned Items</h6>
+										<div class="progress progress-sm">
+											<div class="progress-bar bg-danger w-50"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-sm-6 col-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="dash-widget-header">
+										<span class="dash-widget-icon text-warning border-warning">
+										<i class="fa fa-cubes"></i>
+
+										</span>
+										<div class="dash-count">
+											<h3><?php echo $soldCount; ?></h3>
+										</div>
+									</div>
+									<div class="dash-widget-info">
+										
+										<h6 class="text-muted">Items Sold</h6>
+										<div class="progress progress-sm">
+											<div class="progress-bar bg-warning w-50"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- /Page Header -->
 					
 					<div class="row">
 						<div class="col-sm-12">

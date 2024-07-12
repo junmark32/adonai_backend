@@ -444,15 +444,70 @@ $(function(){
 						<div class="col-md-12 col-lg-6">
 						
 							<!-- Sales Chart -->
-							<div class="card card-chart">
-								<div class="card-header">
-									<h4 class="card-title">Product Sales</h4>
-								</div>
-								<div class="card-body">
-									<div id="morrisArea"></div>
-								</div>
-							</div>
-							<!-- /Sales Chart -->
+<div class="card card-chart">
+    <div class="card-header">
+        <h4 class="card-title">Product Sales</h4>
+        <div class="dropdown">
+            <select id="monthDropdown" class="form-control">
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="morrisArea"></div>
+    </div>
+</div>
+<!-- /Sales Chart -->
+
+<script>
+$(function() {
+    // Data from the server
+    var purchaseDailyData = <?= json_encode($purchaseDailyData); ?>;
+
+    // Initialize Morris Area Chart
+    var mA = Morris.Area({
+        element: 'morrisArea',
+        data: purchaseDailyData,
+        xkey: 'y',
+        ykeys: ['a'],
+        labels: ['Sales'],
+        lineColors: ['#1b5a90'],
+        lineWidth: 2,
+        fillOpacity: 0.5,
+        gridTextSize: 10,
+        hideHover: 'auto',
+        resize: true,
+        redraw: true
+    });
+
+    // Update chart data based on selected month
+    $('#monthDropdown').change(function() {
+        var selectedMonth = $(this).val();
+        var selectedMonthName = $(this).find('option:selected').text();
+        
+        // Filter data based on the selected month
+        var filteredData = purchaseDailyData.filter(function(data) {
+            return data.y.slice(5, 7) === selectedMonth;
+        });
+
+        // Update chart with filtered data and new label
+        mA.options.labels = [selectedMonthName + ' Sales'];
+        mA.setData(filteredData);
+    });
+});
+</script>
+
 							
 						</div>
 						

@@ -783,6 +783,7 @@ public function db_admin()
                     $patientModel = new PatientModel();
                     $appointmentModel = new AppointmentModel();
                     $productModel = new ProductModel();
+                    $purchaseModel = new PurchaseModel();
 
                     // $patientCount = $patientModel->countAll();
                     $doctorCount = $doctorModel->countAll();
@@ -830,6 +831,18 @@ public function db_admin()
                     $data['appointmentMonthlyData'] = $appointmentMonthlyData;
                     $data['appointmentYearlyData'] = $appointmentYearlyData;
 
+                    //
+                    // Get the current year
+                    $currentYear = date('Y');
+
+
+                    $purchaseDailyData = $purchaseModel->select('DATE_FORMAT(PurchaseDate, "%Y-%m-%d") as y, COUNT(PurchaseID) as a')
+                    ->where('YEAR(PurchaseDate)', $currentYear)
+                    ->where('Status', 'Pending')
+                    ->groupBy('DATE_FORMAT(PurchaseDate, "%Y-%m-%d")')
+                    ->findAll();
+
+                    $data['purchaseDailyData'] = $purchaseDailyData;
 
                     // // Format datetime fields to ISO 8601 format for Morris.js compatibility
                     // function formatDataForMorris($data) {
