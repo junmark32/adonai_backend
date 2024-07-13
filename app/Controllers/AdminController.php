@@ -23,7 +23,7 @@ class AdminController extends BaseController
         // Retrieve all products from the database
         $products = $productModel->findAll();
         // Count products where StockQuantity is 0
-$soldCount = $productModel->where('StockQuantity', 0)->countAllResults();
+        $soldCount = $productModel->where('StockQuantity', 0)->countAllResults();
 
 
        // Count purchases where Status is 'Pending'
@@ -35,10 +35,26 @@ $soldCount = $productModel->where('StockQuantity', 0)->countAllResults();
         // Count purchases where Status is 'Returned'
         $returnedCount = $purchaseModel->where('Status', 'Returned')->countAllResults();
 
+        $completeCount = $purchaseModel->where('Status', 'Completed')->countAllResults();
+
+        //
+        // Get the current year
+        $currentYear = date('Y');
+
+
+        $purchaseDailyData = $purchaseModel->select('DATE_FORMAT(PurchaseDate, "%Y-%m-%d") as y, COUNT(PurchaseID) as a')
+        ->where('YEAR(PurchaseDate)', $currentYear)
+        ->where('Status', 'Pending')
+        ->groupBy('DATE_FORMAT(PurchaseDate, "%Y-%m-%d")')
+        ->findAll();
+
+        $data['purchaseDailyData'] = $purchaseDailyData;
+
         // Assign counts to data array
         $data['purchaseCount'] = $purchaseCount;
         $data['onprocessCount'] = $onprocessCount;
         $data['returnedCount'] = $returnedCount;
+        $data['completeCount'] = $completeCount;
         $data['soldCount'] = $soldCount;
 
         // Pass the products data to the view

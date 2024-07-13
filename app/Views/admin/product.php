@@ -21,6 +21,11 @@
 		
 		<!-- Main CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
+
+		<link rel="stylesheet" href="assets/plugins/morris/morris.css">
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 		
 		<!--[if lt IE 9]>
 			<script src="assets/js/html5shiv.min.js"></script>
@@ -341,7 +346,7 @@
 							<div class="card">
 								<div class="card-body">
 									<div class="dash-widget-header">
-										<span class="dash-widget-icon text-success">
+										<span class="dash-widget-icon text-warning">
 										<i class="fe fe-clock"></i>
 
 										</span>
@@ -353,7 +358,60 @@
 										
 										<h6 class="text-muted">On Process</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-success w-50"></div>
+											<?php
+											// Ensure $purchaseCount is not negative to avoid division by zero or negative percentages
+											$onprocessCount = max(0, $onprocessCount);
+
+											// Calculate percentage
+											$percentage = ($onprocessCount / $onprocessCount) * 100; // Since $purchaseCount is the actual count
+
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-warning" style="width: ' . $percentage . '%;"></div>';
+											?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-sm-6 col-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="dash-widget-header">
+										<span class="dash-widget-icon text-success border-success">
+										<i class="fa fa-cubes"></i>
+
+										</span>
+										<div class="dash-count">
+											<h3><?php echo $completeCount; ?></h3>
+										</div>
+									</div>
+									<div class="dash-widget-info">
+										
+										<h6 class="text-muted">Complete Items</h6>
+										<div class="progress progress-sm">
+											<?php
+											// Ensure $soldCount is not negative
+											$completeCount = max(0, $completeCount);
+
+											// Use a fixed value or a different count for the denominator to calculate the percentage
+											$totalItems = $completeCount; // Replace $purchaseCount with the total number of items or an appropriate denominator
+
+											// Avoid division by zero
+											if ($totalItems > 0) {
+												$percentage = ($completeCount / $totalItems) * 100;
+											} else {
+												$percentage = 0;
+											}
+
+											// Limit percentage to a maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-success" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
@@ -375,17 +433,36 @@
 										
 										<h6 class="text-muted">Returned Items</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-danger w-50"></div>
+											<?php
+											// Ensure $purchaseCount is not negative to avoid division by zero or negative percentages
+											$returnedCount = max(0, $returnedCount);
+
+											// Calculate percentage
+											$percentage = ($returnedCount / $returnedCount) * 100; // Since $purchaseCount is the actual count
+
+											// Limit percentage to maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-danger" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						
+					</div>
+
+					<!-- /Page Header -->
+
+					<div class="row">
+						
 						<div class="col-xl-3 col-sm-6 col-12">
 							<div class="card">
 								<div class="card-body">
 									<div class="dash-widget-header">
-										<span class="dash-widget-icon text-warning border-warning">
+										<span class="dash-widget-icon text-secondary border-secondary">
 										<i class="fa fa-cubes"></i>
 
 										</span>
@@ -395,9 +472,28 @@
 									</div>
 									<div class="dash-widget-info">
 										
-										<h6 class="text-muted">Items Sold</h6>
+										<h6 class="text-muted">Sold Items</h6>
 										<div class="progress progress-sm">
-											<div class="progress-bar bg-warning w-50"></div>
+											<?php
+											// Ensure $soldCount is not negative
+											$soldCount = max(0, $soldCount);
+
+											// Use a fixed value or a different count for the denominator to calculate the percentage
+											$totalItems = $completeCount; // Replace $purchaseCount with the total number of items or an appropriate denominator
+
+											// Avoid division by zero
+											if ($totalItems > 0) {
+												$percentage = ($soldCount / $totalItems) * 100;
+											} else {
+												$percentage = 0;
+											}
+
+											// Limit percentage to a maximum of 100%
+											$percentage = min($percentage, 100);
+
+											// Print the progress bar with dynamic width
+											echo '<div class="progress-bar bg-secondary" style="width: ' . $percentage . '%;"></div>';
+											?>
 										</div>
 									</div>
 								</div>
@@ -405,8 +501,76 @@
 						</div>
 					</div>
 
+					<hr>
+
+					<!-- Sales Chart -->
+<div class="card card-chart">
+    <div class="card-header">
+        <h4 class="card-title">Product Sales</h4>
+        <div class="dropdown">
+            <select id="monthDropdown" class="form-control">
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="morrisArea"></div>
+    </div>
+</div>
+<!-- /Sales Chart -->
+
+<script>
+$(function() {
+    // Data from the server
+    var purchaseDailyData = <?= json_encode($purchaseDailyData); ?>;
+
+    // Initialize Morris Area Chart
+    var mA = Morris.Area({
+        element: 'morrisArea',
+        data: purchaseDailyData,
+        xkey: 'y',
+        ykeys: ['a'],
+        labels: ['Sales'],
+        lineColors: ['#1b5a90'],
+        lineWidth: 2,
+        fillOpacity: 0.5,
+        gridTextSize: 10,
+        hideHover: 'auto',
+        resize: true,
+        redraw: true
+    });
+
+    // Update chart data based on selected month
+    $('#monthDropdown').change(function() {
+        var selectedMonth = $(this).val();
+        var selectedMonthName = $(this).find('option:selected').text();
+        
+        // Filter data based on the selected month
+        var filteredData = purchaseDailyData.filter(function(data) {
+            return data.y.slice(5, 7) === selectedMonth;
+        });
+
+        // Update chart with filtered data and new label
+        mA.options.labels = [selectedMonthName + ' Sales'];
+        mA.setData(filteredData);
+    });
+});
+</script>
+
 					<!-- /Page Header -->
-					
+					<hr>
+
 					<div class="row">
 						<div class="col-sm-12">
                             <h4 class="card-title d-flex justify-content-between">
@@ -472,6 +636,9 @@
 		
 		<!-- Slimscroll JS -->
         <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<script src="assets/plugins/raphael/raphael.min.js"></script>    
+		<script src="assets/plugins/morris/morris.min.js"></script>  
+		<script src="assets/js/chart.morris.js"></script>
 		
 		<!-- Custom JS -->
 		<script  src="assets/js/script.js"></script>
