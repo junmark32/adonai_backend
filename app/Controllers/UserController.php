@@ -838,7 +838,7 @@ public function db_admin()
 
                     $purchaseDailyData = $purchaseModel->select('DATE_FORMAT(PurchaseDate, "%Y-%m-%d") as y, COUNT(PurchaseID) as a')
                     ->where('YEAR(PurchaseDate)', $currentYear)
-                    ->where('Status', 'Pending')
+                    ->where('Status', 'Completed')
                     ->groupBy('DATE_FORMAT(PurchaseDate, "%Y-%m-%d")')
                     ->findAll();
 

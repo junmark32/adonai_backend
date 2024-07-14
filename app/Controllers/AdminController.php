@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\AdminModel;
 use App\Models\ProductModel;
 use App\Models\PurchaseModel;
+use App\Models\PatientModel;
 
 class AdminController extends BaseController
 {
@@ -19,6 +20,7 @@ class AdminController extends BaseController
         // Load the ProductModel
         $productModel = new ProductModel();
         $purchaseModel = new PurchaseModel();
+        $patientModel = new PatientModel();
 
         // Retrieve all products from the database
         $products = $productModel->findAll();
@@ -44,9 +46,20 @@ class AdminController extends BaseController
 
         $purchaseDailyData = $purchaseModel->select('DATE_FORMAT(PurchaseDate, "%Y-%m-%d") as y, COUNT(PurchaseID) as a')
         ->where('YEAR(PurchaseDate)', $currentYear)
-        ->where('Status', 'Pending')
+        ->where('Status', 'Completed')
         ->groupBy('DATE_FORMAT(PurchaseDate, "%Y-%m-%d")')
         ->findAll();
+
+        //
+        // Join tables
+        $builder = $purchaseModel->builder();
+        $builder->select('patients.FirstName, patients.LastName, patients.Email, products.Name, purchases.Status, purchases.TotalAmount, purchases.PurchaseDate');
+        $builder->join('patients', 'patients.UserID = purchases.UserID');
+        $builder->join('products', 'products.ProductID = purchases.EyewearID');
+        $builder->orderBy('purchases.PurchaseDate', 'DESC');
+        
+        // Fetch data
+        $data['purchases'] = $builder->get()->getResult();
 
         $data['purchaseDailyData'] = $purchaseDailyData;
 

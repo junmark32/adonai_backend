@@ -568,6 +568,112 @@ $(function() {
 });
 </script>
 
+
+						
+<!-- Feed Activity -->
+<div class="card card-table flex-fill">
+    <div class="card-header">
+        <h4 class="card-title">Recent Purchase</h4>
+        <div class="row">
+            <div class="col">
+                <label for="rowLimit">Show:</label>
+                <select id="rowLimit" class="form-control" style="width: auto; display: inline-block;">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+                <label for="rowLimit">entries</label>
+            </div>
+            <div class="col text-right">
+                <button id="prevPage" class="btn btn-secondary">Previous</button>
+                <button id="nextPage" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-hover table-center mb-0">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Product</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="purchaseTable">
+                    <?php foreach ($purchases as $purchase): ?>
+                    <tr>
+                        <td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
+                        <td><?php echo $purchase->Email; ?></td>
+                        <td><?php echo $purchase->Name; ?></td>
+                        <td><?php echo $purchase->Status; ?></td>
+                        <td><?php echo $purchase->TotalAmount; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /Feed Activity -->
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+    const rowLimit = document.getElementById('rowLimit');
+    const purchaseTable = document.getElementById('purchaseTable');
+    const rows = purchaseTable.getElementsByTagName('tr');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+
+    let currentPage = 1;
+    let rowsPerPage = parseInt(rowLimit.value, 10);
+
+    function updateTable() {
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        for (let i = 0; i < rows.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        updateTable();
+    }
+
+    rowLimit.addEventListener('change', function () {
+        rowsPerPage = parseInt(rowLimit.value, 10);
+        goToPage(1); // Reset to the first page when rows per page changes
+    });
+
+    prevPageBtn.addEventListener('click', function () {
+        if (currentPage > 1) {
+            goToPage(currentPage - 1);
+        }
+    });
+
+    nextPageBtn.addEventListener('click', function () {
+        const maxPage = Math.ceil(rows.length / rowsPerPage);
+        if (currentPage < maxPage) {
+            goToPage(currentPage + 1);
+        }
+    });
+
+    updateTable(); // Initial call to set up the table
+});
+
+
+</script>
+							
+						
+
 					<!-- /Page Header -->
 					<hr>
 

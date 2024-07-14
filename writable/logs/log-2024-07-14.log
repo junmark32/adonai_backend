@@ -1,0 +1,76 @@
+ERROR - 2024-07-14 02:09:25 --> mysqli_sql_exception: Table 'adonai.patientmodel' doesn't exist in C:\laragon\www\adonbacked\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 C:\laragon\www\adonbacked\system\Database\MySQLi\Connection.php(306): mysqli->query('SELECT `Patient...', 0)
+#1 C:\laragon\www\adonbacked\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `Patient...')
+#2 C:\laragon\www\adonbacked\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `Patient...')
+#3 C:\laragon\www\adonbacked\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `Patient...', Array, false)
+#4 C:\laragon\www\adonbacked\app\Controllers\AdminController.php(61): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\adonbacked\system\CodeIgniter.php(942): App\Controllers\AdminController->showProducts()
+#6 C:\laragon\www\adonbacked\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+#7 C:\laragon\www\adonbacked\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\laragon\www\adonbacked\public\index.php(87): CodeIgniter\CodeIgniter->run()
+#9 C:\laragon\www\adonbacked\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#10 {main}
+CRITICAL - 2024-07-14 02:09:25 --> Table 'adonai.patientmodel' doesn't exist
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `PatientModel`.`FirstName`, `PatientModel`.`LastName`, `PatientModel`.`Email`, `ProductModel`.`Name`, `PurchaseModel`.`Status`, `PurchaseModel`.`TotalAmount`
+FROM `purchases`
+JOIN `PatientModel` ON `PatientModel`.`UserID` = `PurchaseModel`.`UserID`
+JOIN `ProductModel` ON `ProductModel`.`ProductID` = `PurchaseModel`.`EyewearID`', [], false)
+ 2 APPPATH\Controllers\AdminController.php(61): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\AdminController->showProducts()
+ 4 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+ERROR - 2024-07-14 02:13:30 --> mysqli_sql_exception: Unknown column 'PurchaseModel.UserID' in 'on clause' in C:\laragon\www\adonbacked\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 C:\laragon\www\adonbacked\system\Database\MySQLi\Connection.php(306): mysqli->query('SELECT `patient...', 0)
+#1 C:\laragon\www\adonbacked\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `patient...')
+#2 C:\laragon\www\adonbacked\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `patient...')
+#3 C:\laragon\www\adonbacked\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `patient...', Array, false)
+#4 C:\laragon\www\adonbacked\app\Controllers\AdminController.php(61): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\adonbacked\system\CodeIgniter.php(942): App\Controllers\AdminController->showProducts()
+#6 C:\laragon\www\adonbacked\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+#7 C:\laragon\www\adonbacked\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\laragon\www\adonbacked\public\index.php(87): CodeIgniter\CodeIgniter->run()
+#9 C:\laragon\www\adonbacked\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#10 {main}
+CRITICAL - 2024-07-14 02:13:30 --> Unknown column 'PurchaseModel.UserID' in 'on clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `patients`.`FirstName`, `patients`.`LastName`, `patients`.`Email`, `products`.`Name`, `purchases`.`Status`, `purchases`.`TotalAmount`
+FROM `purchases`
+JOIN `patients` ON `patients`.`UserID` = `PurchaseModel`.`UserID`
+JOIN `products` ON `products`.`ProductID` = `purchases`.`EyewearID`', [], false)
+ 2 APPPATH\Controllers\AdminController.php(61): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\AdminController->showProducts()
+ 4 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
+ERROR - 2024-07-14 02:23:04 --> mysqli_sql_exception: Unknown column 'purchases.PurchasedDate' in 'field list' in C:\laragon\www\adonbacked\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 C:\laragon\www\adonbacked\system\Database\MySQLi\Connection.php(306): mysqli->query('SELECT `patient...', 0)
+#1 C:\laragon\www\adonbacked\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `patient...')
+#2 C:\laragon\www\adonbacked\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `patient...')
+#3 C:\laragon\www\adonbacked\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `patient...', Array, false)
+#4 C:\laragon\www\adonbacked\app\Controllers\AdminController.php(62): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\adonbacked\system\CodeIgniter.php(942): App\Controllers\AdminController->showProducts()
+#6 C:\laragon\www\adonbacked\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+#7 C:\laragon\www\adonbacked\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\laragon\www\adonbacked\public\index.php(87): CodeIgniter\CodeIgniter->run()
+#9 C:\laragon\www\adonbacked\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#10 {main}
+CRITICAL - 2024-07-14 02:23:04 --> Unknown column 'purchases.PurchasedDate' in 'field list'
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `patients`.`FirstName`, `patients`.`LastName`, `patients`.`Email`, `products`.`Name`, `purchases`.`Status`, `purchases`.`TotalAmount`, `purchases`.`PurchasedDate`
+FROM `purchases`
+JOIN `patients` ON `patients`.`UserID` = `purchases`.`UserID`
+JOIN `products` ON `products`.`ProductID` = `purchases`.`EyewearID`
+ORDER BY `purchases`.`PurchasedDate` DESC', [], false)
+ 2 APPPATH\Controllers\AdminController.php(62): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\AdminController->showProducts()
+ 4 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 5 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(87): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\adonbacked\\public\\index.php')
