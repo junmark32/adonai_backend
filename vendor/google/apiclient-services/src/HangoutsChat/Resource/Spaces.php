@@ -176,8 +176,9 @@ class Spaces extends \Google\Service\Resource
    * authentication](https://developers.google.com/workspace/chat/authenticate-
    * authorize-chat-user). Lists spaces visible to the caller or authenticated
    * user. Group chats and DMs aren't listed until the first message is sent. To
-   * list all named spaces by Google Workspace organization, use the
-   * `spaces.search()` method using Workspace administrator privileges instead.
+   * list all named spaces by Google Workspace organization, use the [`spaces.sear
+   * ch()`](https://developers.google.com/workspace/chat/api/reference/rest/v1/spa
+   * ces/search) method using Workspace administrator privileges instead.
    * (spaces.listSpaces)
    *
    * @param array $optParams Optional parameters.
@@ -224,31 +225,45 @@ class Spaces extends \Google\Service\Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string updateMask Required. The updated field paths, comma
-   * separated if there are multiple. Currently supported field paths: -
-   * `display_name` (Only supports changing the display name of a space with the
-   * `SPACE` type, or when also including the `space_type` mask to change a
-   * `GROUP_CHAT` space type to `SPACE`. Trying to update the display name of a
-   * `GROUP_CHAT` or a `DIRECT_MESSAGE` space results in an invalid argument
-   * error. If you receive the error message `ALREADY_EXISTS` when updating the
-   * `displayName`, try a different `displayName`. An existing space within the
-   * Google Workspace organization might already use this display name.) -
-   * `space_type` (Only supports changing a `GROUP_CHAT` space type to `SPACE`.
+   * separated if there are multiple. You can update the following fields for a
+   * space: - `space_details` - `display_name`: Only supports updating the display
+   * name for spaces where `spaceType` field is `SPACE`. If you receive the error
+   * message `ALREADY_EXISTS`, try a different value. An existing space within the
+   * Google Workspace organization might already use this display name. -
+   * `space_type`: Only supports changing a `GROUP_CHAT` space type to `SPACE`.
    * Include `display_name` together with `space_type` in the update mask and
    * ensure that the specified space has a non-empty display name and the `SPACE`
    * space type. Including the `space_type` mask and the `SPACE` type in the
    * specified space when updating the display name is optional if the existing
    * space already has the `SPACE` type. Trying to update the space type in other
-   * ways results in an invalid argument error). - `space_details` -
-   * `space_history_state` (Supports [turning history on or off for the
-   * space](https://support.google.com/chat/answer/7664687) if [the organization
-   * allows users to change their history
-   * setting](https://support.google.com/a/answer/7664184). Warning: mutually
-   * exclusive with all other field paths.) - Developer Preview:
-   * `access_settings.audience` (Supports changing the [access
-   * setting](https://support.google.com/chat/answer/11971020) of a space. If no
-   * audience is specified in the access setting, the space's access setting is
-   * updated to restricted. Warning: mutually exclusive with all other field
-   * paths.)
+   * ways results in an invalid argument error. `space_type` is not supported with
+   * admin access. - `space_history_state`: Updates [space history
+   * settings](https://support.google.com/chat/answer/7664687) by turning history
+   * on or off for the space. Only supported if history settings are enabled for
+   * the Google Workspace organization. To update the space history state, you
+   * must omit all other field masks in your request. `space_history_state` is not
+   * supported with admin access. - `access_settings.audience`: Updates the
+   * [access setting](https://support.google.com/chat/answer/11971020) of who can
+   * discover the space, join the space, and preview the messages in named space
+   * where `spaceType` field is `SPACE`. If the existing space has a target
+   * audience, you can remove the audience and restrict space access by omitting a
+   * value for this field mask. To update access settings for a space, the
+   * authenticating user must be a space manager and omit all other field masks in
+   * your request. You can't update this field if the space is in [import
+   * mode](https://developers.google.com/workspace/chat/import-data-overview). To
+   * learn more, see [Make a space discoverable to specific
+   * users](https://developers.google.com/workspace/chat/space-target-audience).
+   * `access_settings.audience` is not supported with admin access. - Developer
+   * Preview: Supports changing the [permission
+   * settings](https://support.google.com/chat/answer/13340792) of a space,
+   * supported field paths include:
+   * `permission_settings.manage_members_and_groups`,
+   * `permission_settings.modify_space_details`,
+   * `permission_settings.toggle_history`,
+   * `permission_settings.use_at_mention_all`, `permission_settings.manage_apps`,
+   * `permission_settings.manage_webhooks`, `permission_settings.reply_messages`
+   * (Warning: mutually exclusive with all other non-permission settings field
+   * paths). `permission_settings` is not supported with admin access.
    * @return Space
    * @throws \Google\Service\Exception
    */
@@ -270,20 +285,28 @@ class Spaces extends \Google\Service\Resource
    * People API, or the `id` for the user in the Directory API. For example, if
    * the People API Person profile ID for `user@example.com` is `123456789`, you
    * can add the user to the space by setting the `membership.member.name` to
-   * `users/user@example.com` or `users/123456789`. For a named space or group
-   * chat, if the caller blocks, or is blocked by some members, or doesn't have
-   * permission to add some members, then those members aren't added to the
-   * created space. To create a direct message (DM) between the calling user and
-   * another human user, specify exactly one membership to represent the human
-   * user. If one user blocks the other, the request fails and the DM isn't
-   * created. To create a DM between the calling user and the calling app, set
-   * `Space.singleUserBotDm` to `true` and don't specify any memberships. You can
-   * only use this method to set up a DM with the calling app. To add the calling
-   * app as a member of a space or an existing DM between two human users, see
-   * [Invite or add a user or app to a
-   * space](https://developers.google.com/workspace/chat/create-members). If a DM
-   * already exists between two users, even when one user blocks the other at the
-   * time a request is made, then the existing DM is returned. Spaces with
+   * `users/user@example.com` or `users/123456789`. To specify the Google groups
+   * to add, add memberships with the appropriate `membership.group_member.name`.
+   * To add or invite a Google group, use `groups/{group}`, where `{group}` is the
+   * `id` for the group from the Cloud Identity Groups API. For example, you can
+   * use [Cloud Identity Groups lookup
+   * API](https://cloud.google.com/identity/docs/reference/rest/v1/groups/lookup)
+   * to retrieve the ID `123456789` for group email `group@example.com`, then you
+   * can add the group to the space by setting the `membership.group_member.name`
+   * to `groups/123456789`. Group email is not supported, and Google groups can
+   * only be added as members in named spaces. For a named space or group chat, if
+   * the caller blocks, or is blocked by some members, or doesn't have permission
+   * to add some members, then those members aren't added to the created space. To
+   * create a direct message (DM) between the calling user and another human user,
+   * specify exactly one membership to represent the human user. If one user
+   * blocks the other, the request fails and the DM isn't created. To create a DM
+   * between the calling user and the calling app, set `Space.singleUserBotDm` to
+   * `true` and don't specify any memberships. You can only use this method to set
+   * up a DM with the calling app. To add the calling app as a member of a space
+   * or an existing DM between two human users, see [Invite or add a user or app
+   * to a space](https://developers.google.com/workspace/chat/create-members). If
+   * a DM already exists between two users, even when one user blocks the other at
+   * the time a request is made, then the existing DM is returned. Spaces with
    * threaded replies aren't supported. If you receive the error message
    * `ALREADY_EXISTS` when setting up a space, try a different `displayName`. An
    * existing space within the Google Workspace organization might already use

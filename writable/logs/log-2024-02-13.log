@@ -1,1 +1,0 @@
-ERROR - 2024-02-13 04:49:12 --> Email error: SMTP Error: Could not connect to SMTP host. Called STARTTLS without being connectedSMTP server error: Called QUIT without being connected

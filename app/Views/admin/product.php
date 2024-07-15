@@ -604,16 +604,16 @@ $(function() {
                     </tr>
                 </thead>
                 <tbody id="purchaseTable">
-                    <?php foreach ($purchases as $purchase): ?>
-                    <tr>
-                        <td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
-                        <td><?php echo $purchase->Email; ?></td>
-                        <td><?php echo $purchase->Name; ?></td>
-                        <td><?php echo $purchase->Status; ?></td>
-                        <td><?php echo $purchase->TotalAmount; ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
+					<?php foreach ($purchases as $purchase): ?>
+					<tr>
+						<td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
+						<td><?php echo $purchase->Email; ?></td>
+						<td><?php echo $purchase->ProductName; ?></td>
+						<td><?php echo $purchase->Status; ?></td>
+						<td><?php echo $purchase->TotalAmount; ?></td>
+					</tr>
+					<?php endforeach; ?>
+				</tbody>
             </table>
         </div>
     </div>
@@ -671,6 +671,112 @@ $(function() {
 
 
 </script>
+
+<!-- Feed Activity -->
+<div class="card card-table flex-fill">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Best Selling Products</h4>
+            <div class="form-inline">
+                <label for="rowLimit" class="mr-2">Show:</label>
+                <select id="rowLimit" class="form-control">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+                <label for="rowLimit" class="ml-2 mr-2">entries</label>
+                <button id="bprevPage" class="btn btn-secondary mr-2">Previous</button>
+                <button id="bnextPage" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-hover table-center mb-0">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Orders</th>
+                    </tr>
+                </thead>
+                <tbody id="bestTable">
+                    <?php foreach ($bestselling as $bestsell): ?>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+							
+							<img src="<?= base_url('uploads/' . $bestsell->Image_url); ?>" alt="<?php echo $bestsell->Name; ?>" class="mr-2" style="max-width: 50px; max-height: 50px;">
+                                <div>
+                                    <div><?php echo $bestsell->Name; ?></div>
+                                    <div><?php echo $bestsell->Brand; ?></div>
+                                    <div><?php echo $bestsell->Type; ?></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><?php echo $bestsell->Quantity; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /Feed Activity -->
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+    const rowLimit = document.getElementById('rowLimit');
+    const purchaseTable = document.getElementById('bestTable');
+    const rows = purchaseTable.getElementsByTagName('tr');
+    const prevPageBtn = document.getElementById('bprevPage');
+    const nextPageBtn = document.getElementById('bnextPage');
+
+    let currentPage = 1;
+    let rowsPerPage = parseInt(rowLimit.value, 10);
+
+    function updateTable() {
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        for (let i = 0; i < rows.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        updateTable();
+    }
+
+    rowLimit.addEventListener('change', function () {
+        rowsPerPage = parseInt(rowLimit.value, 10);
+        goToPage(1); // Reset to the first page when rows per page changes
+    });
+
+    prevPageBtn.addEventListener('click', function () {
+        if (currentPage > 1) {
+            goToPage(currentPage - 1);
+        }
+    });
+
+    nextPageBtn.addEventListener('click', function () {
+        const maxPage = Math.ceil(rows.length / rowsPerPage);
+        if (currentPage < maxPage) {
+            goToPage(currentPage + 1);
+        }
+    });
+
+    updateTable(); // Initial call to set up the table
+});
+
+
+</script>
+
 							
 						
 

@@ -51,15 +51,19 @@ class AdminController extends BaseController
         ->findAll();
 
         //
-        // Join tables
-        $builder = $purchaseModel->builder();
-        $builder->select('patients.FirstName, patients.LastName, patients.Email, products.Name, purchases.Status, purchases.TotalAmount, purchases.PurchaseDate');
-        $builder->join('patients', 'patients.UserID = purchases.UserID');
-        $builder->join('products', 'products.ProductID = purchases.EyewearID');
-        $builder->orderBy('purchases.PurchaseDate', 'DESC');
-        
-        // Fetch data
-        $data['purchases'] = $builder->get()->getResult();
+        // Join tables 1
+        $builder1 = $purchaseModel->builder();
+        $builder1->select('patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, purchases.Status, purchases.TotalAmount, purchases.PurchaseDate');
+        $builder1->join('patients', 'patients.UserID = purchases.UserID');
+        $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
+        $builder1->orderBy('purchases.PurchaseDate', 'DESC');
+        $data['purchases'] = $builder1->get()->getResult();
+
+        // Join tables 2
+        $builder2 = $purchaseModel->builder();
+        $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.Quantity');
+        $builder2->join('products p2', 'p2.ProductID = purchases.EyewearID');
+        $data['bestselling'] = $builder2->get()->getResult();
 
         $data['purchaseDailyData'] = $purchaseDailyData;
 
