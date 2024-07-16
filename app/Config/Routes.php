@@ -42,6 +42,7 @@ $routes->match(['post','get'],'appointments/cancel/(:num)', 'PatientController::
 
 // doctor
 $routes->get('/Doctor/Dashboard', 'UserController::db_doctor');
+$routes->get('/Doctor/Products', 'UserController::product');
 $routes->get('/Doctor/Dashboard/Schedule', 'Doctorcontroller::schedule_timings');
 $routes->get('/session', 'Usercontroller::checkSessionData');
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');

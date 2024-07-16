@@ -466,6 +466,14 @@ class UserController extends ResourceController
                         }
                     }
                     
+                    $purchaseModel = new PurchaseModel();
+                    // Join tables 1
+                    $builder1 = $purchaseModel->builder();
+                    $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
+                    $builder1->join('patients', 'patients.UserID = purchases.UserID');
+                    $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
+                    $builder1->orderBy('purchases.PurchaseDate', 'DESC');
+                    $data['purchases'] = $builder1->get()->getResult();
 
 
                             // Pass loggedIn status, role, and doctor data to the view
@@ -482,6 +490,137 @@ class UserController extends ResourceController
                     $data['upcomingCount'] = $upcomingCount;
                     $data['todayCount'] = $todayCount;
                     return view('doctor/doctor_dashboard', ['token' => $token] + $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+
+    }
+
+    public function product()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+    //   return view('doctor/doctor_dashboard');
+
+        // Load the session service
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+            $token = $userData['token'];
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['DoctorID'])) {
+                // Retrieve the DoctorID
+                $doctorID = $userData['DoctorID'];
+
+                // Fetch doctor's data based on DoctorID
+                $doctorModel = new DoctorModel();
+                $doctor = $doctorModel->find($doctorID);
+
+
+                if ($doctor) {
+                    
+                    // Fetch appointments based on DoctorID
+                    $appointmentModel = new AppointmentModel();
+                    $appointments = $appointmentModel->where('DoctorID', $doctorID)->findAll();
+
+                    $appointmentCount = $appointmentModel->where('DoctorID', $doctorID)->countAllResults();
+
+                    date_default_timezone_set('Asia/Manila'); // Adjust according to your location
+                    // Get the current date
+                    $currentDate = date('d, M Y');
+                    // Get the current date in MySQL-compatible format
+                    $currentDates = date('Y-m-d'); // Example output: '2024-06-17'
+
+                    // Initialize an array to hold appointment and patient data
+                    $appointmentData = [];
+
+                    // Fetch patient data for each appointment
+                    $patientModel = new PatientModel();
+                    $patientCount = $patientModel->countAll();
+                    // Query to count patients created on the current date
+                    $patientToday = $patientModel
+                    ->where('DATE(created_at)', $currentDates)
+                    ->countAllResults();
+
+                    foreach ($appointments as $appointment) {
+                        $patient = $patientModel->find($appointment['PatientID']);
+                        if ($patient) {
+                            // Combine appointment and patient data
+                            $appointmentData[] = [
+                                'appointment' => $appointment,
+                                'patient' => $patient,
+                            ];
+                        }
+                    }
+
+                    
+                    // Assuming $appointmentData is an array of appointment details
+                    $upcomingCount = 0;
+                    $todayCount = 0;
+
+                    foreach ($appointmentData as $data) {
+                        $appointmentDate = date('Y-m-d', strtotime($data['appointment']['Pref_Date']));
+                        if ($appointmentDate > $currentDates) {
+                            $upcomingCount++;
+                        } elseif ($appointmentDate == $currentDates) {
+                            $todayCount++;
+                        }
+                    }
+                    
+                    $purchaseModel = new PurchaseModel();
+                    // Join tables 1
+                    $builder1 = $purchaseModel->builder();
+                    $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
+                    $builder1->join('patients', 'patients.UserID = purchases.UserID');
+                    $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
+                    $builder1->orderBy('purchases.PurchaseDate', 'DESC');
+                    $data['purchases'] = $builder1->get()->getResult();
+
+                    // Count purchases where Status is 'Pending'
+                    $purchaseCount = $purchaseModel->where('Status', 'Pending')->countAllResults();
+
+                    // Count purchases where Status is 'On-Process'
+                    $onprocessCount = $purchaseModel->where('Status', 'On-Process')->countAllResults();
+
+                    // Count purchases where Status is 'Returned'
+                    $returnedCount = $purchaseModel->where('Status', 'Returned')->countAllResults();
+
+                    $completeCount = $purchaseModel->where('Status', 'Completed')->countAllResults();
+            // Assign counts to data array
+                    $data['purchaseCount'] = $purchaseCount;
+                    $data['onprocessCount'] = $onprocessCount;
+                    $data['returnedCount'] = $returnedCount;
+                    $data['completeCount'] = $completeCount;
+
+
+                            // Pass loggedIn status, role, and doctor data to the view
+                    $data['loggedIn'] = $loggedIn;
+                    $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                    $data['appointmentData'] = $appointmentData;
+                    $data['appointmentCount'] = $appointmentCount;
+                    $data['patientCount'] = $patientCount;
+                    $data['patientToday'] = $patientToday;
+                    $data['currentDate'] = $currentDate;
+                    // Pass these counts to your view
+                    $data['upcomingCount'] = $upcomingCount;
+                    $data['todayCount'] = $todayCount;
+                    return view('doctor/doctor_products', ['token' => $token] + $data);
                 } else {
                     return view('error', ['error' => 'Doctor not found']);
                 }

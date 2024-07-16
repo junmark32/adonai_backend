@@ -322,22 +322,23 @@
 									</div>
 									<div class="dash-widget-info">
 										<h6 class="text-muted">Pending Orders</h6>
+										
 										<div class="progress progress-sm">
 											<?php
-											// Ensure $purchaseCount is not negative to avoid division by zero or negative percentages
-											$purchaseCount = max(0, $purchaseCount);
+											// Ensure $returnedCount and $purchaseCount are not negative to avoid division by zero or negative percentages
+											$returnedCount = max(0, $returnedCount);
+											$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
 
 											// Calculate percentage
-											$percentage = ($purchaseCount / $purchaseCount) * 100; // Since $purchaseCount is the actual count
+											$percentage = ($returnedCount / $purchaseCount) * 100;
 
 											// Limit percentage to maximum of 100%
-											$percentage = min($percentage, 100);
+											$percentage = min($percentage, 0);
 
 											// Print the progress bar with dynamic width
-											echo '<div class="progress-bar bg-primary" style="width: ' . $percentage . '%;"></div>';
+											echo '<div class="progress-bar bg-primary" style="width:100%;"></div>';
 											?>
 										</div>
-
 									</div>
 								</div>
 							</div>
@@ -359,17 +360,18 @@
 										<h6 class="text-muted">On Process</h6>
 										<div class="progress progress-sm">
 											<?php
-											// Ensure $purchaseCount is not negative to avoid division by zero or negative percentages
+											// Ensure $returnedCount and $purchaseCount are not negative to avoid division by zero or negative percentages
 											$onprocessCount = max(0, $onprocessCount);
+											$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
 
 											// Calculate percentage
-											$percentage = ($onprocessCount / $onprocessCount) * 100; // Since $purchaseCount is the actual count
+											$percentage = ($onprocessCount / $purchaseCount) * 100;
 
 											// Limit percentage to maximum of 100%
 											$percentage = min($percentage, 100);
 
 											// Print the progress bar with dynamic width
-											echo '<div class="progress-bar bg-warning" style="width: ' . $percentage . '%;"></div>';
+											echo '<div class="progress-bar bg-warning" style="width: 100%;"></div>';
 											?>
 										</div>
 									</div>
@@ -410,7 +412,7 @@
 											$percentage = min($percentage, 100);
 
 											// Print the progress bar with dynamic width
-											echo '<div class="progress-bar bg-success" style="width: ' . $percentage . '%;"></div>';
+											echo '<div class="progress-bar bg-success" style="width:100%;"></div>';
 											?>
 										</div>
 									</div>
@@ -434,17 +436,18 @@
 										<h6 class="text-muted">Returned Items</h6>
 										<div class="progress progress-sm">
 											<?php
-											// Ensure $purchaseCount is not negative to avoid division by zero or negative percentages
+											// Ensure $returnedCount and $purchaseCount are not negative to avoid division by zero or negative percentages
 											$returnedCount = max(0, $returnedCount);
+											$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
 
 											// Calculate percentage
-											$percentage = ($returnedCount / $returnedCount) * 100; // Since $purchaseCount is the actual count
+											$percentage = ($returnedCount / $purchaseCount) * 100;
 
 											// Limit percentage to maximum of 100%
 											$percentage = min($percentage, 100);
 
 											// Print the progress bar with dynamic width
-											echo '<div class="progress-bar bg-danger" style="width: ' . $percentage . '%;"></div>';
+											echo '<div class="progress-bar bg-danger" style="width:100%;"></div>';
 											?>
 										</div>
 									</div>
@@ -492,7 +495,7 @@
 											$percentage = min($percentage, 100);
 
 											// Print the progress bar with dynamic width
-											echo '<div class="progress-bar bg-secondary" style="width: ' . $percentage . '%;"></div>';
+											echo '<div class="progress-bar bg-secondary" style="width:100%;"></div>';
 											?>
 										</div>
 									</div>

@@ -35,10 +35,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+									<li class="breadcrumb-item active" aria-current="page">Products</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Dashboard</h2>
+							<h2 class="breadcrumb-title">Products</h2>
 						</div>
 					</div>
 				</div>
@@ -145,208 +145,294 @@
 						</div>
 						
 						<div class="col-md-7 col-lg-8 col-xl-9">
-
-							<div class="row">
-								<div class="col-md-12">
-									<div class="card dash-card">
+							
+						<div class="row">
+								<div class="col-xl-3 col-sm-6 col-12">
+									<div class="card">
 										<div class="card-body">
-											<div class="row">
-												<div class="col-md-12 col-lg-4">
-													<div class="dash-widget dct-border-rht">
-														<div class="circle-bar circle-bar1">
-															<div class="circle-graph1" data-percent="<?php echo $patientCount; ?>">
-																<img src="<?php echo base_url('assets/img/icon-01.png')?>" class="img-fluid" alt="patient">
-															</div>
-														</div>
-														<div class="dash-widget-info">
-															<h6>Total Patient</h6>
-															<h3><?php echo $patientCount; ?></h3>
-															<p class="text-muted">Till Today</p>
-														</div>
-													</div>
+											<div class="dash-widget-header">
+												<div class="dash-count">
+													<h3><?php echo $purchaseCount; ?></h3>
 												</div>
-												
-												<div class="col-md-12 col-lg-4">
-													<div class="dash-widget dct-border-rht">
-														<div class="circle-bar circle-bar2">
-															<div class="circle-graph2" data-percent="<?php echo $patientToday; ?>">
-																<img src="<?php echo base_url('assets/img/icon-02.png')?>" class="img-fluid" alt="Patient">
-															</div>
-														</div>
-														<div class="dash-widget-info">
-															<h6>Today Patient</h6>
-															<h3><?php echo $patientToday; ?></h3>
-															<p class="text-muted"><?php echo $currentDate; ?></p>
-														</div>
-													</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6 class="text-muted">Pending Orders</h6>
+												<div class="progress progress-sm">
+													<?php
+													// Ensure $returnedCount and $purchaseCount are not negative to avoid division by zero or negative percentages
+													$returnedCount = max(0, $returnedCount);
+													$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
+
+													// Calculate percentage
+													$percentage = ($returnedCount / $purchaseCount) * 100;
+
+													// Limit percentage to a maximum of 100%
+													$percentage = min($percentage, 100);
+
+													// Print the progress bar with dynamic width
+													echo '<div class="progress-bar bg-primary" style="width: ' . $percentage . '%;"></div>';
+													?>
 												</div>
-												
-												<div class="col-md-12 col-lg-4">
-													<div class="dash-widget">
-														<div class="circle-bar circle-bar3">
-															<div class="circle-graph3" data-percent="<?php echo $appointmentCount; ?>">
-																<img src="<?php echo base_url('assets/img/icon-03.png')?>" class="img-fluid" alt="Patient">
-															</div>
-														</div>
-														<div class="dash-widget-info">
-															<h6>Appoinments</h6>
-															<h3><?php echo $appointmentCount; ?></h3>
-															<p class="text-muted"><?php echo $currentDate; ?></p>
-														</div>
-													</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-3 col-sm-6 col-12">
+									<div class="card">
+										<div class="card-body">
+											<div class="dash-widget-header">
+												<div class="dash-count">
+													<h3><?php echo $onprocessCount; ?></h3>
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6 class="text-muted">On Process</h6>
+												<div class="progress progress-sm">
+													<?php
+													// Ensure $onprocessCount and $purchaseCount are not negative to avoid division by zero or negative percentages
+													$onprocessCount = max(0, $onprocessCount);
+													$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
+
+													// Calculate percentage
+													$percentage = ($onprocessCount / $purchaseCount) * 100;
+
+													// Limit percentage to a maximum of 100%
+													$percentage = min($percentage, 100);
+
+													// Print the progress bar with dynamic width
+													echo '<div class="progress-bar bg-warning" style="width: ' . $percentage . '%;"></div>';
+													?>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-3 col-sm-6 col-12">
+									<div class="card">
+										<div class="card-body">
+											<div class="dash-widget-header">
+												<div class="dash-count">
+													<h3><?php echo $completeCount; ?></h3>
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6 class="text-muted">Complete Items</h6>
+												<div class="progress progress-sm">
+													<?php
+													// Ensure $completeCount is not negative
+													$completeCount = max(0, $completeCount);
+
+													// Use a fixed value or a different count for the denominator to calculate the percentage
+													$totalItems = $completeCount; // Replace $purchaseCount with the total number of items or an appropriate denominator
+
+													// Avoid division by zero
+													if ($totalItems > 0) {
+														$percentage = ($completeCount / $totalItems) * 100;
+													} else {
+														$percentage = 0;
+													}
+
+													// Limit percentage to a maximum of 100%
+													$percentage = min($percentage, 100);
+
+													// Print the progress bar with dynamic width
+													echo '<div class="progress-bar bg-success" style="width: ' . $percentage . '%;"></div>';
+													?>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-3 col-sm-6 col-12">
+									<div class="card">
+										<div class="card-body">
+											<div class="dash-widget-header">
+												<div class="dash-count">
+													<h3><?php echo $returnedCount; ?></h3>
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6 class="text-muted">Returned Items</h6>
+												<div class="progress progress-sm">
+													<?php
+													// Ensure $returnedCount and $purchaseCount are not negative to avoid division by zero or negative percentages
+													$returnedCount = max(0, $returnedCount);
+													$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
+
+													// Calculate percentage
+													$percentage = ($returnedCount / $purchaseCount) * 100;
+
+													// Limit percentage to a maximum of 100%
+													$percentage = min($percentage, 100);
+
+													// Print the progress bar with dynamic width
+													echo '<div class="progress-bar bg-danger" style="width: ' . $percentage . '%;"></div>';
+													?>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							
+	
 							<div class="row">
 								<div class="col-md-12">
-									<h4 class="mb-4">Patient Appoinment</h4>
-									<div class="appointment-tab">
-									
-										<!-- Appointment Tab -->
-										<ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
-											<li class="nav-item">
-												<a class="nav-link active" href="#upcoming-appointments" data-toggle="tab">Upcoming <span class="badge badge-primary"><?= $upcomingCount ?></span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="#today-appointments" data-toggle="tab">Today <span class="badge badge-primary"><?= $todayCount ?></span></a>
-											</li> 
-										</ul>
-										<!-- /Appointment Tab -->
-										
-										<div class="tab-content">
-										
-											<!-- Upcoming Appointment Tab -->
-<div class="tab-pane show active" id="upcoming-appointments">
-    <div class="card card-table mb-0">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover table-center mb-0">
-                    <thead>
-                        <tr>
-                            <th>Patient Name</th>
-                            <th>Appt Date</th>
-                            <th>Purpose</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php 
-                        $today = date('Y-m-d');
-                        foreach ($appointmentData as $data): 
-                            if (date('Y-m-d', strtotime($data['appointment']['Pref_Date'])) > $today):
-                        ?>
-                            <tr>
-                                <td>
-                                    <h2 class="table-avatar">
-                                        <a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>" class="avatar avatar-sm mr-2">
-                                            <img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image">
-                                        </a>
-                                        <a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>">
-                                            <?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span>
-                                        </a>
-                                    </h2>
-                                </td>
-
-                                <td>
-                                    <?= date('d M Y', strtotime($data['appointment']['Pref_Date'])) ?> 
-                                    <span class="d-block text-info"><?= date('h.i A', strtotime($data['appointment']['Pref_Time_Start'])) ?></span>
-                                </td>
-                                <td><?= $data['appointment']['Purpose'] ?></td>
-                                <td><?= $data['appointment']['Status'] ?></td>
-                                <td class="text-right">
-                                    <div class="table-action">
-                                        <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-                                            <i class="far fa-eye"></i> View
-                                        </a>
-                                        <a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-                                            <i class="fas fa-check"></i> Accept
-                                        </a>
-                                        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-                                            <i class="fas fa-times"></i> Cancel
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php 
-                            endif;
-                        endforeach; 
-                        ?>    
-                    </tbody>
-                </table>        
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Upcoming Appointment Tab -->
-
-
-									   
-											<!-- Today Appointment Tab -->
-<div class="tab-pane" id="today-appointments">
-	<div class="card card-table mb-0">
-		<div class="card-body">
-			<div class="table-responsive">
-				<table class="table table-hover table-center mb-0">
-					<thead>
-						<tr>
-							<th>Patient Name</th>
-							<th>Appt Date</th>
-							<th>Purpose</th>
-							<th>Type</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-					<?php 
-					$today = date('Y-m-d');
-					foreach ($appointmentData as $data): 
-						if (date('Y-m-d', strtotime($data['appointment']['Pref_Date'])) == $today):
-					?>
-						<tr>
-							<td>
-								<h2 class="table-avatar">
-									<a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $data['patient']['Profile_url']) ?>" alt="User Image"></a>
-									<a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $data['patient']['PatientID']) ?>"><?= $data['patient']['FirstName'] ?> <span>#PT<?= $data['patient']['PatientID'] ?></span></a>
-								</h2>
-							</td>
-							<td><?= date('d M Y', strtotime($data['appointment']['Pref_Date'])) ?> <span class="d-block text-info"><?= date('h.i A', strtotime($data['appointment']['Pref_Time_Start'])) ?></span></td>
-							<td><?= $data['appointment']['Purpose'] ?></td>
-							<td><?= $data['appointment']['Status'] ?></td>
-							<td class="text-right">
-								<div class="table-action">
-									<a href="javascript:void(0);" class="btn btn-sm bg-info-light">
-										<i class="far fa-eye"></i> View
-									</a>
-									
-									<a href="javascript:void(0);" class="btn btn-sm bg-success-light">
-										<i class="fas fa-check"></i> Accept
-									</a>
-									<a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-										<i class="fas fa-times"></i> Cancel
-									</a>
-								</div>
-							</td>
-						</tr>
-					<?php 
-						endif;
-					endforeach; 
-					?>	
-					</tbody>
-				</table>		
-			</div>	
-		</div>	
-	</div>	
-</div>
-<!-- /Today Appointment Tab -->
-
-											
+									<!-- Feed Activity -->
+									<div class="card card-table flex-fill">
+										<div class="card-header">
+											<h4 class="card-title">Recent Purchase</h4>
+											<div class="row">
+												<div class="col">
+													<label for="rowLimit">Show:</label>
+													<select id="rowLimit" class="form-control" style="width: auto; display: inline-block;">
+														<option value="5">5</option>
+														<option value="10">10</option>
+														<option value="15">15</option>
+														<option value="20">20</option>
+													</select>
+													<label for="rowLimit">entries</label>
+												</div>
+												<div class="col text-right">
+													<button id="prevPage" class="btn btn-secondary">Previous</button>
+													<button id="nextPage" class="btn btn-secondary">Next</button>
+												</div>
+											</div>
+										</div>
+										<div class="card-body">
+											<div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+												<table id="purchaseTable" class="table table-hover table-center mb-0">
+													<thead>
+														<tr>
+															<th>Id</th>
+															<th>Customer</th>
+															<th>Email</th>
+															<th>Product</th>
+															<th>Status</th>
+															<th>Quantity</th>
+															<th>Amount</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php foreach ($purchases as $purchase): ?>
+														<tr id="purchase_<?php echo $purchase->PurchaseID; ?>">
+															<td><?php echo $purchase->PurchaseID; ?></td>
+															<td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
+															<td><?php echo $purchase->Email; ?></td>
+															<td><?php echo $purchase->ProductName; ?></td>
+															<td>
+																<form id="form_<?php echo $purchase->PurchaseID; ?>" class="status-form">
+																	<input type="hidden" name="purchase_id" value="<?php echo $purchase->PurchaseID; ?>">
+																	<select name="status" class="form-control status-select">
+																		<option value="Pending" <?php if ($purchase->Status == 'Pending') echo 'selected'; ?>>Pending</option>
+																		<option value="On-Process" <?php if ($purchase->Status == 'On-Process') echo 'selected'; ?>>On-Process</option>
+																		<option value="Completed" <?php if ($purchase->Status == 'Completed') echo 'selected'; ?>>Completed</option>
+																		<option value="Returned" <?php if ($purchase->Status == 'Returned') echo 'selected'; ?>>Returned</option>
+																	</select>
+																</form>
+															</td>
+															<td><?php echo $purchase->Quantity; ?></td>
+															<td><?php echo $purchase->TotalAmount; ?></td>
+															<td>
+																<!-- Add additional actions here if needed -->
+															</td>
+														</tr>
+														<?php endforeach; ?>
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
+									<!-- /Feed Activity -->
+
+<script>
+    // JavaScript to handle status update using AJAX
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusForms = document.querySelectorAll('.status-form');
+
+        statusForms.forEach(form => {
+            form.addEventListener('change', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const purchaseId = formData.get('purchase_id');
+                const status = formData.get('status');
+
+                fetch('<?php echo base_url('purchase/updateStatus'); ?>', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the status in the table cell
+                        const statusCell = document.querySelector(`#purchase_${purchaseId} .status-select`);
+                        statusCell.value = status;
+                    } else {
+                        alert('Failed to update status.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating status.');
+                });
+            });
+        });
+    });
+</script>
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+    const rowLimit = document.getElementById('rowLimit');
+    const purchaseTable = document.getElementById('purchaseTable');
+    const rows = purchaseTable.getElementsByTagName('tr');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+
+    let currentPage = 1;
+    let rowsPerPage = parseInt(rowLimit.value, 10);
+
+    function updateTable() {
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        for (let i = 0; i < rows.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        updateTable();
+    }
+
+    rowLimit.addEventListener('change', function () {
+        rowsPerPage = parseInt(rowLimit.value, 10);
+        goToPage(1); // Reset to the first page when rows per page changes
+    });
+
+    prevPageBtn.addEventListener('click', function () {
+        if (currentPage > 1) {
+            goToPage(currentPage - 1);
+        }
+    });
+
+    nextPageBtn.addEventListener('click', function () {
+        const maxPage = Math.ceil(rows.length / rowsPerPage);
+        if (currentPage < maxPage) {
+            goToPage(currentPage + 1);
+        }
+    });
+
+    updateTable(); // Initial call to set up the table
+});
+
+
+</script>
 								</div>
 							</div>
 
