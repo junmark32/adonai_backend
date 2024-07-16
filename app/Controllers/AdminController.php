@@ -59,11 +59,14 @@ class AdminController extends BaseController
         $builder1->orderBy('purchases.PurchaseDate', 'DESC');
         $data['purchases'] = $builder1->get()->getResult();
 
-        // Join tables 2
+        // Join tables and aggregate Quantity per EyewearID
         $builder2 = $purchaseModel->builder();
-        $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.Quantity');
+        $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.EyewearID, SUM(purchases.Quantity) as TotalQuantity');
         $builder2->join('products p2', 'p2.ProductID = purchases.EyewearID');
+        $builder2->groupBy('purchases.EyewearID, p2.Image_url, p2.Name, p2.Brand, p2.Type');
+        $builder2->orderBy('TotalQuantity', 'DESC');
         $data['bestselling'] = $builder2->get()->getResult();
+
 
         $data['purchaseDailyData'] = $purchaseDailyData;
 

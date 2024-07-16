@@ -672,57 +672,80 @@ $(function() {
 
 </script>
 
-<!-- Feed Activity -->
-<div class="card card-table flex-fill">
-    <div class="card-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0">Best Selling Products</h4>
-            <div class="form-inline">
-                <label for="rowLimit" class="mr-2">Show:</label>
-                <select id="rowLimit" class="form-control">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-                <label for="rowLimit" class="ml-2 mr-2">entries</label>
-                <button id="bprevPage" class="btn btn-secondary mr-2">Previous</button>
-                <button id="bnextPage" class="btn btn-secondary">Next</button>
+
+<div class="row">
+    <!-- Feed Activity -->
+    <div class="col-md-8">
+        <div class="card card-table flex-fill">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Best Selling Products</h4>
+                    <div class="form-inline">
+                        <label for="rowLimit" class="mr-2">Show:</label>
+                        <select id="rowLimit" class="form-control">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                        <label for="rowLimit" class="ml-2 mr-2">entries</label>
+                        <button id="bprevPage" class="btn btn-secondary mr-2">Previous</button>
+                        <button id="bnextPage" class="btn btn-secondary">Next</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover table-center mb-0">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bestTable">
+                            <?php foreach ($bestselling as $index => $bestsell): ?>
+                            <tr class="product-row" data-name="<?php echo $bestsell->Name; ?>" data-brand="<?php echo $bestsell->Brand; ?>" data-type="<?php echo $bestsell->Type; ?>" data-image="<?= base_url('uploads/' . $bestsell->Image_url); ?>" data-quantity="<?php echo $bestsell->TotalQuantity; ?>" <?php echo $index === 0 ? 'id="firstProduct"' : ''; ?>>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="<?= base_url('uploads/' . $bestsell->Image_url); ?>" alt="<?php echo $bestsell->Name; ?>" class="mr-2" style="max-width: 50px; max-height: 50px;">
+                                        <div>
+                                            <div><?php echo $bestsell->Name; ?></div>
+                                            <div><?php echo $bestsell->Brand; ?></div>
+                                            <div><?php echo $bestsell->Type; ?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><?php echo $bestsell->TotalQuantity; ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-hover table-center mb-0">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Orders</th>
-                    </tr>
-                </thead>
-                <tbody id="bestTable">
-                    <?php foreach ($bestselling as $bestsell): ?>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-							
-							<img src="<?= base_url('uploads/' . $bestsell->Image_url); ?>" alt="<?php echo $bestsell->Name; ?>" class="mr-2" style="max-width: 50px; max-height: 50px;">
-                                <div>
-                                    <div><?php echo $bestsell->Name; ?></div>
-                                    <div><?php echo $bestsell->Brand; ?></div>
-                                    <div><?php echo $bestsell->Type; ?></div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><?php echo $bestsell->Quantity; ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+    <!-- /Feed Activity -->
+
+    <!-- Product Viewer Card -->
+    <div class="col-md-4 d-flex">
+        <div class="card flex-fill">
+            <img id="viewerImage" alt="Card Image" src="assets/img/img-01.jpg" class="card-img-top">
+            <div class="card-header">
+                <h5 id="viewerTitle" class="card-title mb-0">Card with image and list</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li id="viewerName" class="list-group-item">Cras justo odio</li>
+                <li id="viewerBrand" class="list-group-item">Dapibus ac facilisis in</li>
+                <li id="viewerType" class="list-group-item">Vestibulum at eros</li>
+                <li id="viewerQuantity" class="list-group-item">Orders: 0</li>
+            </ul>
         </div>
     </div>
+    <!-- /Product Viewer Card -->
 </div>
-<!-- /Feed Activity -->
+
+
 
 
 <script>
@@ -777,6 +800,40 @@ $(function() {
 
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    function updateProductViewer(row) {
+        const name = row.getAttribute('data-name');
+        const brand = row.getAttribute('data-brand');
+        const type = row.getAttribute('data-type');
+        const image = row.getAttribute('data-image');
+        const quantity = row.getAttribute('data-quantity');
+
+        // Update the product viewer card
+        document.getElementById('viewerImage').src = image;
+        document.getElementById('viewerImage').alt = name;
+        document.getElementById('viewerTitle').innerText = name;
+        document.getElementById('viewerName').innerText = `Name: ${name}`;
+        document.getElementById('viewerBrand').innerText = `Brand: ${brand}`;
+        document.getElementById('viewerType').innerText = `Type: ${type}`;
+        document.getElementById('viewerQuantity').innerText = `Orders: ${quantity}`;
+    }
+
+    // Update product viewer with the first product by default
+    const firstProductRow = document.getElementById('firstProduct');
+    if (firstProductRow) {
+        updateProductViewer(firstProductRow);
+    }
+
+    // Add click event listener to each product row
+    document.querySelectorAll('.product-row').forEach(row => {
+        row.addEventListener('click', () => {
+            updateProductViewer(row);
+        });
+    });
+});
+
+</script>
 							
 						
 
