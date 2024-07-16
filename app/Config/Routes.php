@@ -68,3 +68,6 @@ $routes->match(['post','get'],'/Admin/Products/Add_Product', 'AdminController::a
 $routes->match(['post','get'],'/Admin/Products/insert_Product', 'AdminController::insertProduct');
 $routes->match(['post','get'],'/Admin/Products/Edit_Product/(:num)', 'AdminController::editProduct/$1');
 $routes->match(['post','get'],'/Admin/Products/update_Product', 'AdminController::updateProduct');
+
+//
+$routes->post('purchase/updateStatus', 'AdminController::updateStatus');

@@ -593,32 +593,88 @@ $(function() {
     </div>
     <div class="card-body">
         <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-            <table class="table table-hover table-center mb-0">
+            <table id="purchaseTable" class="table table-hover table-center mb-0">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Customer</th>
                         <th>Email</th>
                         <th>Product</th>
                         <th>Status</th>
+                        <th>Quantity</th>
                         <th>Amount</th>
+                        <th>Action</th> <!-- Added action column -->
                     </tr>
                 </thead>
-                <tbody id="purchaseTable">
-					<?php foreach ($purchases as $purchase): ?>
-					<tr>
-						<td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
-						<td><?php echo $purchase->Email; ?></td>
-						<td><?php echo $purchase->ProductName; ?></td>
-						<td><?php echo $purchase->Status; ?></td>
-						<td><?php echo $purchase->TotalAmount; ?></td>
-					</tr>
-					<?php endforeach; ?>
-				</tbody>
+                <tbody>
+                    <?php foreach ($purchases as $purchase): ?>
+                    <tr id="purchase_<?php echo $purchase->PurchaseID; ?>">
+                        <td><?php echo $purchase->PurchaseID; ?></td>
+                        <td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
+                        <td><?php echo $purchase->Email; ?></td>
+                        <td><?php echo $purchase->ProductName; ?></td>
+                        <td>
+                            <form id="form_<?php echo $purchase->PurchaseID; ?>" class="status-form">
+                                <input type="hidden" name="purchase_id" value="<?php echo $purchase->PurchaseID; ?>">
+                                <select name="status" class="form-control status-select">
+                                    <option value="Pending" <?php if ($purchase->Status == 'Pending') echo 'selected'; ?>>Pending</option>
+                                    <option value="On-Process" <?php if ($purchase->Status == 'On-Process') echo 'selected'; ?>>On-Process</option>
+                                    <option value="Completed" <?php if ($purchase->Status == 'Completed') echo 'selected'; ?>>Completed</option>
+                                    <option value="Returned" <?php if ($purchase->Status == 'Returned') echo 'selected'; ?>>Returned</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td><?php echo $purchase->Quantity; ?></td>
+                        <td><?php echo $purchase->TotalAmount; ?></td>
+                        <td>
+                            <!-- Add additional actions here if needed -->
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 <!-- /Feed Activity -->
+
+<script>
+    // JavaScript to handle status update using AJAX
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusForms = document.querySelectorAll('.status-form');
+
+        statusForms.forEach(form => {
+            form.addEventListener('change', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const purchaseId = formData.get('purchase_id');
+                const status = formData.get('status');
+
+                fetch('<?php echo base_url('purchase/updateStatus'); ?>', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the status in the table cell
+                        const statusCell = document.querySelector(`#purchase_${purchaseId} .status-select`);
+                        statusCell.value = status;
+                    } else {
+                        alert('Failed to update status.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating status.');
+                });
+            });
+        });
+    });
+</script>
+
+
 
 <script>
 	document.addEventListener('DOMContentLoaded', function () {

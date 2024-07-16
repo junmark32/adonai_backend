@@ -53,7 +53,7 @@ class AdminController extends BaseController
         //
         // Join tables 1
         $builder1 = $purchaseModel->builder();
-        $builder1->select('patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, purchases.Status, purchases.TotalAmount, purchases.PurchaseDate');
+        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
         $builder1->join('patients', 'patients.UserID = purchases.UserID');
         $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
         $builder1->orderBy('purchases.PurchaseDate', 'DESC');
@@ -82,6 +82,57 @@ class AdminController extends BaseController
 
         return view('admin/product', $data);
     }
+
+    // Method to update purchase status
+public function updateStatus()
+{
+    // Ensure this method is accessed via POST
+    if ($this->request->getMethod() === 'post') {
+        // Get the purchase_id and status from POST data
+        $purchaseId = $this->request->getPost('purchase_id');
+        $status = $this->request->getPost('status');
+
+        // Load the PurchaseModel (replace with your actual model name)
+        $purchaseModel = new PurchaseModel();
+
+        // Update the status in the database
+        $data = [
+            'Status' => $status
+        ];
+
+        $updated = $purchaseModel->update($purchaseId, $data);
+
+        if ($updated) {
+            // Status updated successfully
+            // Prepare JSON response
+            $response = [
+                'success' => true,
+                'message' => 'Status updated successfully.',
+                'status' => $status // Optionally include updated status
+            ];
+        } else {
+            // Failed to update status
+            // Prepare JSON response
+            $response = [
+                'success' => false,
+                'message' => 'Failed to update status.'
+            ];
+        }
+
+        // Return JSON response
+        return $this->response->setJSON($response);
+    } else {
+        // Handle invalid request method (should not be accessed directly)
+        // Prepare JSON response for invalid request method
+        $response = [
+            'success' => false,
+            'message' => 'Invalid request method.'
+        ];
+
+        return $this->response->setJSON($response);
+    }
+}
+
 
     public function addProduct()
     {
