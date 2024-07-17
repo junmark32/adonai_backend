@@ -16,6 +16,13 @@ use App\Models\CartModel;
 use App\Models\PurchaseModel;
 use App\Models\AppointmentModel;
 
+use App\Models\DocAboutModel;
+use App\Models\DocAwardsModel;
+use App\Models\DocEducModel;
+use App\Models\DocExpModel;
+use App\Models\DocServModel;
+use App\Models\DocSpecModel;
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -630,6 +637,98 @@ class UserController extends ResourceController
         } else {
             return view('error', ['error' => 'User data not found in session']);
         }
+
+    }
+
+    public function doctorProfile($DoctorID)
+    {
+        // Load the session service
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        $loggedIn = false;
+        $role = null;
+        $userData = [];
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            $token = $userData['token'];
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+        }
+
+        // Load Patients Data
+        $patientModel = new PatientModel();
+        $patients = [];
+        if (!empty($userData['PatientID'])) {
+            // Fetch only the patient associated with the user's session ID
+            $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+        }
+
+        // Load Cart Data for the logged-in user
+        $cartModel = new CartModel();
+        $cartItems = [];
+        if ($loggedIn && isset($userData['UserID'])) {
+            $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+        }
+
+            // Calculate the count of items in the cart
+        $cartCount = count($cartItems);
+
+
+        // Fetch the doctor's data based on the doctor ID
+        $doctorModel = new DoctorModel();
+        $doctor = $doctorModel->find($DoctorID);
+
+        //pangisahan
+        $docaboutModel = new DocAboutModel();
+        $docabout = $docaboutModel->find($DoctorID);
+
+        //pangmaramihan
+        $docawardsModel = new DocAwardsModel();
+        $docawards = $docawardsModel->where('DoctorID', $DoctorID)->findAll();
+
+        $doceducModel = new DocEducModel();
+        $doceduc = $doceducModel->where('DoctorID', $DoctorID)->findAll();
+
+        $docexpModel = new DocExpModel();
+        $docexp = $docexpModel->where('DoctorID', $DoctorID)->findAll();
+
+        $docservModel = new DocServModel();
+        $docserv = $docservModel->where('DoctorID', $DoctorID)->findAll();
+        
+        $docspecModel = new DocSpecModel();
+        $docspec = $docspecModel->where('DoctorID', $DoctorID)->findAll();
+
+        // Debugging: Check the structure of $doceduc
+        // echo '<pre>';
+        // print_r($doceduc);
+        // echo '</pre>';
+
+
+        // Fetch all schedule timings for the doctor
+        $scheduleModel = new ScheduleModel();
+        $scheduleTimings = $scheduleModel->where('doctor_id', $DoctorID)->findAll();
+
+
+        // Calculate the count of items in the cart
+        $cartCount = count($cartItems);
+
+        $data['docabout'] = $docabout;
+        $data['docawards'] = $docawards;
+        $data['doceduc'] = $doceduc;
+        $data['docexp'] = $docexp;
+        $data['docserv'] = $docserv;
+        $data['docspec'] = $docspec;
+
+
+        $data['doctor'] = $doctor;
+        $data['loggedIn'] = $loggedIn;
+        $data['role'] = $role;
+        $data['patients'] = $patients;
+        // Pass the cart count to the view
+        $data['cartCount'] = $cartCount;
+        return view('user/doctor_profile', ['token' => $token] + $data);
 
     }
 
