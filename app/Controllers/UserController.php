@@ -22,6 +22,8 @@ use App\Models\DocEducModel;
 use App\Models\DocExpModel;
 use App\Models\DocServModel;
 use App\Models\DocSpecModel;
+use App\Models\DocFeedModel;
+use CodeIgniter\I18n\Time;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -654,6 +656,7 @@ class UserController extends ResourceController
             $userData = $session->get('user_data');
             $loggedIn = true;
             $token = $userData['token'];
+            $patientID = $userData['PatientID'];
             $role = $userData['Role']; // Assuming 'role' is stored in the session
         }
 
@@ -700,11 +703,20 @@ class UserController extends ResourceController
         $docspecModel = new DocSpecModel();
         $docspec = $docspecModel->where('DoctorID', $DoctorID)->findAll();
 
+        $docFeedModel = new DocFeedModel();
+        $builder = $docFeedModel->builder();
+        $builder->select('patients.FirstName, patients.LastName, patients.Profile_url, doc_feedback.Rating, doc_feedback.Review, doc_feedback.created_at');
+        $builder->join('patients', 'patients.PatientID = doc_feedback.PatientID');
+        $builder->where('doc_feedback.DoctorID', $DoctorID);
+        $data['reviews'] = $builder->get()->getResult();
+        // Pass the current time to the view
+        $data['currentTime'] = Time::now();
         // Debugging: Check the structure of $doceduc
         // echo '<pre>';
-        // print_r($doceduc);
+        // print_r($data['reviews']);
         // echo '</pre>';
-
+        // Perform the join query
+        
 
         // Fetch all schedule timings for the doctor
         $scheduleModel = new ScheduleModel();
@@ -726,10 +738,32 @@ class UserController extends ResourceController
         $data['loggedIn'] = $loggedIn;
         $data['role'] = $role;
         $data['patients'] = $patients;
+        $data['userData'] = $userData;
         // Pass the cart count to the view
         $data['cartCount'] = $cartCount;
         return view('user/doctor_profile', ['token' => $token] + $data);
 
+    }
+
+    public function addReview()
+    {
+        $docFeedModel = new DocFeedModel();
+
+        // Get data from the request
+        $data = [
+            'DoctorID' => $this->request->getPost('doctor_id'), // Ensure this input exists in the form
+            'PatientID' => $this->request->getPost('patient_id'), // Ensure this input exists in the form
+            'Rating' => $this->request->getPost('rating'),
+            'Review' => $this->request->getPost('review_desc'),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        // Insert data into the database
+        if ($docFeedModel->insert($data)) {
+            return redirect()->to('/'); // Redirect to a success page or other route
+        } else {
+            return redirect()->to('/feedback/error'); // Redirect to an error page or other route
+        }
     }
 
 

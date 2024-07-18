@@ -35,6 +35,7 @@ $routes->match(['post','get'],'/fn_login', 'UserController::fn_login');
 
 //patient
 $routes->match(['post','get'],'patient/insertBooking', 'PatientController::insertBooking');
+$routes->match(['post','get'],'feedback/addReview', 'UserController::addReview');
 //appointmet
 $routes->match(['post','get'],'booking/booked-dates', 'PatientController::getBookedDates');
 $routes->match(['post','get'],'available-time-slots', 'PatientController::getAvailableTimeSlots');
