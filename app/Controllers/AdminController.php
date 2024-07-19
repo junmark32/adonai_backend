@@ -7,6 +7,7 @@ use App\Models\AdminModel;
 use App\Models\ProductModel;
 use App\Models\PurchaseModel;
 use App\Models\PatientModel;
+use App\Models\ProdHistoryModel;
 
 class AdminController extends BaseController
 {
@@ -212,6 +213,7 @@ public function updateStatus()
     public function updateProduct()
 {
     $productModel = new ProductModel();
+    $prodHistoryModel = new ProdHistoryModel();
 
     // Retrieve the product ID from the form data
     $productID = $this->request->getPost('product_id')[0]; // Assuming there's only one product ID
@@ -266,6 +268,30 @@ public function updateStatus()
 
     // Update product data in the database
     $productModel->update($productID, $data);
+
+    // Define product data
+    $data1 = [
+        'ProductID' => $productID,
+        'Image_url' => $imageName, // Relative path to the image
+        'Name' => $this->request->getPost('name'),
+        'Brand' => $this->request->getPost('brand'),
+        'Type' => $this->request->getPost('type'),
+        'Price' => $this->request->getPost('price'),
+        'StockQuantity' => $this->request->getPost('stock_quantity'),
+        'Faceshape' => $this->request->getPost('faceshape'),
+        'Frameshape' => $this->request->getPost('frameshape'),
+        'Material' => $this->request->getPost('material'),
+        'Gender' => $this->request->getPost('gender'),
+        'Frameage' => $this->request->getPost('frameage'),
+        'Framesize' => $this->request->getPost('framesize'),
+        'Fullframesize' => $this->request->getPost('fullframesize'),
+        'Nosebridgesize' => $this->request->getPost('nosebridgesize'),
+        'Templesize' => $this->request->getPost('templesize'),
+        'Note' => $this->request->getPost('note')
+    ];
+
+    // Insert product data into the database
+    $prodHistoryModel->insert($data1);
 
     // Optionally, redirect or return a response
     // For example:
