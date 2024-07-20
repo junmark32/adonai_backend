@@ -319,6 +319,8 @@ public function generateReport()
             $builder1->where('purchases.PurchaseDate <=', $endDate);
         }
         $data['purchases'] = $builder1->get()->getResult();
+        $data['startDate'] = $startDate;
+        $data['endDate'] = $endDate;
 
         // Load view and render HTML
         $html = view('reports/prod_report_view', $data);
