@@ -8,7 +8,8 @@ use App\Models\ProductModel;
 use App\Models\PurchaseModel;
 use App\Models\PatientModel;
 use App\Models\ProdHistoryModel;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 class AdminController extends BaseController
 {
     public function index()
@@ -54,19 +55,22 @@ class AdminController extends BaseController
         //
         // Join tables 1
         $builder1 = $purchaseModel->builder();
-        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
+        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, l1.Brand as LensBrand, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
         $builder1->join('patients', 'patients.UserID = purchases.UserID');
         $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
+        $builder1->join('lenses l1', 'l1.LensID = purchases.LensID');
         $builder1->orderBy('purchases.PurchaseDate', 'DESC');
         $data['purchases'] = $builder1->get()->getResult();
 
-        // Join tables and aggregate Quantity per EyewearID
         $builder2 = $purchaseModel->builder();
-        $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.EyewearID, SUM(purchases.Quantity) as TotalQuantity');
+        $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.EyewearID, l.Brand as LensBrand, SUM(purchases.Quantity) as TotalQuantity');
         $builder2->join('products p2', 'p2.ProductID = purchases.EyewearID');
-        $builder2->groupBy('purchases.EyewearID, p2.Image_url, p2.Name, p2.Brand, p2.Type');
+        $builder2->join('lenses l', 'l.LensID = purchases.LensID'); // Join with lenses table
+        $builder2->groupBy('purchases.EyewearID, p2.Image_url, p2.Name, p2.Brand, p2.Type, l.Brand');
         $builder2->orderBy('TotalQuantity', 'DESC');
         $data['bestselling'] = $builder2->get()->getResult();
+
+        
 
 
         $data['purchaseDailyData'] = $purchaseDailyData;
@@ -298,7 +302,38 @@ public function updateStatus()
     return redirect()->to('/Admin/Products')->with('success', 'Product updated successfully');
 }
 
+public function generateReport()
+    {
+        $startDate = $this->request->getPost('start_date');
+        $endDate = $this->request->getPost('end_date');
 
+        // Fetch the data
+        $purchaseModel = new PurchaseModel();
+        $builder1 = $purchaseModel->builder();
+        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, l1.Brand as LensBrand, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
+        $builder1->join('patients', 'patients.UserID = purchases.UserID');
+        $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
+        $builder1->join('lenses l1', 'l1.LensID = purchases.LensID');
+        if ($startDate && $endDate) {
+            $builder1->where('purchases.PurchaseDate >=', $startDate);
+            $builder1->where('purchases.PurchaseDate <=', $endDate);
+        }
+        $data['purchases'] = $builder1->get()->getResult();
+
+        // Load view and render HTML
+        $html = view('reports/prod_report_view', $data);
+
+        // Initialize DOMPDF
+        $options = new Options();
+        $options->set('defaultFont', 'Courier');
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream("report.pdf", ["Attachment" => 0]);
+    }
 
 
     

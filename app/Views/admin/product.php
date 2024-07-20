@@ -576,11 +576,11 @@ $(function() {
 <!-- Feed Activity -->
 <div class="card card-table flex-fill">
     <div class="card-header">
-        <h4 class="card-title">Recent Purchase</h4>
-        <div class="row">
-            <div class="col">
+        <h4 class="card-title">Recent Purchase Eyeglasses</h4>
+        <div class="row align-items-center">
+            <div class="col-auto">
                 <label for="rowLimit">Show:</label>
-                <select id="rowLimit" class="form-control" style="width: auto; display: inline-block;">
+                <select id="rowLimit" class="form-control d-inline-block" style="width: auto;">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -588,7 +588,14 @@ $(function() {
                 </select>
                 <label for="rowLimit">entries</label>
             </div>
-            <div class="col text-right">
+            <div class="col-auto ml-auto">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" class="form-control d-inline-block" style="width: auto;">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" class="form-control d-inline-block" style="width: auto;">
+                <button id="generateReport" class="btn btn-primary">Generate Report</button>
+            </div>
+            <div class="col-auto">
                 <button id="prevPage" class="btn btn-secondary">Previous</button>
                 <button id="nextPage" class="btn btn-secondary">Next</button>
             </div>
@@ -603,10 +610,10 @@ $(function() {
                         <th>Customer</th>
                         <th>Email</th>
                         <th>Product</th>
+                        <th>Lens</th>
                         <th>Status</th>
                         <th>Quantity</th>
                         <th>Amount</th>
-                        <th>Action</th> <!-- Added action column -->
                     </tr>
                 </thead>
                 <tbody>
@@ -616,6 +623,7 @@ $(function() {
                         <td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
                         <td><?php echo $purchase->Email; ?></td>
                         <td><?php echo $purchase->ProductName; ?></td>
+                        <td><?php echo $purchase->LensBrand; ?></td>
                         <td>
                             <form id="form_<?php echo $purchase->PurchaseID; ?>" class="status-form">
                                 <input type="hidden" name="purchase_id" value="<?php echo $purchase->PurchaseID; ?>">
@@ -640,6 +648,34 @@ $(function() {
     </div>
 </div>
 <!-- /Feed Activity -->
+
+<script>
+document.getElementById('generateReport').addEventListener('click', function() {
+    var startDate = document.getElementById('startDate').value;
+    var endDate = document.getElementById('endDate').value;
+
+    if (startDate && endDate) {
+        var formData = new FormData();
+        formData.append('start_date', startDate);
+        formData.append('end_date', endDate);
+
+        fetch('<?= base_url('report/generateReport') ?>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            var url = window.URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        alert('Please select both start date and end date.');
+    }
+});
+
+
+</script>
 
 <script>
     // JavaScript to handle status update using AJAX
@@ -738,7 +774,7 @@ $(function() {
         <div class="card card-table flex-fill">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Best Selling Products</h4>
+                    <h4 class="card-title mb-0">Best Selling Eyeglasses</h4>
                     <div class="form-inline">
                         <label for="rowLimit" class="mr-2">Show:</label>
                         <select id="rowLimit" class="form-control">
@@ -764,7 +800,7 @@ $(function() {
                         </thead>
                         <tbody id="bestTable">
                             <?php foreach ($bestselling as $index => $bestsell): ?>
-                            <tr class="product-row" data-name="<?php echo $bestsell->Name; ?>" data-brand="<?php echo $bestsell->Brand; ?>" data-type="<?php echo $bestsell->Type; ?>" data-image="<?= base_url('uploads/' . $bestsell->Image_url); ?>" data-quantity="<?php echo $bestsell->TotalQuantity; ?>" <?php echo $index === 0 ? 'id="firstProduct"' : ''; ?>>
+                            <tr class="product-row" data-name="<?php echo $bestsell->Name; ?>" data-brand="<?php echo $bestsell->Brand; ?>" data-type="<?php echo $bestsell->Type; ?>" data-lens="<?php echo $bestsell->LensBrand; ?>" data-image="<?= base_url('uploads/' . $bestsell->Image_url); ?>" data-quantity="<?php echo $bestsell->TotalQuantity; ?>" <?php echo $index === 0 ? 'id="firstProduct"' : ''; ?>>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <img src="<?= base_url('uploads/' . $bestsell->Image_url); ?>" alt="<?php echo $bestsell->Name; ?>" class="mr-2" style="max-width: 50px; max-height: 50px;">
@@ -772,6 +808,7 @@ $(function() {
                                             <div><?php echo $bestsell->Name; ?></div>
                                             <div><?php echo $bestsell->Brand; ?></div>
                                             <div><?php echo $bestsell->Type; ?></div>
+											<div><?php echo $bestsell->LensBrand; ?></div>
                                         </div>
                                     </div>
                                 </td>
@@ -797,6 +834,7 @@ $(function() {
                 <li id="viewerName" class="list-group-item">Cras justo odio</li>
                 <li id="viewerBrand" class="list-group-item">Dapibus ac facilisis in</li>
                 <li id="viewerType" class="list-group-item">Vestibulum at eros</li>
+				<li id="viewerLens" class="list-group-item">Vestibulum at erosq</li>
                 <li id="viewerQuantity" class="list-group-item">Orders: 0</li>
             </ul>
         </div>
@@ -865,6 +903,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const name = row.getAttribute('data-name');
         const brand = row.getAttribute('data-brand');
         const type = row.getAttribute('data-type');
+		const lens = row.getAttribute('data-lens');
         const image = row.getAttribute('data-image');
         const quantity = row.getAttribute('data-quantity');
 
@@ -875,6 +914,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('viewerName').innerText = `Name: ${name}`;
         document.getElementById('viewerBrand').innerText = `Brand: ${brand}`;
         document.getElementById('viewerType').innerText = `Type: ${type}`;
+		document.getElementById('viewerLens').innerText = `Lens: ${lens}`;
         document.getElementById('viewerQuantity').innerText = `Orders: ${quantity}`;
     }
 

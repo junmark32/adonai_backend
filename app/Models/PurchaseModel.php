@@ -12,7 +12,7 @@ class PurchaseModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['UserID', 'EyewearID', 'PurchaseDate', 'Quantity', 'TotalAmount', 'Status'];
+    protected $allowedFields    = ['UserID', 'EyewearID', 'LensID', 'PurchaseDate', 'Quantity', 'TotalAmount', 'Status'];
 
     // Dates
     protected $useTimestamps = false;
