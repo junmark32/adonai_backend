@@ -310,7 +310,7 @@ public function generateReport()
         // Fetch the data
         $purchaseModel = new PurchaseModel();
         $builder1 = $purchaseModel->builder();
-        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, l1.Brand as LensBrand, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
+        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, p1.Price as ProductPrice, l1.Brand as LensBrand, l1.Price as LensPrice, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
         $builder1->join('patients', 'patients.UserID = purchases.UserID');
         $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
         $builder1->join('lenses l1', 'l1.LensID = purchases.LensID');

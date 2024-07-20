@@ -6,7 +6,6 @@
     <title>Basic Daily Sales Report</title>
     <style>
         /* styles.css */
-
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -25,6 +24,12 @@
         header {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        header img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
         }
 
         header h1 {
@@ -95,19 +100,20 @@
         .details tbody tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <!-- Try using a relative path here if needed -->
+            <img src="uploads/logo-adonai.png" alt="Company Logo">
             <h1>Sales Report</h1>
+            <p>Generated for the period <?= $startDate; ?> to <?= $endDate; ?></p>
         </header>
         
         <section class="info">
             <div class="info-group">
                 <h3>Sales Person: John Doe </h3>
-                <h3>Date: <?= $startDate; ?> to <?= $endDate; ?></h3>
             </div>
             <div class="totals">
                 <?php
@@ -118,8 +124,7 @@
                         }
                     }
                 ?>
-               <p>Sales Total: &#x20B1;<?= number_format($totalSales, 2); ?></p>
-
+                <p>Sales Total: Php <?= number_format($totalSales, 2); ?></p>
             </div>
         </section>
 
@@ -145,8 +150,8 @@
                             <td><?= $purchase->PurchaseID; ?></td>
                             <td><?= $purchase->FirstName . ' ' . $purchase->LastName; ?></td>
                             <td><?= $purchase->Email; ?></td>
-                            <td><?= $purchase->ProductName; ?></td>
-                            <td><?= $purchase->LensBrand; ?></td>
+                            <td><?= $purchase->ProductName; ?> <span><?= $purchase->ProductPrice; ?></span></td>
+                            <td><?= $purchase->LensBrand; ?> <span><?= $purchase->LensPrice; ?></span></td>
                             <td><?= $purchase->Status; ?></td>
                             <td><?= $purchase->Quantity; ?></td>
                             <td><?= $purchase->TotalAmount; ?></td>

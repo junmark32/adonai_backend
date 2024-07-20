@@ -510,21 +510,30 @@
 <div class="card card-chart">
     <div class="card-header">
         <h4 class="card-title">Product Sales</h4>
-        <div class="dropdown">
-            <select id="monthDropdown" class="form-control">
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
+        <div class="d-flex flex-wrap align-items-center">
+            <div class="dropdown mr-2">
+                <select id="monthDropdown" class="form-control">
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="d-flex flex-wrap align-items-center ml-auto">
+                <label for="startDate" class="mr-2 mb-0">Start Date:</label>
+                <input type="date" id="startDate" class="form-control d-inline-block" style="width: auto; max-width: 150px;">
+                <label for="endDate" class="mx-2 mb-0">End Date:</label>
+                <input type="date" id="endDate" class="form-control d-inline-block" style="width: auto; max-width: 150px;">
+                <button id="generateReport" class="btn btn-primary ml-2">Generate Report</button>
+            </div>
         </div>
     </div>
     <div class="card-body">
@@ -532,6 +541,7 @@
     </div>
 </div>
 <!-- /Sales Chart -->
+
 
 <script>
 $(function() {
@@ -577,26 +587,19 @@ $(function() {
 <div class="card card-table flex-fill">
     <div class="card-header">
         <h4 class="card-title">Recent Purchase Eyeglasses</h4>
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <label for="rowLimit">Show:</label>
+        <div class="d-flex flex-wrap align-items-center">
+            <div class="mb-2 mb-md-0 d-flex align-items-center">
+                <label for="rowLimit" class="mr-2 mb-0">Show:</label>
                 <select id="rowLimit" class="form-control d-inline-block" style="width: auto;">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
                 </select>
-                <label for="rowLimit">entries</label>
+                <label for="rowLimit" class="ml-2 mb-0">entries</label>
             </div>
-            <div class="col-auto ml-auto">
-                <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate" class="form-control d-inline-block" style="width: auto;">
-                <label for="endDate">End Date:</label>
-                <input type="date" id="endDate" class="form-control d-inline-block" style="width: auto;">
-                <button id="generateReport" class="btn btn-primary">Generate Report</button>
-            </div>
-            <div class="col-auto">
-                <button id="prevPage" class="btn btn-secondary">Previous</button>
+            <div class="ml-auto mb-2 mb-md-0 d-flex align-items-center">
+                <button id="prevPage" class="btn btn-secondary mr-2">Previous</button>
                 <button id="nextPage" class="btn btn-secondary">Next</button>
             </div>
         </div>
@@ -648,6 +651,8 @@ $(function() {
     </div>
 </div>
 <!-- /Feed Activity -->
+
+
 
 <script>
 document.getElementById('generateReport').addEventListener('click', function() {
