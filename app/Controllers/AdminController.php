@@ -8,6 +8,7 @@ use App\Models\ProductModel;
 use App\Models\PurchaseModel;
 use App\Models\PatientModel;
 use App\Models\ProdHistoryModel;
+use App\Models\AppointmentModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 class AdminController extends BaseController
@@ -338,7 +339,33 @@ public function generateReport()
     }
 
 
-    
+    public function updateScheduleStatus()
+{
+    $model = new AppointmentModel();
+    $today = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
+
+    // Set timezone to match your database timezone
+    $timezone = new \DateTimeZone('Asia/Manila');
+    $currentTime = new \DateTime('now', $timezone); // Get current time with timezone
+    $formattedTime = $currentTime->format('H:i:s'); // Format the time
+
+    // Update appointments that are ongoing
+    $model->where('Pref_Date', $today)
+          ->where('Pref_Time_Start <=', $formattedTime)
+          ->where('Pref_Time_End >=', $formattedTime)
+          ->set('Status', 'On-Going')
+          ->update();
+
+    // Update appointments that are complete
+    $model->where('Pref_Date', $today)
+          ->where('Pref_Time_End <', $formattedTime)
+          ->set('Status', 'Complete')
+          ->update();
+
+    // Optional: return redirect or a response
+    // return redirect()->to('/appointments');
+}
+
     
 
 

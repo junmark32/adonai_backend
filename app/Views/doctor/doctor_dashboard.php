@@ -106,7 +106,7 @@
 											</li>
 										
 											<li>
-												<a href="reviews.html">
+												<a href="<?= site_url('/scheduler/update-status') ?>">
 													<i class="fas fa-star"></i>
 													<span>Reviews</span>
 												</a>

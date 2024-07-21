@@ -73,6 +73,9 @@ $routes->match(['post','get'],'/Admin/Products/Edit_Product/(:num)', 'AdminContr
 $routes->match(['post','get'],'/Admin/Products/update_Product', 'AdminController::updateProduct');
 
 $routes->post('report/generateReport', 'AdminController::generateReport');
+//
+// app/Config/Routes.php
+$routes->get('/scheduler/update-status', 'AdminController::updateScheduleStatus');
 
 
 //
