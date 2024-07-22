@@ -9,6 +9,7 @@ use App\Models\PurchaseModel;
 use App\Models\PatientModel;
 use App\Models\ProdHistoryModel;
 use App\Models\AppointmentModel;
+use App\Models\ScheduleModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 class AdminController extends BaseController
@@ -341,7 +342,8 @@ public function generateReport()
 
     public function updateScheduleStatus()
 {
-    $model = new AppointmentModel();
+    $appointmentModel = new AppointmentModel();
+    $scheduleTimingsModel = new ScheduleModel(); // Assuming you have a model for schedule_timings
     $today = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
 
     // Set timezone to match your database timezone
@@ -350,21 +352,32 @@ public function generateReport()
     $formattedTime = $currentTime->format('H:i:s'); // Format the time
 
     // Update appointments that are ongoing
-    $model->where('Pref_Date', $today)
-          ->where('Pref_Time_Start <=', $formattedTime)
-          ->where('Pref_Time_End >=', $formattedTime)
-          ->set('Status', 'On-Going')
-          ->update();
+    $appointmentModel->where('Pref_Date', $today)
+                     ->where('Pref_Time_Start <=', $formattedTime)
+                     ->where('Pref_Time_End >=', $formattedTime)
+                     ->set('Status', 'On-Going')
+                     ->update();
 
     // Update appointments that are complete
-    $model->where('Pref_Date', $today)
-          ->where('Pref_Time_End <', $formattedTime)
-          ->set('Status', 'Complete')
-          ->update();
+    $appointmentModel->where('Pref_Date', $today)
+                     ->where('Pref_Time_End <', $formattedTime)
+                     ->set('Status', 'Complete')
+                     ->update();
+
+     // Fetch appointments where Pref_Date is before today
+     $appointments = $appointmentModel->where('Pref_Date <', $today)->findAll();
+
+     // Update schedule timings based on fetched appointments
+     foreach ($appointments as $appointment) {
+         $scheduleTimingsModel->where('id', $appointment['Pref_Timeslot_ID'])
+                              ->set('status', 'Available')
+                              ->update();
+     }
 
     // Optional: return redirect or a response
     // return redirect()->to('/appointments');
 }
+
 
     
 
