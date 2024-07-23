@@ -22,6 +22,13 @@
 		
 		<!-- Main CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css') ?>">
+
+		<!-- SweetAlert CSS alert namay design talo pa ang modal boostarp -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
+<!-- SweetAlert JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>

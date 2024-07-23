@@ -706,7 +706,179 @@ public function update_prof_pres($presID, $patientID)
     }
 }
 
+public function delete_prof_pres($presID, $patientID)
+{
+    // Start session
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true; // Assume logged in if 'user_data' exists
+        $role = $userData['Role']; // Assuming 'Role' is stored in the session
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // Check if the doctor data is found
+            if ($doctor) {
+                // Load the PrescriptionModel
+                $prescriptionModel = new PrescriptionModel();
+                // Check if a prescription exists for the given PatientID, DoctorID, and PrescriptionID
+                $existingPrescription = $prescriptionModel->where('PatientID', $patientID)
+                                                          ->where('DoctorID', $doctorID)
+                                                          ->where('PrescriptionID', $presID)
+                                                          ->first();
+
+                // If the prescription exists, delete it; otherwise, handle the error
+                if ($existingPrescription) {
+                    $prescriptionModel->delete($existingPrescription['PrescriptionID']);
+
+                    return redirect()->to('/Doctor/Dashboard/Patients-Profile/' . $patientID)->with('success', 'Prescription deleted successfully.');
+                } else {
+                    // Handle the case when no existing prescription is found
+                    return redirect()->to('/Doctor/Dashboard/Patients-Profile/' . $patientID)->with('error', 'No existing prescription found to delete.');
+                }
+            } else {
+                // Handle the case when no doctor data is found
+                return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor not found.');
+            }
+        } else {
+            // Handle the case when 'DoctorID' is not set in user data
+            return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor ID not found in session.');
+        }
+    } else {
+        // User is not logged in
+        return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
+    }
+}
+
     
+public function appointments()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            if ($doctor) {
+                // Fetch appointments based on DoctorID
+                $appointmentModel = new AppointmentModel();
+                $appointments = $appointmentModel->where('DoctorID', $doctorID)->findAll();
+
+                // Sort appointments by Pref_Date and Pref_Time_Start in descending order
+                usort($appointments, function($a, $b) {
+                    $dateTimeA = strtotime($a['Pref_Date'] . ' ' . $a['Pref_Time_Start']);
+                    $dateTimeB = strtotime($b['Pref_Date'] . ' ' . $b['Pref_Time_Start']);
+                    return $dateTimeB - $dateTimeA;
+                });
+
+                $appointmentCount = $appointmentModel->where('DoctorID', $doctorID)->countAllResults();
+
+                // Initialize an array to hold appointment and patient data
+                $appointmentData = [];
+
+                // Fetch patient data for each appointment
+                $patientModel = new PatientModel();
+
+                foreach ($appointments as $appointment) {
+                    $patient = $patientModel->find($appointment['PatientID']);
+                    if ($patient) {
+                        // Combine appointment and patient data
+                        $appointmentData[] = [
+                            'appointment' => $appointment,
+                            'patient' => $patient,
+                        ];
+                    }
+                }
+
+                // Pass loggedIn status, role, and doctor data to the view
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                // Pass the doctor data to the view
+                $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                $data['appointmentData'] = $appointmentData;
+                return view('doctor/appointments', ['token' => $token] + $data);
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
+
+public function patients()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            if ($doctor) {
+               
+                $patientModel = new PatientModel();
+                $allPatients = $patientModel->findAll();
+
+                
+               
+
+                // Pass loggedIn status, role, and doctor data to the view
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                // Pass the doctor data to the view
+                $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                $data['allPatients'] = $allPatients;
+                return view('doctor/patients', ['token' => $token] + $data);
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
 
     
 

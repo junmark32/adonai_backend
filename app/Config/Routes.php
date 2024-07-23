@@ -46,6 +46,8 @@ $routes->match(['post','get'],'appointments/cancel/(:num)', 'PatientController::
 $routes->get('/Doctor/Dashboard', 'UserController::db_doctor');
 $routes->get('/Doctor/Products', 'UserController::product');
 $routes->get('/Doctor/Dashboard/Schedule', 'Doctorcontroller::schedule_timings');
+$routes->get('/Doctor/Dashboard/Appointments', 'Doctorcontroller::appointments');
+$routes->get('/Doctor/Dashboard/Patients', 'Doctorcontroller::patients');
 $routes->get('/session', 'Usercontroller::checkSessionData');
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');
 //
@@ -60,6 +62,7 @@ $routes->match(['post','get'],'/Doctor/Dashboard/Insert-Prescription/Patients-Pr
 $routes->match(['post','get'],'/Doctor/Dashboard/Edit-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::edit_prof_pres/$1/$2');
 $routes->match(['post','get'],'/report/generatePres/(:num)/Patients-Profile/(:num)', 'DoctorController::generatePres/$1/$2');
 $routes->match(['post','get'],'/Doctor/Dashboard/Update-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::update_prof_pres/$1/$2');
+$routes->match(['post','get'],'/Doctor/Dashboard/Delete-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::delete_prof_pres/$1/$2');
 //
 $routes->post('send-notification', 'NotificationController::send');
 

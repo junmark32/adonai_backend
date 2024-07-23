@@ -184,16 +184,16 @@
                                         <a href="<?= site_url('/report/generatePres/' . $mergedItems['prescription']['PrescriptionID'] . '/Patients-Profile/' . $patient['PatientID']) ?>" class="btn btn-sm bg-primary-light">
                                             <i class="fas fa-print"></i> Print
                                         </a>
-                                        <a href="javascript:void(0);" class="btn btn-sm bg-info-light">
+                                        <a href="<?= site_url('/Doctor/Dashboard/Edit-Prescription/' . $mergedItems['prescription']['PrescriptionID'] . '/Patients-Profile/' . $patient['PatientID']) ?>" class="btn btn-sm bg-info-light">
                                             <i class="far fa-eye"></i> View
                                         </a>
-                                        <a href="<?= site_url('/Doctor/Dashboard/Edit-Prescription/' . $mergedItems['prescription']['PrescriptionID'] . '/Patients-Profile/' . $patient['PatientID']) ?>
-" class="btn btn-sm bg-success-light">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <a href="javascript:void(0);" class="btn btn-sm bg-danger-light">
-                                            <i class="far fa-trash-alt"></i> Delete
-                                        </a>
+
+                                        <a href="#" class="btn btn-sm bg-danger-light delete-link" data-url="<?= site_url('/Doctor/Dashboard/Delete-Prescription/' . $mergedItems['prescription']['PrescriptionID'] . '/Patients-Profile/' . $patient['PatientID']) ?>">
+											<i class="far fa-trash-alt"></i> Delete
+										</a>
+
+										
+
                                     </div>
                                 </td>
                             </tr>
@@ -220,7 +220,36 @@
 
 			</div>		
 			<!-- /Page Content -->
-   
+										<script>
+											document.addEventListener('DOMContentLoaded', function() {
+												const deleteLinks = document.querySelectorAll('.delete-link');
+												
+												deleteLinks.forEach(link => {
+													link.addEventListener('click', function(event) {
+														event.preventDefault();
+														const url = this.getAttribute('data-url');
+														
+														swal({
+															title: "Are you sure?",
+															text: "You will not be able to recover this prescription!",
+															type: "warning",
+															showCancelButton: true,
+															confirmButtonColor: "#DD6B55",
+															confirmButtonText: "Yes, delete it!",
+															cancelButtonText: "No, cancel!",
+															closeOnConfirm: false,
+															closeOnCancel: false
+														}, function(isConfirm) {
+															if (isConfirm) {
+																window.location.href = url;
+															} else {
+																swal("Cancelled", "Your prescription is safe :)", "error");
+															}
+														});
+													});
+												});
+											});
+										</script>
 			<!-- Footer -->
 			<footer class="footer">
 				

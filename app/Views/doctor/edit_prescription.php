@@ -33,10 +33,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Add Prescription</li>
+									<li class="breadcrumb-item active" aria-current="page">View Prescription</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Edit Prescription</h2>
+							<h2 class="breadcrumb-title">View/Edit Prescription</h2>
 						</div>
 					</div>
 				</div>
@@ -82,7 +82,7 @@
             <div class="col-md-7 col-lg-8 col-xl-9">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Edit Prescription</h4>
+                        <h4 class="card-title mb-0">View/Edit Prescription</h4>
                     </div>
                     <div class="card-body">
                     <?php foreach ($prescription_data as $prescription): ?>
