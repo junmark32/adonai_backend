@@ -11,7 +11,8 @@ use App\Models\DoctorModel;
 use App\Models\AppointmentModel;
 use App\Models\ScheduleModel;
 use App\Models\PrescriptionModel;
-
+use Dompdf\Dompdf;
+use Dompdf\Options;
 //
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -520,6 +521,79 @@ public function edit_prof_pres($presID, $patientID)
           return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
       }
     }
+
+    public function generatePres($presID, $patientID)
+{
+    // Start session
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $role = $userData['Role'] ?? null; // Assuming 'role' is stored in the session
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // Check if the doctor data is found
+            if ($doctor) {
+                // Load the PatientModel
+                $patientModel = new PatientModel();
+                // Fetch patient data based on the patientId
+                $patientData = $patientModel->find($patientID);
+
+                // Check if the patient data is found
+                if ($patientData) {
+                    // Load the PrescriptionModel
+                    $prescriptionModel = new PrescriptionModel();
+                    // Fetch prescription data based on PatientID, DoctorID, and PrescriptionID
+                    $prescriptions = $prescriptionModel->where('PatientID', $patientID)
+                                                        ->where('DoctorID', $doctorID)
+                                                        ->where('PrescriptionID', $presID)
+                                                        ->findAll();
+                    
+                    $data['patient_data'] = [$patientData];                                   
+                    // Prepare data for the view
+                    $data['prescription_data'] = $prescriptions;
+
+                    // Load view and render HTML
+                    $html = view('reports/pres_report_view', $data);
+
+                    // Initialize DOMPDF
+                    $options = new Options();
+                    $options->set('defaultFont', 'Courier');
+                    $dompdf = new Dompdf($options);
+                    $dompdf->loadHtml($html);
+                    $dompdf->setPaper('A4', 'portrait');
+                    $dompdf->render();
+
+                    // Output the generated PDF to Browser
+                    $dompdf->stream("report.pdf", ["Attachment" => 0]);
+                } else {
+                    // Handle case where patient data is not found
+                    throw new \Exception("Patient data not found.");
+                }
+            } else {
+                // Handle case where doctor data is not found
+                throw new \Exception("Doctor data not found.");
+            }
+        } else {
+            // Handle case where DoctorID is not set in user data
+            throw new \Exception("DoctorID not set in user data.");
+        }
+    } else {
+        // Handle case where user_data is not found in session
+        throw new \Exception("User data not found in session.");
+    }
+}
+
 
 
 

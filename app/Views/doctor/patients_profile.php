@@ -181,7 +181,7 @@
                                 </td>
                                 <td class="text-right">
                                     <div class="table-action">
-                                        <a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
+                                        <a href="<?= site_url('/report/generatePres/' . $mergedItems['prescription']['PrescriptionID'] . '/Patients-Profile/' . $patient['PatientID']) ?>" class="btn btn-sm bg-primary-light">
                                             <i class="fas fa-print"></i> Print
                                         </a>
                                         <a href="javascript:void(0);" class="btn btn-sm bg-info-light">

@@ -101,108 +101,105 @@
                     </div>
 
 							
-<!-- Schedule Widget -->
-<div class="card booking-schedule schedule-widget">
-    <!-- Schedule Header -->
-    <div class="schedule-header">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Day Slot -->
-                <div class="day-slot">
-                    <ul id="calendar">
-                    </ul>
-                </div>
-                <!-- /Day Slot -->
-
-                <script>
-                    // Define currentDate outside the functions to make it accessible across functions
-                    let currentDate = new Date();
-
-                   // Function to render the calendar
-                    function renderCalendar() {
-                        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                        const calendarElement = document.getElementById('calendar');
-                        calendarElement.innerHTML = '';
-
-                        // Add left arrow
-                        calendarElement.innerHTML += `<li class="left-arrow"><a href="#" onclick="prevWeek()"><i class="fa fa-chevron-left"></i></a></li>`;
-
-                        // Start the calendar from Sunday
-                        let startingDayIndex = currentDate.getDay(); // Get the index of the current day
-                        if (startingDayIndex !== 0) {
-                            currentDate.setDate(currentDate.getDate() - startingDayIndex); // Set the date to the previous Sunday
-                        }
-
-                        // Add dates for the next 7 days
-                        for (let i = 0; i < 7; i++) {
-                            const day = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
-                            const dayOfWeek = daysOfWeek[day.getDay()];
-                            const formattedDate = `${day.getDate()} ${day.toLocaleString('default', { month: 'short' })} <small class="slot-year">${day.getFullYear()}</small>`;
-                            calendarElement.innerHTML += `<li><span>${dayOfWeek}</span><span class="slot-date">${formattedDate}</span></li>`;
-                        }
-
-                        // Add right arrow
-                        calendarElement.innerHTML += `<li class="right-arrow"><a href="#" onclick="nextWeek()"><i class="fa fa-chevron-right"></i></a></li>`;
-                    }
-
-
-                    // Function to navigate to the previous week
-                    function prevWeek() {
-                        currentDate.setDate(currentDate.getDate() - 7);
-                        renderCalendar();
-                    }
-
-                    // Function to navigate to the next week
-                    function nextWeek() {
-                        currentDate.setDate(currentDate.getDate() + 7);
-                        renderCalendar();
-                    }
-
-                    function selectTimeSlot(day, date, timeSlot, timeslotId) {
-					// Convert time from 12-hour format to 24-hour format
-					const [startTime, endTime] = timeSlot.split(' - ').map(time => {
-						const [timePart, meridiem] = time.split(' ');
-						let [hours, minutes] = timePart.split(':').map(Number);
-						if (meridiem.toLowerCase() === 'pm' && hours !== 12) {
-							hours += 12;
-						} else if (meridiem.toLowerCase() === 'am' && hours === 12) {
-							hours = 0;
-						}
-						return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-					});
-
-					// Calculate the selected date based on the current week's starting date (currentDate)
-					const selectedDate = new Date(currentDate);
-					const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-					const dayIndex = daysOfWeek.indexOf(day);
-					selectedDate.setDate(currentDate.getDate() + dayIndex); // Add the day index to get the selected date
-
-					// Format the selected date
-					const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
-
-					// Store selected values in local storage
-					localStorage.setItem('selectedDay', day);
-					localStorage.setItem('selectedDate', formattedDate);
-					localStorage.setItem('selectedTimeStart', startTime); // Store the selected timeslot start time
-					localStorage.setItem('selectedTimeEnd', endTime); // Store the selected timeslot end time
-					localStorage.setItem('selectedTimeslotId', timeslotId); // Store the selected timeslot ID
-
-					// Redirect to the checkout page
-					window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
-				}
-
-
-
-
-
-                    // Initial rendering
-                    renderCalendar();
-                </script>
-
+<!-- Schedule Header -->
+<div class="schedule-header">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Day Slot -->
+            <div class="day-slot">
+                <ul id="calendar">
+                </ul>
             </div>
+            <!-- /Day Slot -->
+
+            <script>
+                // Define currentDate outside the functions to make it accessible across functions
+                let currentDate = new Date();
+
+                // Function to render the calendar
+                function renderCalendar() {
+                    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    const calendarElement = document.getElementById('calendar');
+                    calendarElement.innerHTML = '';
+
+                    // Add left arrow
+                    calendarElement.innerHTML += `<li class="left-arrow"><a href="#" onclick="prevWeek()"><i class="fa fa-chevron-left"></i></a></li>`;
+
+                    // Start the calendar from Sunday
+                    let startingDayIndex = currentDate.getDay(); // Get the index of the current day
+                    if (startingDayIndex !== 0) {
+                        currentDate.setDate(currentDate.getDate() - startingDayIndex); // Set the date to the previous Sunday
+                    }
+
+                    // Add dates for the next 7 days
+                    for (let i = 0; i < 7; i++) {
+                        const day = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
+                        const dayOfWeek = daysOfWeek[day.getDay()];
+                        const formattedDate = `${day.getDate()} ${day.toLocaleString('default', { month: 'short' })} <small class="slot-year">${day.getFullYear()}</small>`;
+
+                        // Add the current-day class if the day matches today's date
+                        const isToday = (day.toDateString() === new Date().toDateString());
+                        const dayClass = isToday ? 'current-day' : '';
+
+                        calendarElement.innerHTML += `<li class="${dayClass}"><span>${dayOfWeek}</span><span class="slot-date">${formattedDate}</span></li>`;
+                    }
+
+                    // Add right arrow
+                    calendarElement.innerHTML += `<li class="right-arrow"><a href="#" onclick="nextWeek()"><i class="fa fa-chevron-right"></i></a></li>`;
+                }
+
+                // Function to navigate to the previous week
+                function prevWeek() {
+                    currentDate.setDate(currentDate.getDate() - 7);
+                    renderCalendar();
+                }
+
+                // Function to navigate to the next week
+                function nextWeek() {
+                    currentDate.setDate(currentDate.getDate() + 7);
+                    renderCalendar();
+                }
+
+                function selectTimeSlot(day, date, timeSlot, timeslotId) {
+                    // Convert time from 12-hour format to 24-hour format
+                    const [startTime, endTime] = timeSlot.split(' - ').map(time => {
+                        const [timePart, meridiem] = time.split(' ');
+                        let [hours, minutes] = timePart.split(':').map(Number);
+                        if (meridiem.toLowerCase() === 'pm' && hours !== 12) {
+                            hours += 12;
+                        } else if (meridiem.toLowerCase() === 'am' && hours === 12) {
+                            hours = 0;
+                        }
+                        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                    });
+
+                    // Calculate the selected date based on the current week's starting date (currentDate)
+                    const selectedDate = new Date(currentDate);
+                    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    const dayIndex = daysOfWeek.indexOf(day);
+                    selectedDate.setDate(currentDate.getDate() + dayIndex); // Add the day index to get the selected date
+
+                    // Format the selected date
+                    const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
+
+                    // Store selected values in local storage
+                    localStorage.setItem('selectedDay', day);
+                    localStorage.setItem('selectedDate', formattedDate);
+                    localStorage.setItem('selectedTimeStart', startTime); // Store the selected timeslot start time
+                    localStorage.setItem('selectedTimeEnd', endTime); // Store the selected timeslot end time
+                    localStorage.setItem('selectedTimeslotId', timeslotId); // Store the selected timeslot ID
+
+                    // Redirect to the checkout page
+                    window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
+                }
+
+                // Initial rendering
+                renderCalendar();
+            </script>
         </div>
     </div>
-    <!-- /Schedule Header -->
+</div>
+<!-- /Schedule Header -->
 
     <!-- Schedule Content -->
 <div class="schedule-cont">

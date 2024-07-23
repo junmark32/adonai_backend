@@ -6752,7 +6752,11 @@ html.menu-opened body {
     pointer-events: none; /* Disable clicking */
     opacity: 0.5; /* Add visual indication of disabled state */
     /* Add any other styles for disabled state */
+	/* pointer-events: none;
+    opacity: 0.5; */
+    cursor: not-allowed;
 }
+
 
 .header-logo {
 	display: flex;
@@ -6790,4 +6794,34 @@ html.menu-opened body {
   margin-bottom: 10px;
   border: 1px solid #f5c6cb;
   border-radius: 5px;
+}
+
+.current-day {
+	background-color: #15558d;
+	color: white;
+}
+
+.current-day .slot-date {
+	color: white !important;
+}
+
+.current-day .slot-year {
+	color: white !important;
+}
+
+
+/* .past-day {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+} */
+
+.past-day {
+	color: #999;
+	text-decoration: line-through;
+}
+.timing.disabled {
+	pointer-events: none;
+	opacity: 0.5;
+	cursor: not-allowed;
 }
