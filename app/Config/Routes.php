@@ -48,6 +48,7 @@ $routes->get('/Doctor/Products', 'UserController::product');
 $routes->get('/Doctor/Dashboard/Schedule', 'Doctorcontroller::schedule_timings');
 $routes->get('/Doctor/Dashboard/Appointments', 'Doctorcontroller::appointments');
 $routes->get('/Doctor/Dashboard/Patients', 'Doctorcontroller::patients');
+$routes->get('/Doctor/Dashboard/Reviews', 'Doctorcontroller::reviews');
 $routes->get('/session', 'Usercontroller::checkSessionData');
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');
 //

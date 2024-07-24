@@ -11,6 +11,7 @@ use App\Models\DoctorModel;
 use App\Models\AppointmentModel;
 use App\Models\ScheduleModel;
 use App\Models\PrescriptionModel;
+use App\Models\DocFeedModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 //
@@ -869,6 +870,74 @@ public function patients()
                 $data['doctors'] = [$doctor]; // Make sure $doctors is an array
                 $data['allPatients'] = $allPatients;
                 return view('doctor/patients', ['token' => $token] + $data);
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
+
+public function reviews()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            if ($doctor) {
+               
+                $docfeedModel = new DocFeedModel();
+        $docfeeds = $docfeedModel->where('DoctorID', $doctorID)->orderBy('created_at', 'DESC')->findAll();
+
+        // Initialize an array to hold docfeed and patient data
+        $docfeedData = [];
+
+        // Fetch patient data for each docfeed
+        $patientModel = new PatientModel();
+
+        foreach ($docfeeds as $docfeed) {
+            $patient = $patientModel->find($docfeed['PatientID']);
+            if ($patient) {
+                // Combine docfeed and patient data
+                $docfeedData[] = [
+                    'docfeed' => $docfeed,
+                    'patient' => $patient,
+                ];
+            }
+        }
+                
+
+                // var_dump($docfeedData);
+               
+
+                // Pass loggedIn status, role, and doctor data to the view
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                // Pass the doctor data to the view
+                $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                $data['docfeedData'] = $docfeedData;
+
+               
+                return view('doctor/reviews', ['token' => $token] + $data);
             } else {
                 return view('error', ['error' => 'Doctor not found']);
             }
