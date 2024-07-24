@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class DoctorModel extends Model
+class DocContModel extends Model
 {
-    protected $table            = 'doctors';
-    protected $primaryKey       = 'DoctorID';
+    protected $table            = 'doc_cont';
+    protected $primaryKey       = 'ContactID';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['UserID', 'FirstName', 'LastName', 'Email', 'Phone', 'Gender', 'Profile_url', 'Specialization', 'Verified', 'Rating', 'Rating_count', 'Location', 'Fees_range', 'Fees_info', 'fcm_token', 'BirthDate'];
+    protected $allowedFields    = ['DoctorID', 'Address1', 'Address2', 'City', 'Province', 'Country', 'PostalCode', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;

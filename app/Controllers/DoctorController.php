@@ -12,6 +12,14 @@ use App\Models\AppointmentModel;
 use App\Models\ScheduleModel;
 use App\Models\PrescriptionModel;
 use App\Models\DocFeedModel;
+use App\Models\DocAboutModel;
+use App\Models\DocContModel;
+use App\Models\DocServModel;
+use App\Models\DocSpecModel;
+use App\Models\DocEducModel;
+use App\Models\DocExpModel;
+use App\Models\DocAwardsModel;
+
 use Dompdf\Dompdf;
 use Dompdf\Options;
 //
@@ -938,6 +946,100 @@ public function reviews()
 
                
                 return view('doctor/reviews', ['token' => $token] + $data);
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
+
+public function prof_settings()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // $doctorData = [];
+
+            if ($doctor) {
+               
+                $docaboutModel = new DocAboutModel();
+                $doc_about = $docaboutModel->find($doctor['DoctorID']);
+
+                $doccontModel = new DocContModel();
+                $doc_cont = $doccontModel->find($doctor['DoctorID']);
+
+                $docservModel = new DocServModel();
+                $doc_serv = $docservModel->where('DoctorID', $doctor['DoctorID'])->findAll();
+
+                $docspecModel = new DocSpecModel();
+                $doc_spec = $docspecModel->where('DoctorID', $doctor['DoctorID'])->findAll();
+
+                $doceducModel = new DocEducModel();
+                $doc_educ = $doceducModel->where('DoctorID', $doctor['DoctorID'])->findAll();
+
+                $docexpModel = new DocExpModel();
+                $doc_exp = $docexpModel->where('DoctorID', $doctor['DoctorID'])->findAll();
+
+                $docawardsModel = new DocAwardsModel();
+                $doc_awards = $docawardsModel->where('DoctorID', $doctor['DoctorID'])->findAll();
+
+                $docuserModel = new UserModel();
+                $doc_user = $docuserModel->find($doctor['UserID']);
+
+                
+
+                
+                // Combine doctor and doc_about data
+                $doctorData = [
+                    'doctor_data' => $doctor,
+                    'doc_about' => $doc_about,
+                    'doc_cont' => $doc_cont,
+                    'doc_serv' => $doc_serv,
+                    'doc_spec' => $doc_spec,
+                    'doc_educ' => $doc_educ,
+                    'doc_exp' => $doc_exp,
+                    'doc_awards' => $doc_awards,
+                    'doc_user' => $doc_user,
+                ];
+                
+
+                // echo '<pre>';
+                // print_r($doctorData);
+                // echo '</pre>';
+               
+
+                // Pass loggedIn status, role, and doctor data to the view
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                // Pass the doctor data to the view
+                $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                $data['doctorData'] = $doctorData;
+
+                
+
+               
+                return view('doctor/prof_settings', ['token' => $token] + $data);
             } else {
                 return view('error', ['error' => 'Doctor not found']);
             }

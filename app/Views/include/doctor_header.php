@@ -12,6 +12,14 @@
 		
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css') ?>">
+
+				<!-- Bootstrap CSS -->
+				<link rel="stylesheet" href="<?php echo base_url('assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css')?>">
+		
+		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/dropzone/dropzone.min.css')?>">
+
+				<!-- Select2 CSS -->
+				<link rel="stylesheet" href="<?php echo base_url('assets/plugins/select2/css/select2.min.css')?>">
 		
 		<!-- Fontawesome CSS -->
 		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/fontawesome.min.css') ?>">
@@ -24,10 +32,10 @@
 		<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css') ?>">
 
 		<!-- SweetAlert CSS alert namay design talo pa ang modal boostarp -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
-<!-- SweetAlert JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+		<!-- SweetAlert JS -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
