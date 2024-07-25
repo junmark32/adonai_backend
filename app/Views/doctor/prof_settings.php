@@ -146,273 +146,373 @@
 
                         <div class="col-md-7 col-lg-8 col-xl-9">
 						
-							<!-- Basic Information -->
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Basic Information</h4>
-            <div class="row form-row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="change-avatar">
-                            <div class="profile-img">
-                                <!-- Assuming you have a path to the profile picture -->
-                                <img src="<?= base_url('uploads/' . $doctorData['doctor_data']['Profile_url']) ?>" alt="User Image">
-                            </div>
-                            <div class="upload-img">
-                                <div class="change-photo-btn">
-                                    <span><i class="fa fa-upload"></i> Upload Photo</span>
-                                    <input type="file" class="upload">
-                                </div>
-                                <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Username <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_user']['Username']) ?>" readonly>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" value="<?= htmlspecialchars($doctorData['doctor_data']['Email']) ?>" readonly>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>First Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doctor_data']['FirstName']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Last Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doctor_data']['LastName']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doctor_data']['Phone']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Gender</label>
-                        <select class="form-control select">
-                            <option <?= $doctorData['doctor_data']['Gender'] == 'Male' ? 'selected' : '' ?>>Male</option>
-                            <option <?= $doctorData['doctor_data']['Gender'] == 'Female' ? 'selected' : '' ?>>Female</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group mb-0">
-                        <label>Date of Birth</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars(date('d-m-Y', strtotime($doctorData['doctor_data']['BirthDate']))) ?>">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Basic Information -->
-							
-	<!-- About Me -->
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">About Me</h4>
-            <div class="form-group mb-0">
-                <label>Biography</label>
-                <textarea class="form-control" rows="5"><?= htmlspecialchars($doctorData['doc_about']['Biography']) ?></textarea>
-            </div>
-        </div>
-    </div>
-    <!-- /About Me -->
-							
-	<!-- Contact Details -->
-    <div class="card contact-card">
-        <div class="card-body">
-            <h4 class="card-title">Contact Details</h4>
-            <div class="row form-row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Address Line 1</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_cont']['Address1']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Address Line 2</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_cont']['Address2']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">City</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_cont']['City']) ?>">
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">State / Province</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_cont']['Province']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Country</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_cont']['Country']) ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Postal Code</label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($doctorData['doc_cont']['PostalCode']) ?>">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Contact Details -->
-							
-	<!-- Services and Specialization -->
-    <div class="card services-card">
-        <div class="card-body">
-            <h4 class="card-title">Services and Specialization</h4>
-            <div class="form-group">
-                <label>Services</label>
-                <input type="text" data-role="tagsinput" class="input-tags form-control" placeholder="Enter Services" name="services" value="<?= htmlspecialchars(implode(',', array_column($doctorData['doc_serv'], 'Services'))) ?>" id="services">
-                <small class="form-text text-muted">Note : Type & Press enter to add new services</small>
-            </div> 
-            <div class="form-group mb-0">
-                <label>Specialization </label>
-                <input class="input-tags form-control" type="text" data-role="tagsinput" placeholder="Enter Specialization" name="specialist" value="<?= htmlspecialchars(implode(',', array_column($doctorData['doc_spec'], 'Specialization'))) ?>" id="specialist">
-                <small class="form-text text-muted">Note : Type & Press  enter to add new specialization</small>
-            </div> 
-        </div>              
-    </div>
-    <!-- /Services and Specialization -->
-						 
-	<!-- Education -->
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Education</h4>
-            <div class="education-info">
-                <?php foreach ($doctorData['doc_educ'] as $education): ?>
-                    <div class="row form-row education-cont">
-                        <div class="col-12 col-md-10 col-lg-11">
-                            <div class="row form-row">
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>Degree</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($education['Degree']) ?>">
-                                    </div> 
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>College/Institute</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($education['College']) ?>">
-                                    </div> 
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>Year of Completion</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($education['Year']) ?>">
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-                <div class="add-more">
-                    <a href="javascript:void(0);" class="add-education"><i class="fa fa-plus-circle"></i> Add More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Education -->
-						
-<!-- Experience -->
+                        <!-- Basic Information -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Basic Information</h4>
+                                <form action="<?= base_url('doctor/update_prof_settings') ?>" method="post" enctype="multipart/form-data">
+                                    <div class="row form-row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <div class="change-avatar">
+                                                    <div class="profile-img">
+                                                        <!-- Assuming you have a path to the profile picture -->
+                                                        <img src="<?= base_url('uploads/' . $doctorData['doctor_data']['Profile_url']) ?>" alt="User Image">
+                                                    </div>
+                                                    <div class="upload-img">
+                                                        <div class="change-photo-btn">
+                                                            <span><i class="fa fa-upload"></i> Upload Photo</span>
+                                                            <input type="file" class="upload" name="profile_photo">
+                                                        </div>
+                                                        <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Username <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="username" value="<?= htmlspecialchars($doctorData['doc_user']['Username']) ?>" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Email <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" name="email" value="<?= htmlspecialchars($doctorData['doctor_data']['Email']) ?>" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>First Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="first_name" value="<?= htmlspecialchars($doctorData['doctor_data']['FirstName']) ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Last Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="last_name" value="<?= htmlspecialchars($doctorData['doctor_data']['LastName']) ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Phone Number</label>
+                                                <input type="text" class="form-control" name="phone" value="<?= htmlspecialchars($doctorData['doctor_data']['Phone']) ?>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Gender</label>
+                                                <select class="form-control select" name="gender">
+                                                    <option <?= $doctorData['doctor_data']['Gender'] == 'Male' ? 'selected' : '' ?>>Male</option>
+                                                    <option <?= $doctorData['doctor_data']['Gender'] == 'Female' ? 'selected' : '' ?>>Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-0">
+                                                <label>Date of Birth</label>
+                                                <input type="text" class="form-control" name="birth_date" value="<?= htmlspecialchars(date('d-m-Y', strtotime($doctorData['doctor_data']['BirthDate']))) ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- About Me -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">About Me</h4>
+                                            <div class="form-group mb-0">
+                                                <label>Biography</label>
+                                                <textarea class="form-control" rows="5" name="biography"><?= htmlspecialchars($doctorData['doc_about']['Biography']) ?></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <!-- Contact Details -->
+                                    <div class="card contact-card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Contact Details</h4>
+                                            <div class="row form-row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Address Line 1</label>
+                                                        <input type="text" class="form-control" name="address1" value="<?= htmlspecialchars($doctorData['doc_cont']['Address1']) ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Address Line 2</label>
+                                                        <input type="text" class="form-control" name="address2" value="<?= htmlspecialchars($doctorData['doc_cont']['Address2']) ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">City</label>
+                                                        <input type="text" class="form-control" name="city" value="<?= htmlspecialchars($doctorData['doc_cont']['City']) ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">State / Province</label>
+                                                        <input type="text" class="form-control" name="province" value="<?= htmlspecialchars($doctorData['doc_cont']['Province']) ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Country</label>
+                                                        <input type="text" class="form-control" name="country" value="<?= htmlspecialchars($doctorData['doc_cont']['Country']) ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Postal Code</label>
+                                                        <input type="text" class="form-control" name="postal_code" value="<?= htmlspecialchars($doctorData['doc_cont']['PostalCode']) ?>">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <!-- Services and Specialization -->
+                                    <div class="card services-card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Services and Specialization</h4>
+                                            <div class="form-group">
+                                                <label>Services</label>
+                                                <input type="text" data-role="tagsinput" class="input-tags form-control" placeholder="Enter Services" name="services" value="<?= htmlspecialchars(implode(',', array_column($doctorData['doc_serv'], 'Services'))) ?>" id="services">
+                                                <small class="form-text text-muted">Note: Type & Press enter to add new services</small>
+                                            </div> 
+                                            <div class="form-group mb-0">
+                                                <label>Specialization</label>
+                                                <input class="input-tags form-control" type="text" data-role="tagsinput" placeholder="Enter Specialization" name="specialization" value="<?= htmlspecialchars(implode(',', array_column($doctorData['doc_spec'], 'Specialization'))) ?>" id="specialist">
+                                                <small class="form-text text-muted">Note: Type & Press enter to add new specialization</small>
+                                            </div> 
+                                        </div>              
+                                    </div>
+                    <!-- Education -->
 <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Experience</h4>
-            <div class="experience-info">
-                <?php foreach ($doctorData['doc_exp'] as $experience): ?>
-                    <div class="row form-row experience-cont">
-                        <div class="col-12 col-md-10 col-lg-11">
-                            <div class="row form-row">
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>Hospital Name</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($experience['Hosp_name']) ?>">
-                                    </div> 
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>From</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($experience['From_where']) ?>">
-                                    </div> 
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>To</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($experience['To_where']) ?>">
-                                    </div> 
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>Designation</label>
-                                        <input type="text" class="form-control" value="<?= htmlspecialchars($experience['Designation']) ?>">
-                                    </div> 
-                                </div>
+    <div class="card-body">
+        <h4 class="card-title">Education</h4>
+        <div class="education-info">
+            <?php foreach ($doctorData['doc_educ'] as $education): ?>
+                <div class="row form-row education-cont">
+                    <div class="col-12 col-md-10 col-lg-11">
+                        <div class="row form-row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Degree</label>
+                                    <input type="text" class="form-control" name="education_degree[]" value="<?= htmlspecialchars($education['Degree']) ?>">
+                                </div> 
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>College/Institute</label>
+                                    <input type="text" class="form-control" name="education_college[]" value="<?= htmlspecialchars($education['College']) ?>">
+                                </div> 
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Year of Completion</label>
+                                    <input type="text" class="form-control" name="education_year[]" value="<?= htmlspecialchars($education['Year']) ?>">
+                                </div> 
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
-                <div class="add-more">
-                    <a href="javascript:void(0);" class="add-experience"><i class="fa fa-plus-circle"></i> Add More</a>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Experience -->
-							
-<!-- Awards -->
-<div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Awards</h4>
-            <div class="awards-info">
-                <?php foreach ($doctorData['doc_awards'] as $award): ?>
-                    <div class="row form-row awards-cont">
-                        <div class="col-12 col-md-5">
+            <?php endforeach; ?>
+            <div id="education-template" class="row form-row education-cont" style="display: none;">
+                <div class="col-12 col-md-10 col-lg-11">
+                    <div class="row form-row">
+                        <div class="col-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                                <label>Awards</label>
-                                <input type="text" class="form-control" value="<?= htmlspecialchars($award['Awards']) ?>">
+                                <label>Degree</label>
+                                <input type="text" class="form-control" name="education_degree[]">
                             </div> 
                         </div>
-                        <div class="col-12 col-md-5">
+                        <div class="col-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                                <label>Year</label>
-                                <input type="text" class="form-control" value="<?= htmlspecialchars($award['Year']) ?>">
+                                <label>College/Institute</label>
+                                <input type="text" class="form-control" name="education_college[]">
+                            </div> 
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label>Year of Completion</label>
+                                <input type="text" class="form-control" name="education_year[]">
                             </div> 
                         </div>
                     </div>
-                <?php endforeach; ?>
-                <div class="add-more">
-                    <a href="javascript:void(0);" class="add-award"><i class="fa fa-plus-circle"></i> Add More</a>
                 </div>
+            </div>
+            <div class="add-more">
+                <a href="javascript:void(0);" class="add-educations"><i class="fa fa-plus-circle"></i> Add More</a>
             </div>
         </div>
     </div>
-    <!-- /Awards -->
+</div>
 
-    <div class="submit-section submit-btn-bottom">
-        <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
-    </div>
-							
-						</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('.add-educations').addEventListener('click', function() {
+            var template = document.querySelector('#education-template');
+            var clone = template.cloneNode(true);
+            clone.style.display = 'block';
+            clone.removeAttribute('id');
+            template.parentNode.insertBefore(clone, template);
+        });
+    });
+</script>
+
+                                    
+                                    
+                    
+                                    <!-- Experience -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Experience</h4>
+                                            <div class="experience-info">
+                                                <?php foreach ($doctorData['doc_exp'] as $experience): ?>
+                                                    <div class="row form-row experience-cont">
+                                                        <div class="col-12 col-md-10 col-lg-11">
+                                                            <div class="row form-row">
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>Hospital Name</label>
+                                                                        <input type="text" class="form-control" name="experience_hospital[]" value="<?= htmlspecialchars($experience['Hosp_name']) ?>">
+                                                                    </div> 
+                                                                </div>
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>From</label>
+                                                                        <input type="text" class="form-control" name="experience_from[]" value="<?= htmlspecialchars($experience['From_where']) ?>">
+                                                                    </div> 
+                                                                </div>
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>To</label>
+                                                                        <input type="text" class="form-control" name="experience_to[]" value="<?= htmlspecialchars($experience['To_where']) ?>">
+                                                                    </div> 
+                                                                </div>
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>Designation</label>
+                                                                        <input type="text" class="form-control" name="experience_designation[]" value="<?= htmlspecialchars($experience['Designation']) ?>">
+                                                                    </div> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                                <div id="exp-template" class="row form-row education-cont" style="display: none;">
+                                                <div class="col-12 col-md-10 col-lg-11">
+                                                            <div class="row form-row">
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>Hospital Name</label>
+                                                                        <input type="text" class="form-control" name="experience_hospital[]">
+                                                                    </div> 
+                                                                </div>
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>From</label>
+                                                                        <input type="text" class="form-control" name="experience_from[]" >
+                                                                    </div> 
+                                                                </div>
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>To</label>
+                                                                        <input type="text" class="form-control" name="experience_to[]" >
+                                                                    </div> 
+                                                                </div>
+                                                                <div class="col-12 col-md-6 col-lg-4">
+                                                                    <div class="form-group">
+                                                                        <label>Designation</label>
+                                                                        <input type="text" class="form-control" name="experience_designation[]">
+                                                                    </div> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                <div class="add-more">
+                                                    <a href="javascript:void(0);" class="add-experiences"><i class="fa fa-plus-circle"></i> Add More</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('.add-experiences').addEventListener('click', function() {
+            var template = document.querySelector('#exp-template');
+            var clone = template.cloneNode(true);
+            clone.style.display = 'block';
+            clone.removeAttribute('id');
+            template.parentNode.insertBefore(clone, template);
+        });
+    });
+</script>
+                    
+                                    <!-- Awards -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Awards</h4>
+                                            <div class="awards-info">
+                                                <?php foreach ($doctorData['doc_awards'] as $award): ?>
+                                                    <div class="row form-row awards-cont">
+                                                        <div class="col-12 col-md-5">
+                                                            <div class="form-group">
+                                                                <label>Awards</label>
+                                                                <input type="text" class="form-control" name="awards[]" value="<?= htmlspecialchars($award['Awards']) ?>">
+                                                            </div> 
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <div class="form-group">
+                                                                <label>Year</label>
+                                                                <input type="text" class="form-control" name="awards_year[]" value="<?= htmlspecialchars($award['Year']) ?>">
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                                <div id="award-template" class="row form-row education-cont" style="display: none;">
+                                                <div class="row form-row awards-cont">
+                                                        <div class="col-12 col-md-5">
+                                                            <div class="form-group">
+                                                                <label>Awards</label>
+                                                                <input type="text" class="form-control" name="awards[]" >
+                                                            </div> 
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <div class="form-group">
+                                                                <label>Year</label>
+                                                                <input type="text" class="form-control" name="awards_year[]" >
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="add-more">
+                                                    <a href="javascript:void(0);" class="add-awards"><i class="fa fa-plus-circle"></i> Add More</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('.add-awards').addEventListener('click', function() {
+            var template = document.querySelector('#award-template');
+            var clone = template.cloneNode(true);
+            clone.style.display = 'block';
+            clone.removeAttribute('id');
+            template.parentNode.insertBefore(clone, template);
+        });
+    });
+</script>
+                    
+                                    <div class="submit-section submit-btn-bottom">
+                                        <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
                       
 
                         

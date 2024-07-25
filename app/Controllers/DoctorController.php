@@ -1051,6 +1051,241 @@ public function prof_settings()
     }
 }
 
+public function update_prof_settings()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'Role' is stored in the session
+        $token = $userData['token'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            if ($doctor) {
+                // Process image upload
+                $image = $this->request->getFile('profile_photo'); // Assuming you're uploading an image via a form with name 'profile_photo'
+
+                // Initialize the variable to hold the image URL
+                $imageName = '';
+
+                // Check if image was uploaded successfully
+                if ($image && $image->isValid() && !$image->hasMoved()) {
+                    // Generate a unique filename
+                    $imageName = $image->getRandomName();
+
+                    // Move uploaded image to the uploads directory
+                    $image->move(ROOTPATH . 'public/uploads', $imageName);
+                }
+
+                // Define updated doctor data
+                $doctor_data = [
+                    'FirstName' => $this->request->getPost('first_name'),
+                    'LastName' => $this->request->getPost('last_name'),
+                    'Phone' => $this->request->getPost('phone'),
+                    'Gender' => $this->request->getPost('gender'),
+                    'BirthDate' => $this->request->getPost('birth_date'),
+                ];
+
+                // If a new image was uploaded, include it in the data array
+                if (!empty($imageName)) {
+                    $doctor_data['Profile_url'] = $imageName;
+                }
+
+                // Update doctor data in the database
+                $doctorModel->update($doctorID, $doctor_data);
+
+                // Update doctor's biography
+                $docaboutModel = new DocAboutModel();
+
+                $doctor_about = [
+                    'Biography' => $this->request->getPost('biography'),
+                ];
+
+                $docaboutModel->update($doctorID, $doctor_about);
+
+                //
+                $doccontModel = new DocContModel();
+
+                $doctor_cont = [
+                    'Address1' => $this->request->getPost('address1'),
+                    'Address2' => $this->request->getPost('address2'),
+                    'City' => $this->request->getPost('city'),
+                    'Province' => $this->request->getPost('province'),
+                    'Country' => $this->request->getPost('country'),
+                    'PostalCode' => $this->request->getPost('postal_code'),
+                ];
+
+                $doccontModel->update($doctorID, $doctor_cont);
+
+                //
+               // Update doctor's services
+               $docservModel = new DocServModel();
+
+               // Convert the comma-separated services into an array
+               $services = explode(',', $this->request->getPost('services'));
+
+               // Delete existing services for the doctor
+               $docservModel->where('DoctorID', $doctorID)->delete();
+
+               // Insert new services
+               foreach ($services as $service) {
+                   $docservModel->insert([
+                       'DoctorID' => $doctorID,
+                       'Services' => trim($service),
+                   ]);
+               }
+
+               // Update doctor's specializations
+               $docspecModel = new DocSpecModel();
+
+               // Convert the comma-separated specializations into an array
+               $specializations = explode(',', $this->request->getPost('specialization'));
+
+               // Delete existing specializations for the doctor
+               $docspecModel->where('DoctorID', $doctorID)->delete();
+
+               // Insert new specializations
+               foreach ($specializations as $specialization) {
+                   $docspecModel->insert([
+                       'DoctorID' => $doctorID,
+                       'Specialization' => trim($specialization),
+                   ]);
+               }
+
+             // Assuming you have a model for education like DocEducModel
+                $doceducModel = new DocEducModel();
+
+                // Retrieve the posted education data
+                $degrees = $this->request->getPost('education_degree');
+                $colleges = $this->request->getPost('education_college');
+                $years = $this->request->getPost('education_year');
+
+                // Validate and sanitize inputs
+                $degrees = array_map('trim', $degrees);
+                $colleges = array_map('trim', $colleges);
+                $years = array_map('trim', $years);
+
+                // Delete existing education records for the doctor
+                $doceducModel->where('DoctorID', $doctorID)->delete();
+
+                // Prepare data for insertion
+                $educationData = [];
+                for ($i = 0; $i < count($degrees); $i++) {
+                    // Ensure each array has the same length and skip empty entries
+                    if (!empty($degrees[$i]) && !empty($colleges[$i]) && !empty($years[$i])) {
+                        $educationData[] = [
+                            'DoctorID' => $doctorID,
+                            'Degree' => htmlspecialchars($degrees[$i]),
+                            'College' => htmlspecialchars($colleges[$i]),
+                            'Year' => htmlspecialchars($years[$i]),
+                        ];
+                    }
+                }
+
+                // Insert new education records
+                if (!empty($educationData)) {
+                    $doceducModel->insertBatch($educationData);
+                }
+
+                // Assuming you have a model for expereince
+                $docexpModel = new DocExpModel();
+
+                // Retrieve the posted education data
+                $hosp_name = $this->request->getPost('experience_hospital');
+                $from_where = $this->request->getPost('experience_from');
+                $to_where = $this->request->getPost('experience_to');
+                $designation = $this->request->getPost('experience_designation');
+
+                // Validate and sanitize inputs
+                $hosp_name = array_map('trim', $hosp_name);
+                $from_where = array_map('trim', $from_where);
+                $to_where = array_map('trim', $to_where);
+                $designation = array_map('trim', $designation);
+
+                // Delete existing education records for the doctor
+                $docexpModel->where('DoctorID', $doctorID)->delete();
+
+                // Prepare data for insertion
+                $expData = [];
+                for ($i = 0; $i < count($hosp_name); $i++) {
+                    // Ensure each array has the same length and skip empty entries
+                    if (!empty($hosp_name[$i]) && !empty($from_where[$i]) && !empty($to_where[$i]) && !empty($designation[$i])) {
+                        $expData[] = [
+                            'DoctorID' => $doctorID,
+                            'Hosp_name' => htmlspecialchars($hosp_name[$i]),
+                            'From_where' => htmlspecialchars($from_where[$i]),
+                            'To_where' => htmlspecialchars($to_where[$i]),
+                            'Designation' => htmlspecialchars($designation[$i]),
+                        ];
+                    }
+                }
+
+                // Insert new education records
+                if (!empty($expData)) {
+                    $docexpModel->insertBatch($expData);
+                }
+
+                // Assuming you have a model for awards
+                $docawardsModel = new DocAwardsModel();
+
+                // Retrieve the posted education data
+                $awards = $this->request->getPost('awards');
+                $awards_year = $this->request->getPost('awards_year');
+
+                // Validate and sanitize inputs
+                $awards = array_map('trim', $awards);
+                $awards_year = array_map('trim', $awards_year);
+
+                // Delete existing education records for the doctor
+                $docawardsModel->where('DoctorID', $doctorID)->delete();
+
+                // Prepare data for insertion
+                $awardsData = [];
+                for ($i = 0; $i < count($awards); $i++) {
+                    // Ensure each array has the same length and skip empty entries
+                    if (!empty($awards[$i]) && !empty($awards_year[$i])) {
+                        $awardsData[] = [
+                            'DoctorID' => $doctorID,
+                            'Awards' => htmlspecialchars($awards[$i]),
+                            'Year' => htmlspecialchars($awards_year[$i]),
+                        ];
+                    }
+                }
+
+                // Insert new education records
+                if (!empty($awardsData)) {
+                    $docawardsModel->insertBatch($awardsData);
+                }
+
+
+
+                return redirect()->to('/Doctor/Dashboard/Prof-Settings')->with('success', 'Profile updated successfully');
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
+
+
+
+
     
 
     public function getAppointmentsByDoctorUsername($doctorUsername)
