@@ -50,8 +50,10 @@ $routes->get('/Doctor/Dashboard/Appointments', 'Doctorcontroller::appointments')
 $routes->get('/Doctor/Dashboard/Patients', 'Doctorcontroller::patients');
 $routes->get('/Doctor/Dashboard/Reviews', 'Doctorcontroller::reviews');
 $routes->get('/Doctor/Dashboard/Prof-Settings', 'Doctorcontroller::prof_settings');
+$routes->get('/Doctor/Dashboard/Change-password', 'Doctorcontroller::change_password');
 $routes->get('/session', 'Usercontroller::checkSessionData');
 $routes->match(['post','get'],'doctor/update_prof_settings', 'DoctorController::update_prof_settings');
+$routes->match(['post','get'],'doctor/update_password', 'DoctorController::update_password');
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');
 //
 $routes->match(['post','get'],'/getDoctorsData', 'DoctorController::getDoctorsData');

@@ -86,6 +86,9 @@ class DoctorController extends ResourceController
     if ($session->has('user_data')) {
         // Retrieve user data from session
         $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
 
         // Check if the user has a 'DoctorID' key
         if (isset($userData['DoctorID'])) {
@@ -102,9 +105,16 @@ class DoctorController extends ResourceController
                     ->select('id, day, slot_duration, start_time, end_time')
                     ->where('doctor_id', $doctorID)
                     ->findAll();
+                
+                    $data['loggedIn'] = $loggedIn;
+                    $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+    
 
                 // Pass the doctor's data and schedule timings to the view
-                return view('doctor/schedule_timings', ['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings]);
+                return view('doctor/schedule_timings', array_merge(['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings], $data));
+
 
                 // // // Prepare data array
                 // $data = [
@@ -1283,7 +1293,153 @@ public function update_prof_settings()
     }
 }
 
+public function change_password()
+{
+    // Load the session service
+    $session = session();
 
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+        $userID = $userData['UserID'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // $doctorData = [];
+
+            if ($doctor) {
+               
+               
+
+                $userModel = new UserModel();
+                $user = $userModel->find($userID);
+
+               
+                // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
+
+                // Pass loggedIn status, role, and doctor data to the view
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                // Pass the doctor data to the view
+                $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                
+
+                
+
+               
+                return view('doctor/change_password', ['token' => $token] + $data);
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
+
+public function update_password()
+{
+    // Load the session service
+    $session = session();
+
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+        $userID = $userData['UserID'];
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // $doctorData = [];
+
+            if ($doctor) {
+               
+               
+
+                // Load the user model
+                $userModel = new UserModel();
+
+                // Get the form data
+                $oldPassword = $this->request->getPost('old_password');
+                $newPassword = $this->request->getPost('new_password');
+                $confirmPassword = $this->request->getPost('confirm_password');
+
+                // Validation
+                $validation = \Config\Services::validation();
+                $validation->setRules([
+                    'old_password' => 'required',
+                    'new_password' => 'required|min_length[4]',
+                    'confirm_password' => 'required|matches[new_password]'
+                ]);
+
+                if (!$validation->withRequest($this->request)->run()) {
+                    return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+                }
+
+                // Fetch the user from the database
+                $user = $userModel->find($userID);
+
+                // Verify the old password
+                if (!password_verify($oldPassword, $user['PasswordHash'])) {
+                    return redirect('/')->back()->withInput()->with('error', 'The old password is incorrect.');
+                }
+
+                // Hash the new password
+                $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                // Update the user's password in the database
+                $userModel->update($userID, ['PasswordHash' => $newPasswordHash]);
+
+               
+                // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
+
+                // Pass loggedIn status, role, and doctor data to the view
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                // Pass the doctor data to the view
+                $data['doctors'] = [$doctor]; // Make sure $doctors is an array
+                
+
+                
+
+                return redirect('/Doctor/Dashboard/Change-password', ['token' => $token] + $data)->back()->with('success', 'Password updated successfully.');
+            } else {
+                return view('error', ['error' => 'Doctor not found']);
+            }
+        } else {
+            return view('error', ['error' => 'DoctorID not found in session data']);
+        }
+    } else {
+        return view('error', ['error' => 'User data not found in session']);
+    }
+}
 
 
     

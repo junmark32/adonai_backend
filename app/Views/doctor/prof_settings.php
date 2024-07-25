@@ -70,75 +70,7 @@
                                         </div>
                                     <?php endforeach; ?>
 								</div>
-								<div class="dashboard-widget">
-									<nav class="dashboard-menu">
-										<ul>
-											<li class="active">
-												<a href="doctor-dashboard.html">
-													<i class="fas fa-columns"></i>
-													<span>Dashboard</span>
-												</a>
-											</li>
-											<li>
-												<a href="appointments.html">
-													<i class="fas fa-calendar-check"></i>
-													<span>Appointments</span>
-												</a>
-											</li>
-											<li>
-												<a href="my-patients.html">
-													<i class="fas fa-user-injured"></i>
-													<span>My Patients</span>
-												</a>
-											</li>
-											<li>
-												<a href="<?= site_url('/Doctor/Dashboard/Schedule') ?>">
-													<i class="fas fa-hourglass-start"></i>
-													<span>Schedule Timings</span>
-												</a>
-											</li>
-
-											<li>
-												<a href="<?= site_url('/Doctor/Products') ?>">
-													<i class="fas fa-hourglass-start"></i>
-													<span>Products</span>
-												</a>
-											</li>
-										
-											<li>
-												<a href="<?= site_url('/scheduler/update-status') ?>">
-													<i class="fas fa-star"></i>
-													<span>Reviews</span>
-												</a>
-											</li>
-										
-											<li>
-												<a href="doctor-profile-settings.html">
-													<i class="fas fa-user-cog"></i>
-													<span>Profile Settings</span>
-												</a>
-											</li>
-											<li>
-												<a href="social-media.html">
-													<i class="fas fa-share-alt"></i>
-													<span>Social Media</span>
-												</a>
-											</li>
-											<li>
-												<a href="doctor-change-password.html">
-													<i class="fas fa-lock"></i>
-													<span>Change Password</span>
-												</a>
-											</li>
-											<li>
-												<a href="index-2.html">
-													<i class="fas fa-sign-out-alt"></i>
-													<span>Logout</span>
-												</a>
-											</li>
-										</ul>
-									</nav>
-								</div>
+								<?= $this->include('include/doctor_sidebar') ?>
 							</div>
 							<!-- /Profile Sidebar -->
 							
@@ -294,7 +226,7 @@
         <h4 class="card-title">Education</h4>
         <div class="education-info">
             <?php foreach ($doctorData['doc_educ'] as $education): ?>
-                <div class="row form-row education-cont">
+                <div class="row form-row education-cont align-items-center">
                     <div class="col-12 col-md-10 col-lg-11">
                         <div class="row form-row">
                             <div class="col-12 col-md-6 col-lg-4">
@@ -317,9 +249,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 col-md-2 col-lg-1 d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-danger remove-education"><i class="fa fa-trash"></i></a>
+                    </div>
                 </div>
             <?php endforeach; ?>
-            <div id="education-template" class="row form-row education-cont" style="display: none;">
+            <div id="education-template" class="row form-row education-cont align-items-center" style="display: none;">
                 <div class="col-12 col-md-10 col-lg-11">
                     <div class="row form-row">
                         <div class="col-12 col-md-6 col-lg-4">
@@ -342,6 +277,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-md-2 col-lg-1 d-flex align-items-center justify-content-center">
+                    <a href="javascript:void(0);" class="btn btn-danger remove-education"><i class="fa fa-trash"></i></a>
+                </div>
             </div>
             <div class="add-more">
                 <a href="javascript:void(0);" class="add-educations"><i class="fa fa-plus-circle"></i> Add More</a>
@@ -350,160 +288,202 @@
     </div>
 </div>
 
+<!-- Experience -->
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Experience</h4>
+        <div class="experience-info">
+            <?php foreach ($doctorData['doc_exp'] as $experience): ?>
+                <div class="row form-row experience-cont align-items-center">
+                    <div class="col-12 col-md-10 col-lg-11">
+                        <div class="row form-row">
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Hospital Name</label>
+                                    <input type="text" class="form-control" name="experience_hospital[]" value="<?= htmlspecialchars($experience['Hosp_name']) ?>">
+                                </div> 
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>From</label>
+                                    <input type="text" class="form-control" name="experience_from[]" value="<?= htmlspecialchars($experience['From_where']) ?>">
+                                </div> 
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>To</label>
+                                    <input type="text" class="form-control" name="experience_to[]" value="<?= htmlspecialchars($experience['To_where']) ?>">
+                                </div> 
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Designation</label>
+                                    <input type="text" class="form-control" name="experience_designation[]" value="<?= htmlspecialchars($experience['Designation']) ?>">
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-2 col-lg-1 d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-danger remove-exp"><i class="fa fa-trash"></i></a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            <div id="exp-template" class="row form-row experience-cont align-items-center" style="display: none;">
+                <div class="col-12 col-md-10 col-lg-11">
+                    <div class="row form-row">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label>Hospital Name</label>
+                                <input type="text" class="form-control" name="experience_hospital[]">
+                            </div> 
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label>From</label>
+                                <input type="text" class="form-control" name="experience_from[]">
+                            </div> 
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label>To</label>
+                                <input type="text" class="form-control" name="experience_to[]">
+                            </div> 
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label>Designation</label>
+                                <input type="text" class="form-control" name="experience_designation[]">
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-2 col-lg-1 d-flex align-items-center justify-content-center">
+                    <a href="javascript:void(0);" class="btn btn-danger remove-exp"><i class="fa fa-trash"></i></a>
+                </div>
+            </div>
+            <div class="add-more">
+                <a href="javascript:void(0);" class="add-experiences"><i class="fa fa-plus-circle"></i> Add More</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Awards -->
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Awards</h4>
+        <div class="awards-info">
+            <?php foreach ($doctorData['doc_awards'] as $award): ?>
+                <div class="row form-row awards-cont align-items-center">
+                    <div class="col-12 col-md-5">
+                        <div class="form-group">
+                            <label>Awards</label>
+                            <input type="text" class="form-control" name="awards[]" value="<?= htmlspecialchars($award['Awards']) ?>">
+                        </div> 
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <div class="form-group">
+                            <label>Year</label>
+                            <input type="text" class="form-control" name="awards_year[]" value="<?= htmlspecialchars($award['Year']) ?>">
+                        </div> 
+                    </div>
+                    <div class="col-12 col-md-2 col-lg-1 d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-danger remove-awards"><i class="fa fa-trash"></i></a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            <div id="award-template" class="row form-row awards-cont align-items-center" style="display: none;">
+                <div class="col-12 col-md-5">
+                    <div class="form-group">
+                        <label>Awards</label>
+                        <input type="text" class="form-control" name="awards[]">
+                    </div> 
+                </div>
+                <div class="col-12 col-md-5">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" class="form-control" name="awards_year[]">
+                    </div> 
+                </div>
+                <div class="col-12 col-md-2 col-lg-1 d-flex align-items-center justify-content-center">
+                    <a href="javascript:void(0);" class="btn btn-danger remove-awards"><i class="fa fa-trash"></i></a>
+                </div>
+            </div>
+            <div class="add-more">
+                <a href="javascript:void(0);" class="add-awards"><i class="fa fa-plus-circle"></i> Add More</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        function removeEducation(event) {
+            event.preventDefault();
+            var educationCont = event.target.closest('.education-cont');
+            educationCont.remove();
+        }
+
+        function removeExp(event) {
+            event.preventDefault();
+            var experienceCont = event.target.closest('.experience-cont');
+            experienceCont.remove();
+        }
+
+        function removeAwards(event) {
+            event.preventDefault();
+            var awardsCont = event.target.closest('.awards-cont');
+            awardsCont.remove();
+        }
+
         document.querySelector('.add-educations').addEventListener('click', function() {
             var template = document.querySelector('#education-template');
             var clone = template.cloneNode(true);
             clone.style.display = 'block';
             clone.removeAttribute('id');
             template.parentNode.insertBefore(clone, template);
-        });
-    });
-</script>
 
-                                    
-                                    
-                    
-                                    <!-- Experience -->
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">Experience</h4>
-                                            <div class="experience-info">
-                                                <?php foreach ($doctorData['doc_exp'] as $experience): ?>
-                                                    <div class="row form-row experience-cont">
-                                                        <div class="col-12 col-md-10 col-lg-11">
-                                                            <div class="row form-row">
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>Hospital Name</label>
-                                                                        <input type="text" class="form-control" name="experience_hospital[]" value="<?= htmlspecialchars($experience['Hosp_name']) ?>">
-                                                                    </div> 
-                                                                </div>
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>From</label>
-                                                                        <input type="text" class="form-control" name="experience_from[]" value="<?= htmlspecialchars($experience['From_where']) ?>">
-                                                                    </div> 
-                                                                </div>
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>To</label>
-                                                                        <input type="text" class="form-control" name="experience_to[]" value="<?= htmlspecialchars($experience['To_where']) ?>">
-                                                                    </div> 
-                                                                </div>
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>Designation</label>
-                                                                        <input type="text" class="form-control" name="experience_designation[]" value="<?= htmlspecialchars($experience['Designation']) ?>">
-                                                                    </div> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                                <div id="exp-template" class="row form-row education-cont" style="display: none;">
-                                                <div class="col-12 col-md-10 col-lg-11">
-                                                            <div class="row form-row">
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>Hospital Name</label>
-                                                                        <input type="text" class="form-control" name="experience_hospital[]">
-                                                                    </div> 
-                                                                </div>
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>From</label>
-                                                                        <input type="text" class="form-control" name="experience_from[]" >
-                                                                    </div> 
-                                                                </div>
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>To</label>
-                                                                        <input type="text" class="form-control" name="experience_to[]" >
-                                                                    </div> 
-                                                                </div>
-                                                                <div class="col-12 col-md-6 col-lg-4">
-                                                                    <div class="form-group">
-                                                                        <label>Designation</label>
-                                                                        <input type="text" class="form-control" name="experience_designation[]">
-                                                                    </div> 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                </div>
-                                                <div class="add-more">
-                                                    <a href="javascript:void(0);" class="add-experiences"><i class="fa fa-plus-circle"></i> Add More</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-    document.addEventListener('DOMContentLoaded', function() {
+            // Attach remove event to the new remove button
+            clone.querySelector('.remove-education').addEventListener('click', removeEducation);
+        });
+
         document.querySelector('.add-experiences').addEventListener('click', function() {
             var template = document.querySelector('#exp-template');
             var clone = template.cloneNode(true);
             clone.style.display = 'block';
             clone.removeAttribute('id');
             template.parentNode.insertBefore(clone, template);
+
+            // Attach remove event to the new remove button
+            clone.querySelector('.remove-exp').addEventListener('click', removeExp);
         });
-    });
-</script>
-                    
-                                    <!-- Awards -->
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">Awards</h4>
-                                            <div class="awards-info">
-                                                <?php foreach ($doctorData['doc_awards'] as $award): ?>
-                                                    <div class="row form-row awards-cont">
-                                                        <div class="col-12 col-md-5">
-                                                            <div class="form-group">
-                                                                <label>Awards</label>
-                                                                <input type="text" class="form-control" name="awards[]" value="<?= htmlspecialchars($award['Awards']) ?>">
-                                                            </div> 
-                                                        </div>
-                                                        <div class="col-12 col-md-5">
-                                                            <div class="form-group">
-                                                                <label>Year</label>
-                                                                <input type="text" class="form-control" name="awards_year[]" value="<?= htmlspecialchars($award['Year']) ?>">
-                                                            </div> 
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                                <div id="award-template" class="row form-row education-cont" style="display: none;">
-                                                <div class="row form-row awards-cont">
-                                                        <div class="col-12 col-md-5">
-                                                            <div class="form-group">
-                                                                <label>Awards</label>
-                                                                <input type="text" class="form-control" name="awards[]" >
-                                                            </div> 
-                                                        </div>
-                                                        <div class="col-12 col-md-5">
-                                                            <div class="form-group">
-                                                                <label>Year</label>
-                                                                <input type="text" class="form-control" name="awards_year[]" >
-                                                            </div> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="add-more">
-                                                    <a href="javascript:void(0);" class="add-awards"><i class="fa fa-plus-circle"></i> Add More</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
         document.querySelector('.add-awards').addEventListener('click', function() {
             var template = document.querySelector('#award-template');
             var clone = template.cloneNode(true);
             clone.style.display = 'block';
             clone.removeAttribute('id');
             template.parentNode.insertBefore(clone, template);
+
+            // Attach remove event to the new remove button
+            clone.querySelector('.remove-awards').addEventListener('click', removeAwards);
+        });
+
+        // Attach remove event to existing remove buttons
+        document.querySelectorAll('.remove-education').forEach(function(button) {
+            button.addEventListener('click', removeEducation);
+        });
+
+        document.querySelectorAll('.remove-exp').forEach(function(button) {
+            button.addEventListener('click', removeExp);
+        });
+
+        document.querySelectorAll('.remove-awards').forEach(function(button) {
+            button.addEventListener('click', removeAwards);
         });
     });
 </script>
+
                     
                                     <div class="submit-section submit-btn-bottom">
                                         <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>

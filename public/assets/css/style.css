@@ -6827,3 +6827,11 @@ html.menu-opened body {
 }
 
 /*  */
+.education-cont {
+	display: flex;
+	align-items: center;
+}
+.education-cont .btn {
+	margin-top: auto;
+	margin-bottom: auto;
+}

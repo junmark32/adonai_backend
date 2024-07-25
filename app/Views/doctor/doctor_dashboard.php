@@ -70,75 +70,8 @@
                                         </div>
                                     <?php endforeach; ?>
 								</div>
-								<div class="dashboard-widget">
-									<nav class="dashboard-menu">
-										<ul>
-											<li class="active">
-												<a href="doctor-dashboard.html">
-													<i class="fas fa-columns"></i>
-													<span>Dashboard</span>
-												</a>
-											</li>
-											<li>
-												<a href="appointments.html">
-													<i class="fas fa-calendar-check"></i>
-													<span>Appointments</span>
-												</a>
-											</li>
-											<li>
-												<a href="my-patients.html">
-													<i class="fas fa-user-injured"></i>
-													<span>My Patients</span>
-												</a>
-											</li>
-											<li>
-												<a href="<?= site_url('/Doctor/Dashboard/Schedule') ?>">
-													<i class="fas fa-hourglass-start"></i>
-													<span>Schedule Timings</span>
-												</a>
-											</li>
-
-											<li>
-												<a href="<?= site_url('/Doctor/Products') ?>">
-													<i class="fas fa-hourglass-start"></i>
-													<span>Products</span>
-												</a>
-											</li>
-										
-											<li>
-												<a href="<?= site_url('/scheduler/update-status') ?>">
-													<i class="fas fa-star"></i>
-													<span>Reviews</span>
-												</a>
-											</li>
-										
-											<li>
-												<a href="doctor-profile-settings.html">
-													<i class="fas fa-user-cog"></i>
-													<span>Profile Settings</span>
-												</a>
-											</li>
-											<li>
-												<a href="social-media.html">
-													<i class="fas fa-share-alt"></i>
-													<span>Social Media</span>
-												</a>
-											</li>
-											<li>
-												<a href="doctor-change-password.html">
-													<i class="fas fa-lock"></i>
-													<span>Change Password</span>
-												</a>
-											</li>
-											<li>
-												<a href="index-2.html">
-													<i class="fas fa-sign-out-alt"></i>
-													<span>Logout</span>
-												</a>
-											</li>
-										</ul>
-									</nav>
-								</div>
+								<?= $this->include('include/doctor_sidebar') ?>
+								
 							</div>
 							<!-- /Profile Sidebar -->
 							

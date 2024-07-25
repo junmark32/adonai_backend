@@ -35,10 +35,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Reviews</li>
+									<li class="breadcrumb-item active" aria-current="page">Change Password</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Reviews</h2>
+							<h2 class="breadcrumb-title">Change Password</h2>
 						</div>
 					</div>
 				</div>
@@ -70,58 +70,112 @@
                                         </div>
                                     <?php endforeach; ?>
 								</div>
-								<?= $this->include('include/doctor_sidebar') ?>
+								<div class="dashboard-widget">
+									<nav class="dashboard-menu">
+										<ul>
+											<li class="active">
+												<a href="doctor-dashboard.html">
+													<i class="fas fa-columns"></i>
+													<span>Dashboard</span>
+												</a>
+											</li>
+											<li>
+												<a href="appointments.html">
+													<i class="fas fa-calendar-check"></i>
+													<span>Appointments</span>
+												</a>
+											</li>
+											<li>
+												<a href="my-patients.html">
+													<i class="fas fa-user-injured"></i>
+													<span>My Patients</span>
+												</a>
+											</li>
+											<li>
+												<a href="<?= site_url('/Doctor/Dashboard/Schedule') ?>">
+													<i class="fas fa-hourglass-start"></i>
+													<span>Schedule Timings</span>
+												</a>
+											</li>
+
+											<li>
+												<a href="<?= site_url('/Doctor/Products') ?>">
+													<i class="fas fa-hourglass-start"></i>
+													<span>Products</span>
+												</a>
+											</li>
+										
+											<li>
+												<a href="<?= site_url('/scheduler/update-status') ?>">
+													<i class="fas fa-star"></i>
+													<span>Reviews</span>
+												</a>
+											</li>
+										
+											<li>
+												<a href="doctor-profile-settings.html">
+													<i class="fas fa-user-cog"></i>
+													<span>Profile Settings</span>
+												</a>
+											</li>
+											<li>
+												<a href="social-media.html">
+													<i class="fas fa-share-alt"></i>
+													<span>Social Media</span>
+												</a>
+											</li>
+											<li>
+												<a href="doctor-change-password.html">
+													<i class="fas fa-lock"></i>
+													<span>Change Password</span>
+												</a>
+											</li>
+											<li>
+												<a href="index-2.html">
+													<i class="fas fa-sign-out-alt"></i>
+													<span>Logout</span>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
 							</div>
 							<!-- /Profile Sidebar -->
 							
 						</div>
+
                         <div class="col-md-7 col-lg-8 col-xl-9">
-    <?php foreach ($docfeedData as $data): ?>
-        <?php
-            $docfeed = $data['docfeed'];
-            $patient = $data['patient'];
-        ?>
-        <div class="doc-review review-listing">
-            <!-- Review Listing -->
-            <ul class="comments-list">
-                <!-- Comment List -->
-                <li>
-                    <div class="comment">
-                        <img class="avatar rounded-circle" alt="User Image" src="<?= base_url('uploads/' . $patient['Profile_url']) ?>">
-                        <div class="comment-body">
-                            <div class="meta-data">
-                                <span class="comment-author"><?= esc($patient['FirstName']) ?> <?= esc($patient['LastName']) ?></span>
-                                <span class="comment-date"><?php
-																	// Calculate the relative time
-																	$reviewTime = \CodeIgniter\I18n\Time::parse($docfeed['created_at']);
-																	echo 'Reviewed ' . $reviewTime->humanize();
-																	?></span>
-                                <div class="review-count rating text-right">
-                                    <?php for ($i = 0; $i < $docfeed['Rating']; $i++): ?>
-                                        <i class="fas fa-star filled"></i>
-                                    <?php endfor; ?>
-                                    <?php for ($i = $docfeed['Rating']; $i < 5; $i++): ?>
-                                        <i class="fas fa-star"></i>
-                                    <?php endfor; ?>
-                                </div>
-                            </div>
-                            <p class="comment-content">
-                                <?= esc($docfeed['Review']) ?>
-                            </p>
-                            
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <!-- Change Password Form -->
+                    <form action="<?= base_url('doctor/update_password') ?>" method="post">
+                        <div class="form-group">
+                            <label>Old Password</label>
+                            <input type="password" name="old_password" class="form-control" required>
                         </div>
-                    </div>
-                </li>
-                <!-- /Comment List -->
-            </ul>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" name="new_password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control" required>
+                        </div>
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                        </div>
+                    </form>
+                    <!-- /Change Password Form -->
+                </div>
+            </div>
         </div>
-    <?php endforeach; ?>
+    </div>
 </div>
 
-                                
-                     
-                        
-						
+
+
 						
 					</div>
 
@@ -339,6 +393,18 @@
 		
 		<!-- Circle Progress JS -->
 		<script src="<?php echo base_url('assets/js/circle-progress.min.js')?>"></script>
+
+        <!-- Select2 JS -->
+		<script src="<?php echo base_url('assets/plugins/select2/js/select2.min.js')?>"></script>
+		
+		<!-- Dropzone JS -->
+		<script src="<?php echo base_url('assets/plugins/dropzone/dropzone.min.js')?>"></script>
+		
+		<!-- Bootstrap Tagsinput JS -->
+		<script src="<?php echo base_url('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js')?>"></script>
+		
+		<!-- Profile Settings JS -->
+		<script src="<?php echo base_url('assets/js/profile-settings.js')?>"></script>
 		
 		<!-- Custom JS -->
 		<script src="<?php echo base_url('assets/js/script.js')?>"></script>
