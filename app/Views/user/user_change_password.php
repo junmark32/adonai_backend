@@ -1,12 +1,12 @@
-<?= $this->include('include/doctor_header') ?>
-
+<?= $this->include('include/header') ?>
 	<body>
 
 		<!-- Main Wrapper -->
 		<div class="main-wrapper">
 		
 			<!-- Header -->
-			<?php if (isset($loggedIn) && $loggedIn): ?>
+						<!-- Header -->
+<?php if (isset($loggedIn) && $loggedIn): ?>
     <?php
     switch ($role) {
         case 'user':
@@ -24,7 +24,6 @@
     }
     ?>
 <?php endif; ?>
-
 			<!-- /Header -->
 			
 			<!-- Breadcrumb -->
@@ -35,10 +34,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Change Password</li>
+									<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Change Password</h2>
+							<h2 class="breadcrumb-title">Dashboard</h2>
 						</div>
 					</div>
 				</div>
@@ -50,39 +49,39 @@
 				<div class="container-fluid">
 
 					<div class="row">
+						
+						<!-- Profile Sidebar -->
 						<div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
-							
-							<!-- Profile Sidebar -->
+                        <?php foreach ($patients as $patient): ?>
 							<div class="profile-sidebar">
 								<div class="widget-profile pro-widget-content">
-                                    <?php foreach ($doctors as $doctor): ?>
-                                        <div class="profile-info-widget">
-                                            <a href="#" class="booking-doc-img">
-                                                <img src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
-                                            </a>
-                                            <div class="profile-det-info">
-                                                <h3>Dra. <?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></h3>
-                                                
-                                                <div class="patient-details">
-                                                    <h5 class="mb-0"><?= $doctor['Specialization'] ?></h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
+									<div class="profile-info-widget">
+										<a href="#" class="booking-doc-img">
+											<img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image">
+										</a>
+										<div class="profile-det-info">
+											<h3><?= $patient['FirstName'] ?> <?= $patient['LastName'] ?></h3>
+											<div class="patient-details">
+                                                <h5><i class="fas fa-birthday-cake"></i> <?= date('F j, Y', strtotime($patient['DateOfBirth'])) ?></h5>
+												<h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> <?= $patient['Address'] ?></h5>
+											</div>
+										</div>
+									</div>
 								</div>
-								<?= $this->include('include/doctor_sidebar') ?>
-							</div>
-							<!-- /Profile Sidebar -->
-							
-						</div>
+								<?= $this->include('include/user_sidebar') ?>
 
-                        <div class="col-md-7 col-lg-8 col-xl-9">
+							</div>
+                        <?php endforeach; ?>
+						</div>
+						<!-- / Profile Sidebar -->
+						
+						<div class="col-md-7 col-lg-8 col-xl-9">
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12 col-lg-6">
                     <!-- Change Password Form -->
-                    <form action="<?= base_url('doctor/update_password') ?>" method="post">
+                    <form action="<?= base_url('user/update-password') ?>" method="post">
                         <div class="form-group">
                             <label>Old Password</label>
                             <input type="password" name="old_password" class="form-control" required>
@@ -108,15 +107,14 @@
 
 
 
-						
+					</div>
+				</div>
 					</div>
 
 				</div>
 
 			</div>		
 			<!-- /Page Content -->
-
-            
    
 			<!-- Footer -->
 			<footer class="footer">
@@ -259,11 +257,8 @@
 		   
 		</div>
 		<!-- /Main Wrapper -->
-
-
 		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-
-		<script>
+<script>
     // Make the userID available in JavaScript
     var token = '<?php echo $token; ?>';
     // Enable Pusher logging - don't include this in production
@@ -276,11 +271,11 @@
     });
 
     var channel = pusher.subscribe('user-token-' + token);
-    channel.bind('booking-notification', function(data) {
+    channel.bind('prescription-notification', function(data) {
         // Handle the notification data here
         console.log('Received data:', data);
         
-        // Request permission to show notifications
+        // Request permission to show notifications if not already granted
         if (Notification.permission === 'granted') {
             showNotification(data.message);
         } else if (Notification.permission !== 'denied') {
@@ -298,50 +293,33 @@
             body: message,
             icon: 'path_to_icon/icon.png' // Optional: Path to an icon
         };
-        var notification = new Notification('New Booking Notification', options);
+        var notification = new Notification('Adonai', options);
 
         // Optional: Handle notification click
         notification.onclick = function(event) {
             event.preventDefault();
             // Example: Focus or navigate to the app
-            window.open('http://localhost:8080/Doctor/Dashboard', '_blank');
+            window.focus();
         };
     }
 </script>
 
-
-
 	  
 		<!-- jQuery -->
-		<script src="<?php echo base_url('assets/js/jquery.min.js')?>"></script>
+		<script src="assets/js/jquery.min.js"></script>
 		
 		<!-- Bootstrap Core JS -->
-		<script src="<?php echo base_url('assets/js/popper.min.js')?>"></script>
-		<script src="<?php echo base_url('assets/js/bootstrap.min.js')?>"></script>
+		<script src="assets/js/popper.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
 		
 		<!-- Sticky Sidebar JS -->
-        <script src="<?php echo base_url('assets/plugins/theia-sticky-sidebar/ResizeSensor.j')?>'"></script>
-        <script src="<?php echo base_url('assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js')?>"></script>
-		
-		<!-- Circle Progress JS -->
-		<script src="<?php echo base_url('assets/js/circle-progress.min.js')?>"></script>
-
-        <!-- Select2 JS -->
-		<script src="<?php echo base_url('assets/plugins/select2/js/select2.min.js')?>"></script>
-		
-		<!-- Dropzone JS -->
-		<script src="<?php echo base_url('assets/plugins/dropzone/dropzone.min.js')?>"></script>
-		
-		<!-- Bootstrap Tagsinput JS -->
-		<script src="<?php echo base_url('assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js')?>"></script>
-		
-		<!-- Profile Settings JS -->
-		<script src="<?php echo base_url('assets/js/profile-settings.js')?>"></script>
+        <script src="assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
+        <script src="assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
 		
 		<!-- Custom JS -->
-		<script src="<?php echo base_url('assets/js/script.js')?>"></script>
+		<script src="assets/js/script.js"></script>
 		
 	</body>
 
-<!-- doccure/doctor-dashboard.html  30 Nov 2019 04:12:09 GMT -->
+<!-- doccure/patient-dashboard.html  30 Nov 2019 04:12:16 GMT -->
 </html>

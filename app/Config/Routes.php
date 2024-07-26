@@ -15,7 +15,12 @@ $routes->get('/booking', 'Usercontroller::booking');
 $routes->get('/doctor/getDoctorDetails/(:num)', 'UserController::getDoctorDetails/$1');
 $routes->match(['post','get'],'/booking/checkout', 'UserController::checkout');
 $routes->match(['post','get'],'/dashboard', 'UserController::user_db');
+$routes->match(['post','get'],'/profile-settings', 'UserController::user_prof_setting');
+$routes->match(['post','get'],'/user/update_profile_settings', 'UserController::update_prof_setting');
+$routes->match(['post','get'],'/change-password', 'UserController::user_change_password');
+$routes->match(['post','get'],'/user/update-password', 'UserController::update_change_password');
 $routes->match(['post','get'],'/doctor-profile/(:num)', 'UserController::doctorProfile/$1');
+$routes->match(['post','get'],'/user/generatePres/(:num)/(:num)', 'UserController::gen_prescript/$1/$2');
 
 //prod
 $routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProdDetails/$1');
@@ -55,6 +60,8 @@ $routes->get('/session', 'Usercontroller::checkSessionData');
 $routes->match(['post','get'],'doctor/update_prof_settings', 'DoctorController::update_prof_settings');
 $routes->match(['post','get'],'doctor/update_password', 'DoctorController::update_password');
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule');
+$routes->match(['post','get'],'schedule/delete/(:num)', 'DoctorController::deleteSchedule/$1');
+
 //
 $routes->match(['post','get'],'/getDoctorsData', 'DoctorController::getDoctorsData');
 $routes->match(['post','get'],'getPatients', 'DoctorController::getPatients');

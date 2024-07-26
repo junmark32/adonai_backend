@@ -32,6 +32,9 @@
 							<li>
 								<a href="<?php echo site_url('/store')?>">Shop</a>
 							</li>
+							<li>
+								<a href="<?php echo site_url('/dashboard')?>">Dashboard</a>
+							</li>
 						</ul>	 
 					</div>		 
 					<ul class="nav header-navbar-rht">

@@ -72,6 +72,21 @@ class DoctorController extends ResourceController
             return redirect()->to('error_page');
         }
     }
+
+    public function deleteSchedule($id)
+    {
+        $scheduleModel = new ScheduleModel();
+        $existingSchedule = $scheduleModel->where('id', $id)->first();
+    
+        // If the schedule exists, delete it; otherwise, handle the error
+        if ($existingSchedule) {
+            $scheduleModel->delete($existingSchedule['id']);
+            return redirect()->to('/Doctor/Dashboard/Schedule')->with('success', 'Schedule deleted successfully.');
+        } else {
+            return redirect()->to('/Doctor/Dashboard/Schedule')->with('error', 'Schedule not found.');
+        }
+    }
+    
     
 
     //

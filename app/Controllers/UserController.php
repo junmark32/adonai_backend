@@ -15,6 +15,10 @@ use App\Models\LensModel;
 use App\Models\CartModel;
 use App\Models\PurchaseModel;
 use App\Models\AppointmentModel;
+use App\Models\PrescriptionModel;
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 use App\Models\DocAboutModel;
 use App\Models\DocAwardsModel;
@@ -126,11 +130,16 @@ class UserController extends ResourceController
 
     // Load Appointments Data
     $appointmentModel = new AppointmentModel();
+    $prescriptModel = new PrescriptionModel();
     $appointments = [];
+    $prescript = [];
 
     if (!empty($userData['PatientID'])) {
         // Fetch appointments associated with the user's session PatientID
-        $appointments = $appointmentModel->where('PatientID', $userData['PatientID'])->findAll();
+        $appointments = $appointmentModel
+        ->where('PatientID', $userData['PatientID'])
+        ->orderBy('AppointmentID', 'DESC')
+        ->findAll();
 
         // If appointments are found, fetch doctor data for each appointment
         if (!empty($appointments)) {
@@ -149,6 +158,35 @@ class UserController extends ResourceController
             }
         }
     }
+
+    if (!empty($userData['PatientID'])) {
+        // Fetch appointments associated with the user's session PatientID
+        $prescript = $prescriptModel
+        ->where('PatientID', $userData['PatientID'])
+        ->orderBy('PrescriptionID', 'DESC')  // Replace 'id' with the appropriate field for sorting
+        ->findAll();
+
+        // If appointments are found, fetch doctor data for each appointment
+        if (!empty($prescript)) {
+            // Load Doctor model
+            $doctorModel = new DoctorModel();
+
+            // Loop through appointments to fetch doctor data for each appointment
+            foreach ($prescript as &$pres) {
+                // Fetch doctor data based on the DoctorID from the appointment
+                $doctor = $doctorModel->find($pres['DoctorID']);
+
+                // If doctor data is found, assign it to the appointment
+                if (!empty($doctor)) {
+                    $pres['doctor_data'] = $doctor;
+                }
+            }
+        }
+    }
+
+    // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
 
 
 
@@ -180,6 +218,7 @@ class UserController extends ResourceController
     $data['role'] = $role;
     $data['patients'] = $patients;
     $data['appointments'] = $appointments;
+    $data['prescript'] = $prescript;
 
      // Pass the products data to the view
      $data['products'] = $products;
@@ -188,6 +227,310 @@ class UserController extends ResourceController
      $data['cartCount'] = $cartCount;
 
      return view('user/user_dashboard', ['token' => $token] + $data);
+
+    }
+
+    public function user_prof_setting()
+    {
+       // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+    }
+
+    // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+     // Load the ProductModel
+     $productModel = new ProductModel();
+
+     // Retrieve all products from the database
+     $products = $productModel->findAll();
+
+     // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
+     // Pass loggedIn status, role, and patient data to the view
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
+
+     // Pass the products data to the view
+     $data['products'] = $products;
+
+     // Pass the cart count to the view
+     $data['cartCount'] = $cartCount;
+
+     return view('user/user_prof_setting', ['token' => $token] + $data);
+
+    }
+
+    public function update_prof_setting()
+    {
+       // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+    }
+
+    // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+    // Process image upload
+    $image = $this->request->getFile('profile_photo'); // Assuming you're uploading an image via a form with name 'profile_photo'
+
+    // Initialize the variable to hold the image URL
+    $imageName = '';
+
+    // Check if image was uploaded successfully
+    if ($image && $image->isValid() && !$image->hasMoved()) {
+        // Generate a unique filename
+        $imageName = $image->getRandomName();
+
+        // Move uploaded image to the uploads directory
+        $image->move(ROOTPATH . 'public/uploads', $imageName);
+    }
+
+    // Define updated doctor data
+    $user_data = [
+        'FirstName' => $this->request->getPost('first_name'),
+        'LastName' => $this->request->getPost('last_name'),
+        'Phone' => $this->request->getPost('phone'),
+        'Gender' => $this->request->getPost('gender'),
+        'DateOfBirth' => $this->request->getPost('dateofbirth'),
+        'Blood_type' => $this->request->getPost('blood_type'),
+        'Email' => $this->request->getPost('email'),
+        'Address' => $this->request->getPost('address'),
+        'City' => $this->request->getPost('city'),
+        'State' => $this->request->getPost('state'),
+        'Zipcode' => $this->request->getPost('zipcode'),
+        'Country' => $this->request->getPost('country'),
+    ];
+
+    // If a new image was uploaded, include it in the data array
+    if (!empty($imageName)) {
+        $user_data['Profile_url'] = $imageName;
+    }
+
+    // Update doctor data in the database
+    $patientModel->update($userData['PatientID'], $user_data);
+
+
+    return redirect()->to('/profile-settings')->with('success', 'Profile updated successfully');
+
+    }
+
+    public function user_change_password()
+    {
+       // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+    }
+
+    // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+
+     // Load the ProductModel
+     $productModel = new ProductModel();
+
+     // Retrieve all products from the database
+     $products = $productModel->findAll();
+
+     // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
+     // Pass loggedIn status, role, and patient data to the view
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
+
+     // Pass the products data to the view
+     $data['products'] = $products;
+
+     // Pass the cart count to the view
+     $data['cartCount'] = $cartCount;
+
+     return view('user/user_change_password', ['token' => $token] + $data);
+
+    }
+
+    public function update_change_password()
+    {
+       // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+    }
+
+    // echo '<pre>';
+                // print_r($user);
+                // echo '</pre>';
+    // Load the user model
+    $userModel = new UserModel();
+
+    // Get the form data
+    $oldPassword = $this->request->getPost('old_password');
+    $newPassword = $this->request->getPost('new_password');
+    $confirmPassword = $this->request->getPost('confirm_password');
+
+    // Validation
+    $validation = \Config\Services::validation();
+    $validation->setRules([
+        'old_password' => 'required',
+        'new_password' => 'required|min_length[4]',
+        'confirm_password' => 'required|matches[new_password]'
+    ]);
+
+    if (!$validation->withRequest($this->request)->run()) {
+        return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+    }
+
+    // Fetch the user from the database
+    $user = $userModel->find($userData['UserID']);
+
+    // Verify the old password
+    if (!password_verify($oldPassword, $user['PasswordHash'])) {
+        return redirect('/')->back()->withInput()->with('error', 'The old password is incorrect.');
+    }
+
+    // Hash the new password
+    $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    // Update the user's password in the database
+    $userModel->update($userData['UserID'], ['PasswordHash' => $newPasswordHash]);
+
+    return redirect()->to('/login')->with('status', 'Password changed successfully. Please login with your new password.');
+
+    }
+
+
+    public function gen_prescript($presID, $doctorID)
+    {
+    // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+    }
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+    //
+    // Load the PrescriptionModel
+    $prescriptionModel = new PrescriptionModel();
+    // Fetch prescription data based on PatientID, DoctorID, and PrescriptionID
+    $prescriptions = $prescriptionModel->where('PatientID', $userData['PatientID'])
+                                        ->where('DoctorID', $doctorID)
+                                        ->where('PrescriptionID', $presID)
+                                        ->findAll();
+    
+                                  
+    // Prepare data for the view
+    $data['prescription_data'] = $prescriptions;
+
+    // Load view and render HTML
+    $html = view('reports/pres_report_view', $data);
+
+    // Initialize DOMPDF
+    $options = new Options();
+    $options->set('defaultFont', 'Courier');
+    $dompdf = new Dompdf($options);
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    // Output the generated PDF to Browser
+    $dompdf->stream("report.pdf", ["Attachment" => 0]);
 
     }
 

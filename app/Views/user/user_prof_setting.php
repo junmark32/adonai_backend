@@ -76,158 +76,131 @@
 						<!-- / Profile Sidebar -->
 						
 						<div class="col-md-7 col-lg-8 col-xl-9">
-							<div class="card">
-								<div class="card-body pt-0">
-								
-									<!-- Tab Menu -->
-									<nav class="user-tabs mb-4">
-										<ul class="nav nav-tabs nav-tabs-bottom nav-justified">
-											<li class="nav-item">
-												<a class="nav-link active" href="#pat_appointments" data-toggle="tab">Appointments</a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="#pat_prescriptions" data-toggle="tab">Prescriptions</a>
-											</li>
-											<!-- <li class="nav-item">
-												<a class="nav-link" href="#pat_medical_records" data-toggle="tab"><span class="med-records">Medical Records</span></a>
-											</li>
-											<li class="nav-item">
-												<a class="nav-link" href="#pat_billing" data-toggle="tab">Billing</a>
-											</li> -->
-										</ul>
-									</nav>
-									<!-- /Tab Menu -->
-									
-									<!-- Tab Content -->
-									<div class="tab-content pt-0">
-										
-										<!-- Appointment Tab -->
-                                        <div id="pat_appointments" class="tab-pane fade show active">
-                                            <div class="card card-table mb-0">
-                                                <div class="card-body">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-hover table-center mb-0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Doctor</th>
-                                                                    <th>Patient Name</th>
-																	<th>Purpose</th>
-                                                                    <th>Appt Date</th>
-                                                                    <th>Booking Date</th>
-                                                                    <th>Status</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php foreach ($appointments as $appointment): ?>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <h2 class="table-avatar">
-                                                                            <a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-                                                                                <img class="avatar-img rounded-circle" src="<?= base_url('uploads/') . $appointment['doctor_data']['Profile_url'] ?>" alt="User Image">
-                                                                            </a>
+    <div class="card">
+        <div class="card-body">
+            <!-- Profile Settings Form -->
+            <form action="<?= base_url('user/update_profile_settings') ?>" method="post" enctype="multipart/form-data">
+                <div class="row form-row">
+                    <div class="col-12 col-md-12">
+                        <div class="form-group">
+                            <div class="change-avatar">
+                                <div class="profile-img">
+                                    <img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image">
+                                </div>
+                                <div class="upload-img">
+                                    <div class="change-photo-btn">
+                                        <span><i class="fa fa-upload"></i> Upload Photo</span>
+                                        <input type="file" class="upload" name="profile_photo">
+                                    </div>
+                                    <small class="form-text text-muted">Allowed JPG, GIF or PNG. Max size of 2MB</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if (!empty($patients)): ?>
+                        <?php $patient = $patients[0]; ?>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" name="first_name" class="form-control" value="<?= htmlspecialchars($patient['FirstName']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" name="last_name" class="form-control" value="<?= htmlspecialchars($patient['LastName']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <div class="cal-icon">
+                                    <input type="text" name="dateofbirth" class="form-control datetimepicker" value="<?= htmlspecialchars($patient['DateOfBirth']) ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Blood Group</label>
+                                <select class="form-control select" name="blood_type">
+                                    <option <?= $patient['Blood_type'] == 'A-' ? 'selected' : '' ?>>A-</option>
+                                    <option <?= $patient['Blood_type'] == 'A+' ? 'selected' : '' ?>>A+</option>
+                                    <option <?= $patient['Blood_type'] == 'B-' ? 'selected' : '' ?>>B-</option>
+                                    <option <?= $patient['Blood_type'] == 'B+' ? 'selected' : '' ?>>B+</option>
+                                    <option <?= $patient['Blood_type'] == 'AB-' ? 'selected' : '' ?>>AB-</option>
+                                    <option <?= $patient['Blood_type'] == 'AB+' ? 'selected' : '' ?>>AB+</option>
+                                    <option <?= $patient['Blood_type'] == 'O-' ? 'selected' : '' ?>>O-</option>
+                                    <option <?= $patient['Blood_type'] == 'O+' ? 'selected' : '' ?>>O+</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select class="form-control select" name="gender">
+                                    <option <?= $patient['Gender'] == 'Male' ? 'selected' : '' ?>>Male</option>
+                                    <option <?= $patient['Gender'] == 'Female' ? 'selected' : '' ?>>Female</option>
+                                    <option <?= $patient['Gender'] == 'Unknown' ? 'selected' : '' ?>>Unknown</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Email ID</label>
+                                <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($patient['Email']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Mobile</label>
+                                <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($patient['Phone']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" name="address" class="form-control" value="<?= htmlspecialchars($patient['Address']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" name="city" class="form-control" value="<?= htmlspecialchars($patient['City']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>State</label>
+                                <input type="text" name="state" class="form-control" value="<?= htmlspecialchars($patient['State']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Zip Code</label>
+                                <input type="text" name="zipcode" class="form-control" value="<?= htmlspecialchars($patient['Zipcode']) ?>">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <input type="text" name="country" class="form-control" value="<?= htmlspecialchars($patient['Country']) ?>">
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="submit-section">
+                    <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                </div>
+            </form>
+            <!-- /Profile Settings Form -->
+        </div>
+    </div>
+</div>
 
 
-                                                                                <a href="doctor-profile.html">Dra. <?= $appointment['doctor_data']['FirstName'] ?> <?= $appointment['doctor_data']['LastName'] ?></a>
-                                                                            </h2>
-                                                                        </td>
-                                                                        <td><?= $appointment['Firstname'] ?> <?= $appointment['Lastname'] ?></td>
-																		<td><?= $appointment['Purpose'] ?></td>
-                                                                        <td>
-                                                                            <?= date('j M Y', strtotime($appointment['Pref_Date'])) ?>
-                                                                            <span class="d-block text-info">
-                                                                                <?= date('h:i A', strtotime($appointment['Pref_Time_Start'])) ?>
-                                                                            </span>
-                                                                        </td>
-                                                                        <td><?= date('j M Y', strtotime($appointment['created_at'])) ?></td>
-                                                                        <td>
-																			<?php 
-																			$statusClass = '';
-																			if ($appointment['Status'] == 'Cancelled') {
-																				$statusClass = 'bg-danger-light';
-																			} else {
-																				$statusClass = 'bg-success-light';
-																			}
-																			?>
-																			<span class="badge badge-pill <?= $statusClass ?>"><?= $appointment['Status'] ?></span>
-																		</td>
-																		<td class="text-right">
-																			<div class="table-action">
-																				<form action="<?= site_url('appointments/cancel/' . $appointment['AppointmentID']) ?>" method="post">
-																					<button type="submit" class="btn btn-sm bg-danger text-light">
-																						<i class="fas fa-times"></i> Cancel
-																					</button>
-																				</form>
-																			</div>
-																		</td>
 
-
-                                                                    </tr>
-                                                                <?php endforeach; ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- /Appointment Tab -->
-
-										
-										<!-- Prescription Tab -->
-										<div class="tab-pane fade" id="pat_prescriptions">
-											<div class="card card-table mb-0">
-												<div class="card-body">
-													<div class="table-responsive">
-														<table class="table table-hover table-center mb-0">
-															<thead>
-																<tr>
-																	<th>Date </th>
-																	<th>Name</th>									
-																	<th>Created by </th>
-																	<th></th>
-																</tr>     
-															</thead>
-															<tbody>
-															<?php foreach ($prescript as $pres): ?>
-																<tr>
-																	<td><?= $pres['Date'] ?></td>
-																	<td>Prescription <?= $pres['PrescriptionID'] ?></td>
-																	<td>
-																		<h2 class="table-avatar">
-																			<a href="doctor-profile.html" class="avatar avatar-sm mr-2">
-																				<img class="avatar-img rounded-circle" src="<?= base_url('uploads/') . $pres['doctor_data']['Profile_url'] ?>" alt="User Image">
-																			</a>
-																			<a href="doctor-profile.html">Dra. <?= $pres['doctor_data']['FirstName'] ?> <?= $pres['doctor_data']['LastName'] ?> <span><?= $pres['doctor_data']['Specialization'] ?></span></a>
-																		</h2>
-																	</td>
-																	<td class="text-right">
-																		<div class="table-action">
-																			<a href="javascript:void(0);" class="btn btn-sm bg-primary-light">
-																				<i class="fas fa-print"></i> Print
-																			</a>
-																			<a href="<?= site_url('/user/generatePres/' . $pres['PrescriptionID'] . '/' . $pres['doctor_data']['DoctorID']) ?>" class="btn btn-sm bg-info-light" target="_blank">
-																				<i class="far fa-eye"></i> View
-																			</a>
-																		</div>
-																	</td>
-																</tr>
-															<?php endforeach; ?>
-															</tbody>	
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- /Prescription Tab -->
-											
-										
-										
-									</div>
-									<!-- Tab Content -->
-									
-								</div>
-							</div>
-						</div>
+					</div>
+				</div>
 					</div>
 
 				</div>

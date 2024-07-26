@@ -133,7 +133,7 @@
                                                                             <?php if ($timing['day'] == 'Sunday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>
