@@ -53,7 +53,7 @@
 												</a>
 											</li>
 											<li>
-												<a href="index-2.html">
+												<a href="<?= site_url('/logout') ?>">
 													<i class="fas fa-sign-out-alt"></i>
 													<span>Logout</span>
 												</a>

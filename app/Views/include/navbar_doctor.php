@@ -63,9 +63,9 @@
                                             <p class="text-muted mb-0">Doctor</p>
                                         </div>
                                     </div>
-                                    <a class="dropdown-item" href="doctor-dashboard.html">Dashboard</a>
-                                    <a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
-                                    <a class="dropdown-item" href="login.html">Logout</a>
+                                    <a class="dropdown-item" href="<?= site_url('/Doctor/Dashboard') ?>">Dashboard</a>
+                                    <a class="dropdown-item" href="<?= site_url('/Doctor/Dashboard/Prof-Settings') ?>">Profile Settings</a>
+                                    <a class="dropdown-item" href="<?= site_url('/logout') ?>">Logout</a>
                                 </div>
                             <?php endforeach; ?>
 						</li>

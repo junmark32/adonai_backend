@@ -1513,6 +1513,19 @@ public function checkSessionData()
         }
     }
 
+    public function logout()
+{
+    // Load the session library
+    $session = session();
+
+    // Destroy the session data
+    $session->destroy();
+
+    // Optionally, you can redirect to the login page or another page
+    return redirect()->to('/login');
+}
+
+
 //ordering
 
 public function showProdDetails($productID)
