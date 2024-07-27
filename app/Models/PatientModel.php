@@ -12,7 +12,7 @@ class PatientModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['UserID', 'FirstName', 'LastName', 'Email', 'Phone', 'DateOfBirth', 'Gender', 'Address', 'Blood_type', 'City', 'State', 'Zipcode', 'Country', 'Profile_url', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['UserID', 'FirstName', 'LastName', 'Email', 'Phone', 'DateOfBirth', 'Age', 'Gender', 'Address', 'Blood_type', 'City', 'State', 'Zipcode', 'Country', 'Profile_url', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;

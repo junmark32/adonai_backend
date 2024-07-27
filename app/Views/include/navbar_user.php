@@ -53,13 +53,13 @@
                             <?php foreach ($patients as $patient): ?>
                                 <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                                     <span class="user-img">
-                                        <img class="rounded-circle" src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" width="31" alt="Darren Elder">
+                                        <img class="rounded-circle" src="<?= base_url('uploads/' . (!empty($patient['Profile_url']) ? $patient['Profile_url'] : 'default_profile.jpg')) ?>" width="31" alt="<?= $patient['FirstName'] ?> <?= $patient['LastName'] ?>">
                                     </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="user-header">
                                         <div class="avatar avatar-sm">
-                                            <img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image" class="avatar-img rounded-circle">
+                                            <img src="<?= base_url('uploads/' . (!empty($patient['Profile_url']) ? $patient['Profile_url'] : 'default_profile.jpg')) ?>" alt="User Image" class="avatar-img rounded-circle">
                                         </div>
                                         <div class="user-text">
                                             <h6><?= $patient['FirstName'] ?> <?= $patient['LastName'] ?></h6>

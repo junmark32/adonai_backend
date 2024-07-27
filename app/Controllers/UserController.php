@@ -341,6 +341,7 @@ class UserController extends ResourceController
         'Phone' => $this->request->getPost('phone'),
         'Gender' => $this->request->getPost('gender'),
         'DateOfBirth' => $this->request->getPost('dateofbirth'),
+        'Age' => $this->request->getPost('age'),
         'Blood_type' => $this->request->getPost('blood_type'),
         'Email' => $this->request->getPost('email'),
         'Address' => $this->request->getPost('address'),

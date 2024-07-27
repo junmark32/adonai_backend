@@ -34,10 +34,10 @@
 							<nav aria-label="breadcrumb" class="page-breadcrumb">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+									<li class="breadcrumb-item active" aria-current="page">Profile Settings</li>
 								</ol>
 							</nav>
-							<h2 class="breadcrumb-title">Dashboard</h2>
+							<h2 class="breadcrumb-title">Profile Settings</h2>
 						</div>
 					</div>
 				</div>
@@ -57,7 +57,7 @@
 								<div class="widget-profile pro-widget-content">
 									<div class="profile-info-widget">
 										<a href="#" class="booking-doc-img">
-											<img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image">
+										<img src="<?= base_url('uploads/' . (!empty($patient['Profile_url']) ? $patient['Profile_url'] : 'default_profile.jpg')) ?>" alt="User Image">
 										</a>
 										<div class="profile-det-info">
 											<h3><?= $patient['FirstName'] ?> <?= $patient['LastName'] ?></h3>
@@ -85,7 +85,7 @@
                         <div class="form-group">
                             <div class="change-avatar">
                                 <div class="profile-img">
-                                    <img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image">
+                                    <img src="<?= base_url('uploads/' . (!empty($patient['Profile_url']) ? $patient['Profile_url'] : 'default_profile.jpg')) ?>" alt="User Image">
                                 </div>
                                 <div class="upload-img">
                                     <div class="change-photo-btn">
@@ -117,6 +117,12 @@
                                 <div class="cal-icon">
                                     <input type="text" name="dateofbirth" class="form-control datetimepicker" value="<?= htmlspecialchars($patient['DateOfBirth']) ?>">
                                 </div>
+                            </div>
+                        </div>
+						<div class="col-12 col-md-6">
+                            <div class="form-group">
+								<label>Age</label>
+                                <input type="text" name="age" class="form-control" value="<?= htmlspecialchars($patient['Age']) ?>">
                             </div>
                         </div>
                         <div class="col-12 col-md-6">

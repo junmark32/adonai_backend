@@ -146,10 +146,6 @@
 
 																<!-- Monday Slot -->
 																<div id="slot_monday" class="tab-pane fade show active">
-																	<h4 class="card-title d-flex justify-content-between">
-																		<span>Time Slots</span> 
-																		<a class="edit-link" data-toggle="modal" href="#edit_time_slot"><i class="fa fa-edit mr-1"></i>Edit</a>
-																	</h4>
 																	
 																	<!-- Slot List -->
 																	<div class="doc-times">
@@ -157,7 +153,7 @@
                                                                             <?php if ($timing['day'] == 'Monday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>
@@ -172,17 +168,13 @@
 
 																<!-- Tuesday Slot -->
 																<div id="slot_tuesday" class="tab-pane fade">
-																	<h4 class="card-title d-flex justify-content-between">
-																		<span>Time Slots</span> 
-																		<a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-																	</h4>
-
+																	
 																	<div class="doc-times">
                                                                         <?php foreach ($scheduleTimings as $timing): ?>
                                                                             <?php if ($timing['day'] == 'Tuesday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>
@@ -195,17 +187,14 @@
 
 																<!-- Wednesday Slot -->
 																<div id="slot_wednesday" class="tab-pane fade">
-																	<h4 class="card-title d-flex justify-content-between">
-																		<span>Time Slots</span> 
-																		<a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-																	</h4>
+																	
 
                                                                     <div class="doc-times">
                                                                         <?php foreach ($scheduleTimings as $timing): ?>
                                                                             <?php if ($timing['day'] == 'Wednesday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>
@@ -219,17 +208,13 @@
 
 																<!-- Thursday Slot -->
 																<div id="slot_thursday" class="tab-pane fade">
-																	<h4 class="card-title d-flex justify-content-between">
-																		<span>Time Slots</span> 
-																		<a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-																	</h4>
-
+																	
                                                                     <div class="doc-times">
                                                                         <?php foreach ($scheduleTimings as $timing): ?>
                                                                             <?php if ($timing['day'] == 'Thursday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>
@@ -243,17 +228,14 @@
 
 																<!-- Friday Slot -->
 																<div id="slot_friday" class="tab-pane fade">
-																	<h4 class="card-title d-flex justify-content-between">
-																		<span>Time Slots</span> 
-																		<a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-																	</h4>
+																	
 
                                                                     <div class="doc-times">
                                                                         <?php foreach ($scheduleTimings as $timing): ?>
                                                                             <?php if ($timing['day'] == 'Friday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>
@@ -267,17 +249,14 @@
 
 																<!-- Saturday Slot -->
 																<div id="slot_saturday" class="tab-pane fade">
-																	<h4 class="card-title d-flex justify-content-between">
-																		<span>Time Slots</span> 
-																		<a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-																	</h4>
+																	
 
                                                                     <div class="doc-times">
                                                                         <?php foreach ($scheduleTimings as $timing): ?>
                                                                             <?php if ($timing['day'] == 'Saturday'): ?>
                                                                                 <div class="doc-slot-list">
                                                                                     <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="javascript:void(0)" class="delete_schedule">
+                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
                                                                                         <i class="fa fa-times"></i>
                                                                                     </a>
                                                                                 </div>

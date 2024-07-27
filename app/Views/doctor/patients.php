@@ -85,7 +85,7 @@
                         <div class="profile-info-widget" style="display: flex; align-items: center;">
                             <a href="patient-profile.html" class="booking-doc-img" style="flex-shrink: 0;">
                                 <!-- Update image path if needed -->
-                                <img src="<?= base_url('uploads/' . $patient['Profile_url']) ?>" alt="User Image" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+                                <img src="<?= base_url('uploads/' . (!empty($patient['Profile_url']) ? $patient['Profile_url'] : 'default_profile.jpg')) ?>" alt="User Image" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
                             </a>
                             <div class="profile-det-info" style="margin-left: 15px;">
                                 <h3><a href="<?= site_url('/Doctor/Dashboard/Patients-Profile/' . $patient['PatientID']) ?>" style="text-decoration: none; color: #333;"><?= $patient['FirstName'] ?> <?= $patient['LastName'] ?></a></h3>

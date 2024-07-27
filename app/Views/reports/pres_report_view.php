@@ -1,9 +1,15 @@
+<?php
+$imagePath = 'uploads/logo-adonai.png';
+$imageData = base64_encode(file_get_contents($imagePath));
+$src = 'data:image/png;base64,' . $imageData;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Prescription</title>
+    <title>View Prescription</title>
     <style>
         @page {
             size: A4;
@@ -107,7 +113,7 @@
                 <?php foreach ($prescription_data as $prescription): ?>
                     <div class="header-logo">
                         <div>RX</div>
-                        <div><img src="<?php echo base_url('uploads/logo-adonai.png'); ?>" alt="Adonai Logo"></div>
+                        <div><img src="<?= $src; ?>" alt="Adonai Logo"></div>
                         <div>PO No: <?= $prescription['PrescriptionID'] ?></div>
                     </div>
 

@@ -72,8 +72,8 @@
 										<div class="patient-info">
 											<ul>
 												<li>Phone <span><?= $patient['Phone'] ?></span></li>
-												<li>Age <span>38 Years, Male</span></li>
-												<li>Blood Group <span>AB+</span></li>
+												<li>Age <span><?= $patient['Age'] ?> Years, <?= $patient['Gender'] ?></span></li>
+												<li>Blood Group <span><?= $patient['Blood_type'] ?></span></li>
 											</ul>
 										</div>
 									</div>
