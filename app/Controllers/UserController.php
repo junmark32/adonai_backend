@@ -842,6 +842,8 @@ class UserController extends ResourceController
                     // Pass these counts to your view
                     $data['upcomingCount'] = $upcomingCount;
                     $data['todayCount'] = $todayCount;
+
+                    // print_r($token);
                     return view('doctor/doctor_dashboard', ['token' => $token] + $data);
                 } else {
                     return view('error', ['error' => 'Doctor not found']);

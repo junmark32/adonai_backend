@@ -128,7 +128,7 @@ class DoctorController extends ResourceController
     
 
                 // Pass the doctor's data and schedule timings to the view
-                return view('doctor/schedule_timings', array_merge(['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings], $data));
+                return view('doctor/schedule_timings', array_merge(['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings, 'token' => $token],  $data));
 
 
                 // // // Prepare data array
