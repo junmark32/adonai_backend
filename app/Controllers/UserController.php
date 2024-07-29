@@ -1669,40 +1669,37 @@ public function viewCart()
         $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
     }
 
-    // Initialize cart items array
+    // Initialize cart items array and cart count
     $cartItems = [];
+    $cartCount = 0; // Initialize cartCount to avoid undefined variable error
     
     // Check if the user is logged in and has a valid UserID
     if ($loggedIn && isset($userData['UserID'])) {
         $cartModel = new CartModel();
-        $cartItems = [];
         $productModel = new ProductModel();
         $lensModel = new LensModel();
 
-         // Fetch cart items based on UserID
-         $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+        // Fetch cart items based on UserID
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
 
-         // Fetch product and lens data for each cart item
-         foreach ($cartItems as &$item) {
-             // Fetch product data based on ProductID
-             $product = $productModel->find($item['ProductID']);
-             if ($product) {
-                 $item['product'] = $product;
-             }
- 
-             // Fetch lens data based on LensID
-             $lens = $lensModel->find($item['LensID']);
-             if ($lens) {
-                 $item['lens'] = $lens;
-             }
-
-                  // Calculate the count of items in the cart
-                $cartCount = count($cartItems);
-         }
+        // Fetch product and lens data for each cart item
+        foreach ($cartItems as &$item) {
+            // Fetch product data based on ProductID
+            $product = $productModel->find($item['ProductID']);
+            if ($product) {
+                $item['product'] = $product;
+            }
+    
+            // Fetch lens data based on LensID
+            $lens = $lensModel->find($item['LensID']);
+            if ($lens) {
+                $item['lens'] = $lens;
+            }
+        }
         
+        // Calculate the count of items in the cart
+        $cartCount = count($cartItems);
     }
-
-
 
     // Pass loggedIn status, role, and patient data to the view
     $data = [
@@ -1715,6 +1712,7 @@ public function viewCart()
 
     return view('user/cart', $data);
 }
+
 
 // Function to remove item from cart
 public function removeItem($CartID)

@@ -359,7 +359,7 @@ public function generateReport()
                      ->update();
 
     // Update appointments that are complete
-    $appointmentModel->where('Pref_Date <', $today)
+    $appointmentModel->where('Pref_Date <=', $today)
                      ->where('Pref_Time_End <', $formattedTime)
                      ->set('Status', 'Complete')
                      ->update();

@@ -107,34 +107,43 @@
                             </li>
                         </ul>
                         <form action="<?= site_url('/store/cart/addToCart') ?>" method="post">
-                            
-                            <input type="hidden" name="productID" value="<?= $product['ProductID'] ?>">
-                            <div class="form-group row">
-                                <label class="col-form-label col-md-2">LENSES:</label>
-                                <div class="col-md-6">
-                                    <select class="form-control" name="lensID">
-                                        <?php foreach ($lens as $lensItem): ?>
-                                            <option value="<?= $lensItem['LensID'] ?>">
-                                                <?= $lensItem['Brand'] . " " . $lensItem['Model'] ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
+    <input type="hidden" name="productID" value="<?= $product['ProductID'] ?>">
 
-                            <div class="form-group row">
-                                <label class="col-form-label col-md-2">Quantity:</label>
-                                <div class="col-md-3">
-                                    <input type="number" class="form-control" name="quantity" value="1" min="1" max="<?= $product['StockQuantity'] ?>">
-                                </div>
-                            </div>
+    <div class="form-group row">
+        <label class="col-form-label col-md-2">LENSES:</label>
+        <div class="col-md-6">
+            <select class="form-control" name="lensID">
+                <?php foreach ($lens as $lensItem): ?>
+                    <option value="<?= $lensItem['LensID'] ?>">
+                        <?= $lensItem['Brand'] . " " . $lensItem['Model'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
 
-                            <div class="form-group row">
-                                <div class="col-md-10 offset-md-2">
-                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                                </div>
-                            </div>
-                        </form>
+    <?php if ($product['StockQuantity'] > 0): ?>
+        <div class="form-group row">
+            <label class="col-form-label col-md-2">Quantity:</label>
+            <div class="col-md-3">
+                <input type="number" class="form-control" name="quantity" value="1" min="1" max="<?= $product['StockQuantity'] ?>">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-10 offset-md-2">
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="form-group row">
+            <div class="col-md-10 offset-md-2">
+                <h3 class="text-danger">Out of Stock</h3>
+            </div>
+        </div>
+    <?php endif; ?>
+</form>
+
 
                         <hr>
 
