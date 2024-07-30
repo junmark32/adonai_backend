@@ -32,7 +32,7 @@
 			<ul class="nav user-menu">
 
 				<!-- Notifications -->
-				<li class="nav-item dropdown noti-dropdown">
+				<!-- <li class="nav-item dropdown noti-dropdown">
 					<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 						<i class="fe fe-bell"></i> <span class="badge badge-pill">3</span>
 					</a>
@@ -101,7 +101,7 @@
 							<a href="#">View all Notifications</a>
 						</div>
 					</div>
-				</li>
+				</li> -->
 				<!-- /Notifications -->
 				
 				<!-- User Menu -->
@@ -122,9 +122,9 @@
 										<p class="text-muted mb-0">Admin</p>
 									</div>
 								</div>
-								<a class="dropdown-item" href="doctor-dashboard.html">Dashboard</a>
-								<a class="dropdown-item" href="doctor-profile-settings.html">Profile Settings</a>
-								<a class="dropdown-item" href="login.html">Logout</a>
+								<a class="dropdown-item" href="<?= site_url('/Admin/Dashboard') ?>">Dashboard</a>
+								<a class="dropdown-item" href="<?= site_url('/Admin/Profile') ?>">Profile Settings</a>
+								<a class="dropdown-item" href="<?= site_url('/logout') ?>">Logout</a>
 							</div>
 					<?php endforeach; ?>
 				</li>

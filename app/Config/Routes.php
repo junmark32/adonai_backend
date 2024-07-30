@@ -91,6 +91,11 @@ $routes->match(['post','get'],'/Admin/Products/update_Product', 'AdminController
 
 $routes->match(['post','get'],'/Admin/Appointments', 'AdminController::showAppt');
 $routes->match(['post','get'],'/Admin/Doctors', 'AdminController::showDoctors');
+$routes->match(['post','get'],'/Admin/Patients', 'AdminController::showPatients');
+$routes->match(['post','get'],'/Admin/Reviews', 'AdminController::showReviews');
+$routes->match(['post','get'],'/Admin/Profile', 'AdminController::showProfile');
+$routes->match(['post','get'],'admin/update_profile_settings', 'AdminController::updateProfile');
+$routes->match(['post','get'],'admin/update-password', 'AdminController::updateAdminPass');
 
 $routes->post('report/generateReport', 'AdminController::generateReport');
 //

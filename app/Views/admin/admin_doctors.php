@@ -67,33 +67,31 @@
 												</thead>
 												<tbody>
 												<?php if (!empty($doctors)): ?>
-    <?php foreach ($doctors as $doctor): ?>
-        <tr>
-            <td>
-                <h2 class="table-avatar">
-                    <a href="profile.html" class="avatar avatar-sm mr-2">
-                        <img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
-                    </a>
-                    <a href="profile.html"><?php echo esc($doctor['FirstName']); ?> <?php echo esc($doctor['LastName']); ?></a>
-                </h2>
-            </td>
-            <td><?php echo esc($doctor['Specialization']); ?></td>
-            <td><?php echo esc(date('d M Y', strtotime($doctor['created_at']))); ?> <br><small><?php echo esc(date('h:i A', strtotime($doctor['created_at']))); ?></small></td>
-			<td>
-    <div class="status-toggle">
-        <input type="checkbox" id="status_<?php echo esc($doctor['DoctorID']); ?>" class="check" <?php echo $doctor['Status'] == 'Active' ? 'checked' : ''; ?>>
-        <label for="status_<?php echo esc($doctor['DoctorID']); ?>" class="checktoggle <?php echo $doctor['Status'] == 'Active' ? 'active' : ''; ?>">checkbox</label>
-    </div>
-</td>
-
-        </tr>
-    <?php endforeach; ?>
-<?php else: ?>
-    <tr>
-        <td colspan="11">No doctors found.</td>
-    </tr>
-<?php endif; ?>
-
+													<?php foreach ($doctors as $doctor): ?>
+														<tr>
+															<td>
+																<h2 class="table-avatar">
+																	<a href="profile.html" class="avatar avatar-sm mr-2">
+																		<img class="avatar-img rounded-circle" src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
+																	</a>
+																	<a href="profile.html"><?php echo esc($doctor['FirstName']); ?> <?php echo esc($doctor['LastName']); ?></a>
+																</h2>
+															</td>
+															<td><?php echo esc($doctor['Specialization']); ?></td>
+															<td><?php echo esc(date('d M Y', strtotime($doctor['created_at']))); ?> <br><small><?php echo esc(date('h:i A', strtotime($doctor['created_at']))); ?></small></td>
+															<td>
+																<div class="status-toggle">
+																	<input type="checkbox" id="status_<?php echo esc($doctor['DoctorID']); ?>" class="check" <?php echo $doctor['Status'] == 'Active' ? 'checked' : ''; ?>>
+																	<label for="status_<?php echo esc($doctor['DoctorID']); ?>" class="checktoggle <?php echo $doctor['Status'] == 'Active' ? 'active' : ''; ?>">checkbox</label>
+																</div>
+															</td>
+														</tr>
+													<?php endforeach; ?>
+												<?php else: ?>
+													<tr>
+														<td colspan="11">No doctors found.</td>
+													</tr>
+												<?php endif; ?>
 												</tbody>
 											</table>
 										</div>

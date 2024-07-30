@@ -11,6 +11,8 @@ use App\Models\ProdHistoryModel;
 use App\Models\AppointmentModel;
 use App\Models\ScheduleModel;
 use App\Models\DoctorModel;
+use App\Models\DocFeedModel;
+use App\Models\UserModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 class AdminController extends BaseController
@@ -443,6 +445,295 @@ public function showAppt()
             return view('error', ['error' => 'User data not found in session']);
         }
     }
+
+    public function showPatients()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+                    $patientModel = new PatientModel();
+                    $patients = $patientModel->findAll();
+                    $data['patients'] = $patients;
+
+                    // print_r($patients);
+
+
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/admin_patients', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
+
+    public function showReviews()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+                    $docfeedModel = new DocfeedModel();
+        
+                    $builder = $docfeedModel->builder();
+                    $builder->select(' doc_feedback.FeedbackID,  doc_feedback.DoctorID,  doc_feedback.PatientID,  doc_feedback.Rating,  doc_feedback.Review,  doc_feedback.created_at, patients.FirstName as PatientFirstName, patients.LastName as PatientLastName, patients.Profile_url as PatientProfile_url, doctors.FirstName as DoctorFirstName, doctors.LastName as DoctorLastName, doctors.Profile_url as DoctorProfile_url');
+                    $builder->join('patients', 'patients.PatientID = doc_feedback.PatientID');
+                    $builder->join('doctors', 'doctors.DoctorID =  doc_feedback.DoctorID');
+                    $docfeeds = $builder->get()->getResult();
+
+                    $data['docfeeds'] = $docfeeds;
+                    // print_r($reviews);
+
+
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/admin_reviews', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
+
+    public function showProfile()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+
+                    // print_r($reviews);
+                    $data['admin_data'] = $admin;
+
+
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/admin_profile', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
+
+    public function updateProfile()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+
+                     // Define updated doctor data
+                $admin_data = [
+                    'FirstName' => $this->request->getPost('first_name'),
+                    'LastName' => $this->request->getPost('last_name'),
+                    'Phone' => $this->request->getPost('phone'),
+                    'Location' => $this->request->getPost('location'),
+                    'DateOfBirth' => $this->request->getPost('dateofbirth'),
+                    'Email' => $this->request->getPost('email'),
+                ];
+// Update doctor data in the database
+                $adminModel->update($adminID, $admin_data);
+
+
+
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return redirect()->to('/Admin/Profile')->with('success', 'Profile updated successfully');
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
+
+    public function updateAdminPass()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            $userID = $userData['UserID'];
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+
+                     // Load the user model
+                $userModel = new UserModel();
+
+                // Get the form data
+                $oldPassword = $this->request->getPost('old_password');
+                $newPassword = $this->request->getPost('new_password');
+                $confirmPassword = $this->request->getPost('confirm_password');
+
+                // Validation
+                $validation = \Config\Services::validation();
+                $validation->setRules([
+                    'old_password' => 'required',
+                    'new_password' => 'required|min_length[4]',
+                    'confirm_password' => 'required|matches[new_password]'
+                ]);
+
+                if (!$validation->withRequest($this->request)->run()) {
+                    return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+                }
+
+                // Fetch the user from the database
+                $user = $userModel->find($userID);
+
+                // Verify the old password
+                if (!password_verify($oldPassword, $user['PasswordHash'])) {
+                    return redirect('/Admin/Profile')->back()->withInput()->with('error', 'The old password is incorrect.');
+                }
+
+                // Hash the new password
+                $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                // Update the user's password in the database
+                $userModel->update($userID, ['PasswordHash' => $newPasswordHash]);
+
+
+
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return redirect()->to('/Admin/Profile')->with('success', 'Profile updated successfully');
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
+
+
 
 public function generateReport()
     {
