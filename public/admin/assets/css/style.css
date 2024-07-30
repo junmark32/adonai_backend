@@ -4158,3 +4158,12 @@ table.table-inbox tbody tr.checked {
 .card-header .btn {
 	margin-left: 5px;
 }
+
+
+.status-toggle .check:checked + .checktoggle {
+    background-color: green; /* Color for active status */
+}
+
+.status-toggle .check + .checktoggle {
+    background-color: red; /* Default color for inactive status */
+}

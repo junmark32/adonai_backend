@@ -10,6 +10,7 @@ use App\Models\PatientModel;
 use App\Models\ProdHistoryModel;
 use App\Models\AppointmentModel;
 use App\Models\ScheduleModel;
+use App\Models\DoctorModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 class AdminController extends BaseController
@@ -21,73 +22,110 @@ class AdminController extends BaseController
 
     public function showProducts()
     {
-        // Load the ProductModel
-        $productModel = new ProductModel();
-        $purchaseModel = new PurchaseModel();
-        $patientModel = new PatientModel();
+        $session = session();
 
-        // Retrieve all products from the database
-        $products = $productModel->findAll();
-        // Count products where StockQuantity is 0
-        $soldCount = $productModel->where('StockQuantity', 0)->countAllResults();
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+                    // Load the ProductModel
+                    $productModel = new ProductModel();
+                    $purchaseModel = new PurchaseModel();
+                    $patientModel = new PatientModel();
+
+                    // Retrieve all products from the database
+                    $products = $productModel->findAll();
+                    // Count products where StockQuantity is 0
+                    $soldCount = $productModel->where('StockQuantity', 0)->countAllResults();
 
 
-       // Count purchases where Status is 'Pending'
-        $purchaseCount = $purchaseModel->where('Status', 'Pending')->countAllResults();
+                // Count purchases where Status is 'Pending'
+                    $purchaseCount = $purchaseModel->where('Status', 'Pending')->countAllResults();
 
-        // Count purchases where Status is 'On-Process'
-        $onprocessCount = $purchaseModel->where('Status', 'On-Process')->countAllResults();
+                    // Count purchases where Status is 'On-Process'
+                    $onprocessCount = $purchaseModel->where('Status', 'On-Process')->countAllResults();
 
-        // Count purchases where Status is 'Returned'
-        $returnedCount = $purchaseModel->where('Status', 'Returned')->countAllResults();
+                    // Count purchases where Status is 'Returned'
+                    $returnedCount = $purchaseModel->where('Status', 'Returned')->countAllResults();
 
-        $completeCount = $purchaseModel->where('Status', 'Completed')->countAllResults();
+                    $completeCount = $purchaseModel->where('Status', 'Completed')->countAllResults();
 
-        //
-        // Get the current year
-        $currentYear = date('Y');
+                    //
+                    // Get the current year
+                    $currentYear = date('Y');
 
 
-        $purchaseDailyData = $purchaseModel->select('DATE_FORMAT(PurchaseDate, "%Y-%m-%d") as y, COUNT(PurchaseID) as a')
-        ->where('YEAR(PurchaseDate)', $currentYear)
-        ->where('Status', 'Completed')
-        ->groupBy('DATE_FORMAT(PurchaseDate, "%Y-%m-%d")')
-        ->findAll();
+                    $purchaseDailyData = $purchaseModel->select('DATE_FORMAT(PurchaseDate, "%Y-%m-%d") as y, COUNT(PurchaseID) as a')
+                    ->where('YEAR(PurchaseDate)', $currentYear)
+                    ->where('Status', 'Completed')
+                    ->groupBy('DATE_FORMAT(PurchaseDate, "%Y-%m-%d")')
+                    ->findAll();
 
-        //
-        // Join tables 1
-        $builder1 = $purchaseModel->builder();
-        $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, l1.Brand as LensBrand, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
-        $builder1->join('patients', 'patients.UserID = purchases.UserID');
-        $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
-        $builder1->join('lenses l1', 'l1.LensID = purchases.LensID');
-        $builder1->orderBy('purchases.PurchaseDate', 'DESC');
-        $data['purchases'] = $builder1->get()->getResult();
+                    //
+                    // Join tables 1
+                    $builder1 = $purchaseModel->builder();
+                    $builder1->select('purchases.PurchaseID, patients.FirstName, patients.LastName, patients.Email, p1.Name as ProductName, l1.Brand as LensBrand, purchases.Status, purchases.Quantity, purchases.TotalAmount, purchases.PurchaseDate');
+                    $builder1->join('patients', 'patients.UserID = purchases.UserID');
+                    $builder1->join('products p1', 'p1.ProductID = purchases.EyewearID');
+                    $builder1->join('lenses l1', 'l1.LensID = purchases.LensID');
+                    $builder1->orderBy('purchases.PurchaseDate', 'DESC');
+                    $data['purchases'] = $builder1->get()->getResult();
 
-        $builder2 = $purchaseModel->builder();
-        $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.EyewearID, l.Brand as LensBrand, SUM(purchases.Quantity) as TotalQuantity');
-        $builder2->join('products p2', 'p2.ProductID = purchases.EyewearID');
-        $builder2->join('lenses l', 'l.LensID = purchases.LensID'); // Join with lenses table
-        $builder2->groupBy('purchases.EyewearID, p2.Image_url, p2.Name, p2.Brand, p2.Type, l.Brand');
-        $builder2->orderBy('TotalQuantity', 'DESC');
-        $data['bestselling'] = $builder2->get()->getResult();
+                    $builder2 = $purchaseModel->builder();
+                    $builder2->select('p2.Image_url, p2.Name, p2.Brand, p2.Type, purchases.EyewearID, l.Brand as LensBrand, SUM(purchases.Quantity) as TotalQuantity');
+                    $builder2->join('products p2', 'p2.ProductID = purchases.EyewearID');
+                    $builder2->join('lenses l', 'l.LensID = purchases.LensID'); // Join with lenses table
+                    $builder2->groupBy('purchases.EyewearID, p2.Image_url, p2.Name, p2.Brand, p2.Type, l.Brand');
+                    $builder2->orderBy('TotalQuantity', 'DESC');
+                    $data['bestselling'] = $builder2->get()->getResult();
+
+                    
+
+
+                    $data['purchaseDailyData'] = $purchaseDailyData;
+
+                    // Assign counts to data array
+                    $data['purchaseCount'] = $purchaseCount;
+                    $data['onprocessCount'] = $onprocessCount;
+                    $data['returnedCount'] = $returnedCount;
+                    $data['completeCount'] = $completeCount;
+                    $data['soldCount'] = $soldCount;
+
+                    // Pass the products data to the view
+                    $data['products'] = $products;
 
         
 
-
-        $data['purchaseDailyData'] = $purchaseDailyData;
-
-        // Assign counts to data array
-        $data['purchaseCount'] = $purchaseCount;
-        $data['onprocessCount'] = $onprocessCount;
-        $data['returnedCount'] = $returnedCount;
-        $data['completeCount'] = $completeCount;
-        $data['soldCount'] = $soldCount;
-
-        // Pass the products data to the view
-        $data['products'] = $products;
-
-        return view('admin/product', $data);
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/product', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
     }
 
     // Method to update purchase status
@@ -303,6 +341,108 @@ public function updateStatus()
     // For example:
     return redirect()->to('/Admin/Products')->with('success', 'Product updated successfully');
 }
+
+public function showAppt()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+                    $appointmentModel = new AppointmentModel();
+
+                    $builder = $appointmentModel->builder();
+                    $builder->select('doctors.Profile_url as DoctorProfile_url, doctors.FirstName as DoctorFirstName, doctors.LastName as DoctorLastName, doctors.Specialization, patients.Profile_url as PatientProfile_url, patients.FirstName as PatientFirstName, patients.LastName as PatientLastName, appointments.PatientID, appointments.DoctorID, appointments.Pref_Date, appointments.Pref_Time_Start, appointments.Pref_Time_End, appointments.Status');
+                    $builder->join('doctors', 'doctors.DoctorID = appointments.DoctorID');
+                    $builder->join('patients', 'patients.PatientID = appointments.PatientID');
+                    $builder->orderBy('appointments.Pref_Date', 'DESC');
+
+                    $appointments = $builder->get()->getResult();
+
+                    $data['appointments'] = $appointments;
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/admin_appt', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
+
+    public function showDoctors()
+    {
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+
+                    $doctorModel = new DoctorModel();
+                    $doctors = $doctorModel->findAll();
+                    $data['doctors'] = $doctors;
+
+                    // print_r($doctors);
+
+
+
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/admin_doctors', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+    }
 
 public function generateReport()
     {
