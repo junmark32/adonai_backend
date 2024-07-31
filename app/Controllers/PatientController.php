@@ -93,7 +93,6 @@ class PatientController extends ResourceController
                     'Pref_Date' => $this->request->getVar('pref_date'),
                     'Pref_Time_Start' => $this->request->getVar('pref_time_start'),
                     'Pref_Time_End' => $this->request->getVar('pref_time_end'),
-                    'Pref_Day' => $this->request->getVar('pref_day'),
                     'Pref_Timeslot_ID' => $this->request->getVar('pref_timeslot_id'),
                     'Pref_Doctor' => 'Dra. Ashley Cabudsan',
                     'Purpose' => $this->request->getVar('purpose'),

@@ -88,7 +88,7 @@ html {
 body {
 	background-color: #f8f9fa;
 	color: #272b41;
-    font-family: "Poppins",sans-serif;
+    font-family: "Poppins",sans-serif !important;
 	font-size: 0.9375rem;
     height: 100%;
 	overflow-x: hidden;
@@ -6835,3 +6835,36 @@ html.menu-opened body {
 	margin-top: auto;
 	margin-bottom: auto;
 }
+
+
+ /* Change calendar header background color to gold */
+
+
+	.evo-calendar .calendar-sidebar {
+        background-color: gold !important;
+        color: black; /* Ensure text is visible on the gold background */
+    }
+
+	.evo-calendar .calendar-sidebar .calendar-months .month {
+		color: black; /* Default text color */
+	}
+	
+	.evo-calendar .calendar-sidebar .calendar-months .month:hover {
+		color: black; /* Color on hover */
+		/* Add other hover styles if needed */
+		background-color: #fcffd9; /* Optional: light background color for better visibility */
+		cursor: pointer; /* Optional: change cursor to pointer */
+	}
+
+	.evo-calendar .calendar-sidebar>.month-list>.calendar-months>li.active-month {
+		color: black; /* Color on hover */
+		/* Add other hover styles if needed */
+		background-color: #fcffd9; /* Optional: light background color for better visibility */
+		cursor: pointer; /* Optional: change cursor to pointer */
+	}
+
+	.evo-calendar .calendar-day .event-indicator {
+        display: none !important;
+    }
+
+

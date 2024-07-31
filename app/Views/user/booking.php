@@ -18,7 +18,18 @@
 		<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
 		
 		<!-- Main CSS -->
-		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+<!-- Add the evo-calendar.css for styling -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.2/evo-calendar/css/evo-calendar.min.css"/>
+
+<!-- Add jQuery library (required) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+<!-- Add the evo-calendar.js for functionality -->
+<script src="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.2/evo-calendar/js/evo-calendar.min.js"></script>
+
+
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -79,175 +90,103 @@
 					<div class="row">
 						<div class="col-12">
 						
-                        <div class="card">
-                        <div class="card-body">
-                            <div class="booking-doc-info">
-                                <a href="doctor-profile.html" class="booking-doc-img">
-                                    <img src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
-                                </a>
-                                <div class="booking-info">
-                                    <h4><a href="doctor-profile.html">Dr. <?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></a></h4>
-                                    <div class="rating">
-                                        <!-- Display the doctor's rating -->
-                                        <?php for ($i = 0; $i < $doctor['Rating']; $i++): ?>
-                                            <i class="fas fa-star filled"></i>
-                                        <?php endfor; ?>
-                                        <span class="d-inline-block average-rating"><?= $doctor['Rating_count'] ?></span>
-                                    </div>
-                                    <p class="text-muted mb-0"><i class="fas fa-map-marker-alt"></i> <?= $doctor['Location'] ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+							<div class="card">
+								<div class="card-body">
+									<div class="booking-doc-info">
+										<a href="doctor-profile.html" class="booking-doc-img">
+											<img src="<?= base_url('uploads/' . $doctor['Profile_url']) ?>" alt="User Image">
+										</a>
+										<div class="booking-info">
+											<h4><a href="doctor-profile.html">Dr. <?= $doctor['FirstName'] ?> <?= $doctor['LastName'] ?></a></h4>
+											<div class="rating">
+												<!-- Display the doctor's rating -->
+												<?php for ($i = 0; $i < $doctor['Rating']; $i++): ?>
+													<i class="fas fa-star filled"></i>
+												<?php endfor; ?>
+												<span class="d-inline-block average-rating"><?= $doctor['Rating_count'] ?></span>
+											</div>
+											<p class="text-muted mb-0"><i class="fas fa-map-marker-alt"></i> <?= $doctor['Location'] ?></p>
+										</div>
+									</div>
+								</div>
+							</div>
 
 							
-<!-- Schedule Header -->
-<div class="schedule-header">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Day Slot -->
-            <div class="day-slot">
-                <ul id="calendar">
-                </ul>
-            </div>
-            <!-- /Day Slot -->
+							<div id="calendar"></div>
 
-            <script>
-                // Define currentDate outside the functions to make it accessible across functions
-                let currentDate = new Date();
+							<script>
+    // Get the PHP data and parse it as JSON
+    const scheduleTimings = JSON.parse('<?php echo $scheduleTimings; ?>');
 
-                // Function to render the calendar
-                function renderCalendar() {
-                    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                    const calendarElement = document.getElementById('calendar');
-                    calendarElement.innerHTML = '';
+    // Initialize the calendar with events
+    $('#calendar').evoCalendar({
+        calendarEvents: scheduleTimings,
+        onSelectDate: function(date, event) {
+            if (event) {
+                renderTimeSlots(date); // Optional: Render time slots if needed
+            }
+        }
+    });
 
-                    // Add left arrow
-                    calendarElement.innerHTML += `<li class="left-arrow"><a href="#" onclick="prevWeek()"><i class="fa fa-chevron-left"></i></a></li>`;
+    // Function to render time slots based on selected date
+    function renderTimeSlots(selectedDate) {
+        const dateString = selectedDate.toISOString().split('T')[0]; // Get date in YYYY-MM-DD format
 
-                    // Start the calendar from Sunday
-                    let startingDayIndex = currentDate.getDay(); // Get the index of the current day
-                    if (startingDayIndex !== 0) {
-                        currentDate.setDate(currentDate.getDate() - startingDayIndex); // Set the date to the previous Sunday
-                    }
+        // Clear existing time slots
+        $('#time-slot-list').html('');
 
-                    // Add dates for the next 7 days
-                    for (let i = 0; i < 7; i++) {
-                        const day = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
-                        const dayOfWeek = daysOfWeek[day.getDay()];
-                        const formattedDate = `${day.getDate()} ${day.toLocaleString('default', { month: 'short' })} <small class="slot-year">${day.getFullYear()}</small>`;
+        // Filter and render time slots for the selected date
+        scheduleTimings.forEach(event => {
+            if (event.date.split(' ')[0] === dateString) {
+                const timingHtml = `<li>
+                    <a class="timing ${event.color === '#ff0000' ? 'disabled' : ''}" href="#" onclick="${event.color === '#ff0000' ? '' : `selectTimeSlot('${event.name}', '${event.date}', '${event.id}')`}">
+                        <span>${event.name}</span>
+                    </a>
+                </li>`;
+                $('#time-slot-list').append(timingHtml);
+            }
+        });
+    }
 
-                        // Add the current-day class if the day matches today's date
-                        const isToday = (day.toDateString() === new Date().toDateString());
-                        const dayClass = isToday ? 'current-day' : '';
+    function selectTimeSlot(timeSlot, date, timeslotId) {
+        // Store selected values in local storage
+        localStorage.setItem('selectedTimeSlot', timeSlot);
+        localStorage.setItem('selectedDate', date);
+        localStorage.setItem('selectedTimeslotId', timeslotId);
 
-                        calendarElement.innerHTML += `<li class="${dayClass}"><span>${dayOfWeek}</span><span class="slot-date">${formattedDate}</span></li>`;
-                    }
+        // Redirect to the checkout page
+        window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
+    }
 
-                    // Add right arrow
-                    calendarElement.innerHTML += `<li class="right-arrow"><a href="#" onclick="nextWeek()"><i class="fa fa-chevron-right"></i></a></li>`;
-                }
+    // Handle click events on the event-container elements
+    $(document).on('click', '.event-container', function(e) {
+        const eventIndex = $(this).data('event-index');
+        const event = scheduleTimings.find(e => e.id == eventIndex);
 
-                // Function to navigate to the previous week
-                function prevWeek() {
-                    currentDate.setDate(currentDate.getDate() - 7);
-                    renderCalendar();
-                }
+        if (event) {
+            if (event.color === '#ff0000') { // Reserved
+                e.preventDefault(); // Prevent default action if the event is reserved
+                return; // Exit the function
+            }
 
-                // Function to navigate to the next week
-                function nextWeek() {
-                    currentDate.setDate(currentDate.getDate() + 7);
-                    renderCalendar();
-                }
+            // Extract event details
+            const [startTime, endTime] = event.name.split(' - ');
+            const formattedDate = event.date;
+            const timeslotId = event.id;
 
-                function selectTimeSlot(day, date, timeSlot, timeslotId) {
-                    // Convert time from 12-hour format to 24-hour format
-                    const [startTime, endTime] = timeSlot.split(' - ').map(time => {
-                        const [timePart, meridiem] = time.split(' ');
-                        let [hours, minutes] = timePart.split(':').map(Number);
-                        if (meridiem.toLowerCase() === 'pm' && hours !== 12) {
-                            hours += 12;
-                        } else if (meridiem.toLowerCase() === 'am' && hours === 12) {
-                            hours = 0;
-                        }
-                        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-                    });
+            // Store selected values in local storage
+            localStorage.setItem('selectedTimeSlot', event.name);
+            localStorage.setItem('selectedDate', formattedDate);
+            localStorage.setItem('selectedTimeStart', startTime.trim());
+            localStorage.setItem('selectedTimeEnd', endTime.trim());
+            localStorage.setItem('selectedTimeslotId', timeslotId);
 
-                    // Calculate the selected date based on the current week's starting date (currentDate)
-                    const selectedDate = new Date(currentDate);
-                    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                    const dayIndex = daysOfWeek.indexOf(day);
-                    selectedDate.setDate(currentDate.getDate() + dayIndex); // Add the day index to get the selected date
+            // Redirect to the checkout page
+            window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
+        }
+    });
+</script>
 
-                    // Format the selected date
-                    const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
-
-                    // Store selected values in local storage
-                    localStorage.setItem('selectedDay', day);
-                    localStorage.setItem('selectedDate', formattedDate);
-                    localStorage.setItem('selectedTimeStart', startTime); // Store the selected timeslot start time
-                    localStorage.setItem('selectedTimeEnd', endTime); // Store the selected timeslot end time
-                    localStorage.setItem('selectedTimeslotId', timeslotId); // Store the selected timeslot ID
-
-                    // Redirect to the checkout page
-                    window.location.href = '<?= site_url('/booking/checkout?doctor_id=' . $doctor['DoctorID']) ?>';
-                }
-
-                // Initial rendering
-                renderCalendar();
-            </script>
-        </div>
-    </div>
-</div>
-<!-- /Schedule Header -->
-
-    <!-- Schedule Content -->
-<div class="schedule-cont">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Time Slot -->
-            <div class="time-slot">
-                <ul class="clearfix">
-                    <?php
-                    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                    foreach ($daysOfWeek as $day) :
-                        ?>
-                        <li>
-                            <?php foreach ($scheduleTimings as $timing) : ?>
-                                <?php if ($timing['day'] == $day) : ?>
-                                    <?php // Merge the start time and end time ?>
-                                    <?php $mergedTime = date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])); ?>
-                                    <?php $formattedDate = date('F j, Y', strtotime("next $day", strtotime("next Sunday", strtotime("now")))); ?>
-                                    <?php
-                                    $isReserved = ($timing['status'] == 'Reserved'); // Check if status is Reserved
-                                    ?>
-                                    <a class="timing <?php if ($isReserved) echo 'disabled'; ?>" href="#" onclick="<?php if (!$isReserved) echo "selectTimeSlot('{$day}', '{$formattedDate}', '{$mergedTime}', '{$timing['id']}')"; ?>">
-                                        <span><?= $mergedTime ?></span>
-                                    </a>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-            <!-- /Time Slot -->
-        </div>
-    </div>
-</div>
-<!-- /Schedule Content -->
-
-</div>
-<!-- /Schedule Widget -->
-
-
-
-
-
-<!-- Submit Section -->
-<div class="submit-section proceed-btn text-right">
-    <a href="checkout.html" class="btn btn-primary submit-btn">Proceed to Pay</a>
-</div>
-<!-- /Submit Section -->
 
 							
 						</div>

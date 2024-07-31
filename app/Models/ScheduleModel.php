@@ -12,7 +12,7 @@ class ScheduleModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['doctor_id', 'day', 'slot_duration', 'start_time', 'end_time', 'status'];
+    protected $allowedFields    = ['doctor_id', 'date', 'start_time', 'end_time', 'status'];
 
     // Dates
     protected $useTimestamps = false;

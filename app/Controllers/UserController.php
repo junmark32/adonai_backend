@@ -688,17 +688,34 @@ class UserController extends ResourceController
     // Fetch all schedule timings for the doctor
     $scheduleModel = new ScheduleModel();
     $scheduleTimings = $scheduleModel->where('doctor_id', $doctorID)->findAll();
+    // Prepare events data
+$events = [];
+foreach ($scheduleTimings as $timing) {
+    // Merge start_time and end_time
+    $startDateTime = $timing['date'] . ' ' . $timing['start_time'];
+    $endDateTime = $timing['date'] . ' ' . $timing['end_time'];
 
+    $events[] = [
+        'id' => $timing['id'],
+        'name' => date('g:i A', strtotime($timing['start_time'])) . ' - ' . date('g:i A', strtotime($timing['end_time'])),
+        'date' => $timing['date'], // Use date in yyyy-mm-dd format
+        'color' => ($timing['status'] === 'Available') ? '#00ff00' : '#ff0000'
+    ];
+}
+
+$data['scheduleTimings'] = json_encode($events);
+
+    // print_r($data);
 
     // Pass the doctor's data, schedule timings, and user-related data to the view
     return view('user/booking', [
         'doctor' => $doctor,
-        'scheduleTimings' => $scheduleTimings,
+        
         'loggedIn' => $loggedIn,
         'role' => $role,
         'patients' => $patients,
         'cartCount' => $cartCount
-    ]);
+    ] + $data );
 
 }
 

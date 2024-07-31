@@ -160,7 +160,6 @@
                                             <input type="hidden" name="pref_date" id="pref_date_input">
                                             <input type="hidden" name="pref_time_start" id="pref_time_start_input">
                                             <input type="hidden" name="pref_time_end" id="pref_time_end_input">
-											<input type="hidden" name="pref_day" id="pref_day_input">
 											<input type="hidden" name="pref_timeslot_id" id="pref_timeslotid_input">
 											
 											<!-- Submit Section -->
@@ -212,7 +211,6 @@
 										<div class="booking-item-wrap">
                                         <ul class="booking-date">
                                             <li>Date <span id="selectedDate"></span></li>
-											<li>Day <span id="selectedDay"></span></li>
 											<li>Time ID <span id="selectedTimeslotId"></span></li>
                                             <li>Time <span id="selectedTime"></span></li>
                                             
@@ -389,40 +387,85 @@
 
 		<script>
     // Retrieve selected values from local storage
-    const selectedDay = localStorage.getItem('selectedDay');
+    // const selectedDay = localStorage.getItem('selectedDay');
     const selectedDate = localStorage.getItem('selectedDate');
     const selectedTimeStart = localStorage.getItem('selectedTimeStart'); // Update to selectedTimeStart
     const selectedTimeEnd = localStorage.getItem('selectedTimeEnd'); // Add selectedTimeEnd
     const selectedTimeslotId = localStorage.getItem('selectedTimeslotId');
 
     // Display selected values in the booking summary
-    document.getElementById('selectedDay').textContent = selectedDay;
+    // document.getElementById('selectedDay').textContent = selectedDay;
     document.getElementById('selectedDate').textContent = selectedDate;
     document.getElementById('selectedTimeslotId').textContent = selectedTimeslotId;
     // Retrieve selected values from local storage
 // const selectedTimeStart = localStorage.getItem('selectedTimeStart');
 // const selectedTimeEnd = localStorage.getItem('selectedTimeEnd');
-
-// Function to convert time to 12-hour format with AM/PM
-function convertTo12Hour(time) {
-    const [hour, minute] = time.split(':').map(Number);
-    const amPm = hour >= 12 ? 'PM' : 'AM';
-    const displayHour = hour % 12 || 12; // Convert 0 to 12
-    return `${displayHour}:${minute.toString().padStart(2, '0')} ${amPm}`;
-}
-
 // Display selected time in 12-hour format with AM/PM
-document.getElementById('selectedTime').textContent = `${convertTo12Hour(selectedTimeStart)} - ${convertTo12Hour(selectedTimeEnd)}`;
+document.getElementById('selectedTime').textContent = `${selectedTimeStart} - ${selectedTimeEnd}`;
+
 
 
     // Set the value of the hidden input field for pref_date
     document.getElementById('pref_timeslotid_input').value = selectedTimeslotId;
-    document.getElementById('pref_day_input').value = selectedDay;
-    document.getElementById('pref_date_input').value = selectedDate;
 
-    // Set the value of hidden input fields for Pref_Time_Start and Pref_Time_End
-    document.getElementById('pref_time_start_input').value = selectedTimeStart;
-    document.getElementById('pref_time_end_input').value = selectedTimeEnd;
+	// Function to convert MM/DD/YYYY to YYYY-MM-DD format
+function convertDateFormat(dateStr) {
+    if (!dateStr) return 'Invalid Date'; // Check for empty or invalid input
+    
+    const [month, day, year] = dateStr.split('/').map(Number);
+
+    // Validate month, day, and year
+    if (isNaN(month) || isNaN(day) || isNaN(year) ||
+        month < 1 || month > 12 || day < 1 || day > 31 || year < 1900) {
+        return 'Invalid Date';
+    }
+
+    // Format the date to YYYY-MM-DD
+    return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+}
+
+// Convert the date to YYYY-MM-DD format
+const convertedDate = convertDateFormat(selectedDate);
+
+// Set the value of hidden input field for Pref_Date
+document.getElementById('pref_date_input').value = convertedDate;
+
+
+// Function to convert 12-hour time with AM/PM to 24-hour format
+function convertTo24Hour(time) {
+    if (!time) return 'Invalid Time'; // Check for empty or invalid input
+    
+    const [timePart, amPm] = time.split(/(am|pm)$/i);
+    const [hour, minute] = timePart.split(':').map(Number);
+    
+    // Validate hour and minute
+    if (isNaN(hour) || isNaN(minute) || hour < 1 || hour > 12 || minute < 0 || minute > 59) {
+        return 'Invalid Time';
+    }
+
+    let hour24 = hour;
+    if (amPm.toLowerCase() === 'pm' && hour !== 12) {
+        hour24 += 12;
+    } else if (amPm.toLowerCase() === 'am' && hour === 12) {
+        hour24 = 0;
+    }
+
+    return `${hour24.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+}
+
+
+
+// Convert times to 24-hour format
+const convertedTimeStart = convertTo24Hour(selectedTimeStart);
+const convertedTimeEnd = convertTo24Hour(selectedTimeEnd);
+
+// Set the value of hidden input fields for Pref_Time_Start and Pref_Time_End
+document.getElementById('pref_time_start_input').value = convertedTimeStart;
+document.getElementById('pref_time_end_input').value = convertedTimeEnd;
+
+
+
+
 
 </script>
 
