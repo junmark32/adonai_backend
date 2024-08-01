@@ -796,14 +796,14 @@ public function generateReport()
                      ->update();
 
      // Fetch appointments where Pref_Date is before today
-     $appointments = $appointmentModel->where('Pref_Date <', $today)->findAll();
+    //  $appointments = $appointmentModel->where('Pref_Date <', $today)->findAll();
 
-     // Update schedule timings based on fetched appointments
-     foreach ($appointments as $appointment) {
-         $scheduleTimingsModel->where('id', $appointment['Pref_Timeslot_ID'])
-                              ->set('status', 'Available')
-                              ->update();
-     }
+    //  // Update schedule timings based on fetched appointments
+    //  foreach ($appointments as $appointment) {
+    //      $scheduleTimingsModel->where('id', $appointment['Pref_Timeslot_ID'])
+    //                           ->set('status', 'Available')
+    //                           ->update();
+    //  }
 
     // Optional: return redirect or a response
     // return redirect()->to('/appointments');

@@ -6877,22 +6877,26 @@ html.menu-opened body {
 	display: flex;
 	flex-wrap: wrap;
 }
-.calendar, .sidebar {
+
+.calendar-container .calendar, .calendar-container .sidebar {
 	flex: 1;
 	min-width: 300px;
 	margin: 10px;
 }
-.calendar-header, .calendar-body {
+
+.calendar-container .calendar-header, .calendar-container .calendar-body {
 	display: flex;
 	flex-wrap: wrap;
 }
-.calendar-day {
+
+.calendar-container .calendar-day {
 	flex: 1 0 14.28%; /* Seven days in a week */
 	text-align: center;
 	padding: 10px;
 	border: 1px solid #ccc;
 }
-.calendar-day.empty {
+
+.calendar-container .calendar-day.empty {
 	background-color: #f0f0f0;
 }
 

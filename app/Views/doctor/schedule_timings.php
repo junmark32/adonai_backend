@@ -75,58 +75,71 @@
 						
 						<div class="col-md-7 col-lg-8 col-xl-9">
 						 
-							<div class="container mt-5">
-								<form action="<?= base_url('schedule/insert') ?>" method="post">
-									<div id="dateTimeContainer">
-										<div class="row dateTimeEntry">
-											<div class="col-md-4">
-												<div class="form-group">
-													<label for="date">Select Date</label>
-													<input type="date" class="form-control" name="date[]" onchange="showTimeInputs(this)">
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<label for="start_time">Start Time</label>
-													<input type="time" class="form-control" name="start_time[]">
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="form-group">
-													<label for="end_time">End Time</label>
-													<input type="time" class="form-control" name="end_time[]">
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row mt-3">
-										<div class="col-md-4">
-											<button type="button" class="btn btn-secondary" onclick="addDateTimeEntry()">Add Another</button>
-										</div>
-										<div class="col-md-4">
-											<button type="submit" class="btn btn-primary">Submit</button>
-										</div>
-									</div>
-								</form>
-							</div>
+						<div class="container mt-5">
+    <form id="scheduleForm" action="<?= base_url('schedule/insert') ?>" method="post" onsubmit="return validateForm()">
+        <div id="dateTimeContainer">
+            <div class="row dateTimeEntry">
+                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                    <div class="form-group">
+                        <label for="date">Select Date</label>
+                        <input type="date" class="form-control" name="date[]" required onchange="showTimeInputs(this)">
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                    <div class="form-group">
+                        <label for="start_time">Start Time</label>
+                        <input type="time" class="form-control" name="start_time[]" required>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4 mb-3 mb-md-0">
+                    <div class="form-group">
+                        <label for="end_time">End Time</label>
+                        <input type="time" class="form-control" name="end_time[]" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                <button type="button" class="btn btn-secondary w-100" onclick="addDateTimeEntry()">Add Another</button>
+            </div>
+            <div class="col-12 col-md-4 mb-3 mb-md-0">
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-							<script>
-								function showTimeInputs(dateInput) {
-									var entry = dateInput.closest('.dateTimeEntry');
-									entry.querySelectorAll('input[type="time"]').forEach(input => {
-										input.style.display = 'block';
-									});
-								}
+<script>
+    function showTimeInputs(dateInput) {
+        var entry = dateInput.closest('.dateTimeEntry');
+        entry.querySelectorAll('input[type="time"]').forEach(input => {
+            input.style.display = 'block';
+        });
+    }
 
-								function addDateTimeEntry() {
-									var container = document.getElementById('dateTimeContainer');
-									var newEntry = container.firstElementChild.cloneNode(true);
-									newEntry.querySelectorAll('input').forEach(input => {
-										input.value = '';
-									});
-									container.appendChild(newEntry);
-								}
-							</script>
+    function addDateTimeEntry() {
+        var container = document.getElementById('dateTimeContainer');
+        var newEntry = container.firstElementChild.cloneNode(true);
+        newEntry.querySelectorAll('input').forEach(input => {
+            input.value = '';
+        });
+        container.appendChild(newEntry);
+    }
+
+    function validateForm() {
+        var form = document.getElementById('scheduleForm');
+        var inputs = form.querySelectorAll('input');
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value.trim() === '') {
+                alert('Please fill out all fields before submitting.');
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+
 							<br>
 							<hr>
 							<br>
