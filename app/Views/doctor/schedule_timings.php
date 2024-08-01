@@ -75,211 +75,210 @@
 						
 						<div class="col-md-7 col-lg-8 col-xl-9">
 						 
-							<div class="row">
-								<div class="col-sm-12">
-									<div class="card">
-										<div class="card-body">
-											<h4 class="card-title">Schedule Timings</h4>
-											<div class="profile-box">
-												
-                                                                    <h4 class="card-title d-flex justify-content-between">
-																		<a class="edit-link" data-toggle="modal" href="#add_time_slot"><i class="fa fa-plus-circle"></i> Add Slot</a>
-																	</h4>   
-												<div class="row">
-													<div class="col-md-12">
-														<div class="card schedule-widget mb-0">
-														
-															<!-- Schedule Header -->
-															<div class="schedule-header">
-															
-																<!-- Schedule Nav -->
-																<div class="schedule-nav">
-																	<ul class="nav nav-tabs nav-justified">
-																		<li class="nav-item">
-																			<a class="nav-link" data-toggle="tab" href="#slot_sunday">Sunday</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link active" data-toggle="tab" href="#slot_monday">Monday</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link" data-toggle="tab" href="#slot_tuesday">Tuesday</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link" data-toggle="tab" href="#slot_wednesday">Wednesday</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link" data-toggle="tab" href="#slot_thursday">Thursday</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link" data-toggle="tab" href="#slot_friday">Friday</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link" data-toggle="tab" href="#slot_saturday">Saturday</a>
-																		</li>
-																	</ul>
-																</div>
-																<!-- /Schedule Nav -->
-																
-															</div>
-															<!-- /Schedule Header -->
-															
-															<!-- Schedule Content -->
-															<div class="tab-content schedule-cont">
-															
-																<!-- Sunday Slot -->
-																<div id="slot_sunday" class="tab-pane fade">
-                                                                    <div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Sunday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-                                                                </div>
-
-																<!-- /Sunday Slot -->
-
-																<!-- Monday Slot -->
-																<div id="slot_monday" class="tab-pane fade show active">
-																	
-																	<!-- Slot List -->
-																	<div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Monday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-
-																	<!-- /Slot List -->
-																	
-																</div>
-																<!-- /Monday Slot -->
-
-																<!-- Tuesday Slot -->
-																<div id="slot_tuesday" class="tab-pane fade">
-																	
-																	<div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Tuesday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-
-																</div>
-																<!-- /Tuesday Slot -->
-
-																<!-- Wednesday Slot -->
-																<div id="slot_wednesday" class="tab-pane fade">
-																	
-
-                                                                    <div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Wednesday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-
-																	
-																</div>
-																<!-- /Wednesday Slot -->
-
-																<!-- Thursday Slot -->
-																<div id="slot_thursday" class="tab-pane fade">
-																	
-                                                                    <div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Thursday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-
-																	
-																</div>
-																<!-- /Thursday Slot -->
-
-																<!-- Friday Slot -->
-																<div id="slot_friday" class="tab-pane fade">
-																	
-
-                                                                    <div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Friday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-
-																	
-																</div>
-																<!-- /Friday Slot -->
-
-																<!-- Saturday Slot -->
-																<div id="slot_saturday" class="tab-pane fade">
-																	
-
-                                                                    <div class="doc-times">
-                                                                        <?php foreach ($scheduleTimings as $timing): ?>
-                                                                            <?php if ($timing['day'] == 'Saturday'): ?>
-                                                                                <div class="doc-slot-list">
-                                                                                    <?= date('h:i A', strtotime($timing['start_time'])) ?> - <?= date('h:i A', strtotime($timing['end_time'])) ?>
-                                                                                    <a href="<?= site_url('schedule/delete/' . $timing['id']) ?>" class="delete_schedule">
-                                                                                        <i class="fa fa-times"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                    </div>
-
-																	
-																</div>
-																<!-- /Saturday Slot -->
-
-															</div>
-															<!-- /Schedule Content -->
-															
-														</div>
-													</div>
+							<div class="container mt-5">
+								<form action="<?= base_url('schedule/insert') ?>" method="post">
+									<div id="dateTimeContainer">
+										<div class="row dateTimeEntry">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="date">Select Date</label>
+													<input type="date" class="form-control" name="date[]" onchange="showTimeInputs(this)">
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="start_time">Start Time</label>
+													<input type="time" class="form-control" name="start_time[]">
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="end_time">End Time</label>
+													<input type="time" class="form-control" name="end_time[]">
 												</div>
 											</div>
 										</div>
 									</div>
+									<div class="row mt-3">
+										<div class="col-md-4">
+											<button type="button" class="btn btn-secondary" onclick="addDateTimeEntry()">Add Another</button>
+										</div>
+										<div class="col-md-4">
+											<button type="submit" class="btn btn-primary">Submit</button>
+										</div>
+									</div>
+								</form>
+							</div>
+
+							<script>
+								function showTimeInputs(dateInput) {
+									var entry = dateInput.closest('.dateTimeEntry');
+									entry.querySelectorAll('input[type="time"]').forEach(input => {
+										input.style.display = 'block';
+									});
+								}
+
+								function addDateTimeEntry() {
+									var container = document.getElementById('dateTimeContainer');
+									var newEntry = container.firstElementChild.cloneNode(true);
+									newEntry.querySelectorAll('input').forEach(input => {
+										input.value = '';
+									});
+									container.appendChild(newEntry);
+								}
+							</script>
+							<br>
+							<hr>
+							<br>
+							
+							
+						
+							<div class="container calendar-container">
+								<div class="calendar">
+									<div class="calendar-header">
+										<button class="btn btn-primary" id="prevMonth">Previous</button>
+										<h2 id="calendarTitle" class="mx-auto"></h2>
+										<button class="btn btn-primary" id="nextMonth">Next</button>
+									</div>
+									<div class="calendar-body">
+										<div class="calendar-day">Sun</div>
+										<div class="calendar-day">Mon</div>
+										<div class="calendar-day">Tue</div>
+										<div class="calendar-day">Wed</div>
+										<div class="calendar-day">Thu</div>
+										<div class="calendar-day">Fri</div>
+										<div class="calendar-day">Sat</div>
+									</div>
+									<div id="calendarDays" class="calendar-body"></div>
+								</div>
+								<div class="sidebar">
+									<h4>Schedule Details</h4>
+									<div id="scheduleDetails">Click a date to see the schedule details.</div>
 								</div>
 							</div>
-								
+
+							<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+							<script>
+								const scheduleTimings = <?php echo json_encode($scheduleTimings); ?>;
+
+								const calendarTitle = document.getElementById('calendarTitle');
+								const calendarDays = document.getElementById('calendarDays');
+								const prevMonthBtn = document.getElementById('prevMonth');
+								const nextMonthBtn = document.getElementById('nextMonth');
+								const scheduleDetails = document.getElementById('scheduleDetails');
+
+								let currentYear = new Date().getFullYear();
+								let currentMonth = new Date().getMonth();
+
+								function renderCalendar(year, month) {
+									calendarTitle.innerText = `${year} - ${month + 1}`;
+
+									const firstDayOfMonth = new Date(year, month, 1).getDay();
+									const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+									const lastDayOfMonth = new Date(year, month, lastDateOfMonth).getDay();
+									const days = [];
+
+									for (let i = 0; i < firstDayOfMonth; i++) {
+										days.push('<div class="calendar-day empty"></div>');
+									}
+									for (let i = 1; i <= lastDateOfMonth; i++) {
+										days.push(`<div class="calendar-day" data-date="${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}">${i}</div>`);
+									}
+									for (let i = lastDayOfMonth + 1; i < 7; i++) {
+										days.push('<div class="calendar-day empty"></div>');
+									}
+
+									calendarDays.innerHTML = days.join('');
+								}
+
+								function getScheduleForDate(date) {
+									return scheduleTimings.filter(item => {
+										const itemDate = item.date.split(' ')[0];
+										return itemDate === date;
+									});
+								}
+
+								function formatTimeToAmPm(timeStr) {
+	const date = new Date(`1970-01-01T${timeStr}Z`);
+	const hours = date.getUTCHours();
+	const minutes = date.getUTCMinutes();
+	const ampm = hours >= 12 ? 'PM' : 'AM';
+	const formattedHours = hours % 12 || 12; // Convert 0 hours to 12
+	const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+	return `${formattedHours}:${formattedMinutes} ${ampm}`;
+}
+
+calendarDays.addEventListener('click', function(event) {
+	const target = event.target;
+	if (target.classList.contains('calendar-day') && !target.classList.contains('empty')) {
+		const date = target.getAttribute('data-date');
+		const schedules = getScheduleForDate(date);
+
+		if (schedules.length > 0) {
+			let scheduleHTML = schedules.map(schedule => {
+				const formattedStartTime = formatTimeToAmPm(schedule.start_time);
+				const formattedEndTime = formatTimeToAmPm(schedule.end_time);
+				return `
+					<div class="doc-times">
+						<div class="doc-slot-list">
+							${formattedStartTime} - ${formattedEndTime}
+							<a href="<?= site_url('schedule/delete/') ?>${schedule.id}" class="delete_schedule">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+				`;
+			}).join('');
+
+			scheduleDetails.innerHTML = scheduleHTML;
+
+		} else {
+			scheduleDetails.innerHTML = `
+				<h4>No Schedule</h4>
+				<p>No schedule available for ${date}</p>
+			`;
+		}
+	}
+});
+
+
+
+
+								function handleCustomButtonClick(date) {
+									const schedules = getScheduleForDate(date);
+									if (schedules.length > 0) {
+										let scheduleText = schedules.map(schedule => {
+											return `Start Time: ${schedule.start_time}\nEnd Time: ${schedule.end_time}`;
+										}).join('\n\n');
+										
+										alert(`Custom Button Clicked\n\n${scheduleText}`);
+									} else {
+										alert(`No schedule available for ${date}`);
+									}
+								}
+
+								prevMonthBtn.addEventListener('click', () => {
+									if (currentMonth === 0) {
+										currentMonth = 11;
+										currentYear--;
+									} else {
+										currentMonth--;
+									}
+									renderCalendar(currentYear, currentMonth);
+								});
+
+								nextMonthBtn.addEventListener('click', () => {
+									if (currentMonth === 11) {
+										currentMonth = 0;
+										currentYear++;
+									} else {
+										currentMonth++;
+									}
+									renderCalendar(currentYear, currentMonth);
+								});
+
+								renderCalendar(currentYear, currentMonth);
+							</script>
 						</div>
 					</div>
 
@@ -460,18 +459,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="col-lg-3">
-                                <div class="form-group">               
-                                    <label>Slot Duration</label>
-                                    <select class="form-control slot-duration" name="slot_duration">
-                                        <option>-</option>
-                                        <option value="15">15 mins</option>
-                                        <option value="30" selected="selected">30 mins</option>  
-                                        <option value="45">45 mins</option>
-                                        <option value="60">1 Hour</option>
-                                    </select>
-                                </div>
-                            </div> -->
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Start Time</label>

@@ -37,41 +37,48 @@ class DoctorController extends ResourceController
 
     //
     public function insertSchedule()
-    {
-        $session = session();
-        
-        if ($session->has('user_data')) {
-            $userData = $session->get('user_data');
+{
+    $session = session();
     
-            if (isset($userData['DoctorID'])) {
-                $doctorId = $userData['DoctorID'];
-    
-                // Get doctor_id from session storage
-                $model = new ScheduleModel();
-    
+    if ($session->has('user_data')) {
+        $userData = $session->get('user_data');
+
+        if (isset($userData['DoctorID'])) {
+            $doctorId = $userData['DoctorID'];
+
+            // Get doctor_id from session storage
+            $model = new ScheduleModel();
+
+            // Fetch input data
+            $dates = $this->request->getVar('date');
+            $start_times = $this->request->getVar('start_time');
+            $end_times = $this->request->getVar('end_time');
+
+            // Loop through each entry and insert into the database
+            foreach ($dates as $index => $date) {
                 $data = [
-                    'doctor_id' => $doctorId,
-                    'day' => $this->request->getVar('day'),
-                    // 'slot_duration' => $this->request->getVar('slot_duration'),
-                    'start_time' => $this->request->getVar('start_time'),
-                    'end_time' => $this->request->getVar('end_time'),
+                    'doctor_id' => $doctorId,  // Added doctor_id to the data array
+                    'date' => $date,
+                    'start_time' => $start_times[$index],
+                    'end_time' => $end_times[$index],
                     'status' => 'Available',
                 ];
-    
+
                 $model->insert($data);
-    
-                return redirect()->to('/Doctor/Dashboard/Schedule'); // Redirect to a success page after insertion.
-            } else {
-                // Handle case where DoctorID is not set
-                // You might want to log an error or redirect to an error page
-                return redirect()->to('error_page');
             }
+
+            // Redirect to a success page after insertion
+            return redirect()->to('/Doctor/Dashboard/Schedule');
         } else {
-            // Handle case where session data is not set
-            // You might want to log an error or redirect to an error page
-            return redirect()->to('error_page');
+            // Handle case where DoctorID is not set
+            return redirect()->to('/error_page'); // Changed to a relative path
         }
+    } else {
+        // Handle case where session data is not set
+        return redirect()->to('/error_page'); // Changed to a relative path
     }
+}
+
 
     public function deleteSchedule($id)
     {
@@ -117,9 +124,13 @@ class DoctorController extends ResourceController
             if ($doctor) {
                 // Fetch schedule timings for the doctor
                 $scheduleTimings = $scheduleModel
-                    ->select('id, day, slot_duration, start_time, end_time')
+                    ->select('id, date, start_time, end_time')
                     ->where('doctor_id', $doctorID)
                     ->findAll();
+
+                    $data['scheduleTimings'] = $scheduleTimings;
+
+                    // print_r($scheduleTimings);
                 
                     $data['loggedIn'] = $loggedIn;
                     $data['role'] = $role;
@@ -128,7 +139,7 @@ class DoctorController extends ResourceController
     
 
                 // Pass the doctor's data and schedule timings to the view
-                return view('doctor/schedule_timings', array_merge(['doctor' => $doctor, 'scheduleTimings' => $scheduleTimings, 'token' => $token],  $data));
+                return view('doctor/schedule_timings', array_merge(['doctor' => $doctor, 'token' => $token],  $data));
 
 
                 // // // Prepare data array

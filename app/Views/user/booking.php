@@ -113,6 +113,9 @@
 
 							
 							<div id="calendar"></div>
+							
+
+
 
 							<script>
     // Get the PHP data and parse it as JSON

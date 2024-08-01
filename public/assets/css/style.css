@@ -6839,6 +6839,9 @@ html.menu-opened body {
 
  /* Change calendar header background color to gold */
 
+	.evo-calendar {
+		margin-bottom: 30px !important;
+	}
 
 	.evo-calendar .calendar-sidebar {
         background-color: gold !important;
@@ -6868,3 +6871,29 @@ html.menu-opened body {
     }
 
 
+/*  */
+
+.calendar-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+.calendar, .sidebar {
+	flex: 1;
+	min-width: 300px;
+	margin: 10px;
+}
+.calendar-header, .calendar-body {
+	display: flex;
+	flex-wrap: wrap;
+}
+.calendar-day {
+	flex: 1 0 14.28%; /* Seven days in a week */
+	text-align: center;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+.calendar-day.empty {
+	background-color: #f0f0f0;
+}
+
+/*  */
