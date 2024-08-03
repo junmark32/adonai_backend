@@ -85,68 +85,99 @@
 									<form action="<?= base_url('patient/insertBooking') ?>">
 									
 										<!-- Personal Information -->
-										<div class="info-widget">
-											<h4 class="card-title">Personal Information</h4>
-											<div class="row">
-												<input type="hidden" name="doctor_id" value="<?= isset($_GET['doctor_id']) ? $_GET['doctor_id'] : '' ?>">
-												<div class="col-md-6 col-sm-12">
-													<div class="form-group card-label">
-														<label>First Name</label>
-														<input class="form-control" type="text" name="firstname">
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-12">
-													<div class="form-group card-label">
-														<label>Last Name</label>
-														<input class="form-control" type="text" name="lastname">
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-12">
-													<div class="form-group card-label">
-														<label>Email</label>
-														<input class="form-control" type="email" name="email">
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-12">
-													<div class="form-group card-label">
-														<label>Phone</label>
-														<input class="form-control" type="text" name="phone">
-													</div>
-												</div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="form-group card-label">
-                                                        <label>Purpose</label>
-                                                        <select class="form-control" name="purpose">
-                                                            <option value="Check-Up">Check-Up</option>
-                                                            <option value="Cataract">Cataract</option>
-                                                            <option value="Eyecare">Eyecare</option>
-                                                            <option value="Followed_Checkup">Followed_Checkup</option>
-                                                            <!-- Add more options as needed -->
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="form-group card-label">
-                                                        <label>Location</label>
-                                                        <select class="form-control" name="pref_location">
-                                                            <option value="Adonai-1 Xentro Mall, Calapan">Adonai-1 Xentro Mall, Calapan</option>
-                                                            <option value="Adonai-2">Adonai-2</option>
-                                                            <option value="Adonai-3">Adonai-3</option>
-                                                            <option value="Adonai-4">Adonai-4</option>
-                                                            <!-- Add more options as needed -->
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="form-group card-label">
-                                                        <label>Addtional Message</label>
-                                                        <input class="form-control" type="text" name="add_message">
-                                                    </div>
-                                                </div>
+<div class="info-widget">
+    <h4 class="card-title">Personal Information</h4>
+    <div class="row">
+        <input type="hidden" name="doctor_id" value="<?= isset($_GET['doctor_id']) ? $_GET['doctor_id'] : '' ?>">
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>First Name</label>
+                <input class="form-control" type="text" name="firstname" required>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>Last Name</label>
+                <input class="form-control" type="text" name="lastname" required>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>Email</label>
+                <input class="form-control" type="email" name="email" required>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>Phone</label>
+                <input class="form-control" type="text" name="phone" required>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>Purpose</label>
+                <select class="form-control" name="purpose" required>
+                    <option value="Check-Up">Check-Up</option>
+                    <option value="Cataract">Cataract</option>
+                    <option value="Eyecare">Eyecare</option>
+                    <option value="Followed_Checkup">Followed Checkup</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>Location</label>
+                <select class="form-control" name="pref_location" required>
+                    <option value="Adonai-1 Xentro Mall, Calapan">Adonai-1 Xentro Mall, Calapan</option>
+                    <!-- <option value="Adonai-2">Adonai-2</option>
+                    <option value="Adonai-3">Adonai-3</option>
+                    <option value="Adonai-4">Adonai-4</option> -->
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="form-group card-label">
+                <label>Additional Message</label>
+                <input class="form-control" type="text" name="add_message">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Personal Information -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
 
-											</div>
-										</div>
-										<!-- /Personal Information -->
+        form.addEventListener('submit', function (event) {
+            let valid = true;
+
+            // Custom validation logic
+            const email = form.querySelector('input[name="email"]');
+            const phone = form.querySelector('input[name="phone"]');
+
+            // Check if email is valid
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email.value)) {
+                alert('Please enter a valid email address.');
+                valid = false;
+            }
+
+            // Check if phone number is valid (simple check)
+            const phonePattern = /^[0-9]{10,15}$/;
+            if (!phonePattern.test(phone.value)) {
+                alert('Please enter a valid phone number.');
+                valid = false;
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
 										
 										<div class="payment-widget">
 											<!-- Terms Accept -->
@@ -164,7 +195,7 @@
 											
 											<!-- Submit Section -->
 											<div class="submit-section mt-4">
-												<button type="submit" class="btn btn-primary submit-btn">Confirm and Pay</button>
+												<button type="submit" class="btn btn-primary submit-btn">Confirm</button>
 											</div>
 											<!-- /Submit Section -->
 											
@@ -209,25 +240,24 @@
 									
 									<div class="booking-summary">
 										<div class="booking-item-wrap">
-                                        <ul class="booking-date">
-                                            <li>Date <span id="selectedDate"></span></li>
-											<li>Time ID <span id="selectedTimeslotId"></span></li>
-                                            <li>Time <span id="selectedTime"></span></li>
-                                            
-                                        </ul>
-											<ul class="booking-fee">
-												<li>Consulting Fee <span>₱100</span></li>
-												<li>Booking Fee <span>₱10</span></li>
-												<!-- <li>Video Call <span>$50</span></li> -->
+											<ul class="booking-date">
+												<li>Date <span id="selectedDate"></span></li>
+												<li>Time ID <span id="selectedTimeslotId"></span></li>
+												<li>Time <span id="selectedTime"></span></li>
+												
 											</ul>
-											<div class="booking-total">
-												<ul class="booking-total-list">
-													<li>
-														<span>Total</span>
-														<span class="total-cost">₱110</span>
-													</li>
-												</ul>
-											</div>
+												<!-- <ul class="booking-fee">
+													<li>Consulting Fee <span>₱100</span></li>
+													<li>Booking Fee <span>₱10</span></li>
+												</ul> -->
+												<!-- <div class="booking-total">
+													<ul class="booking-total-list">
+														<li>
+															<span>Total</span>
+															<span class="total-cost">₱110</span>
+														</li>
+													</ul>
+												</div> -->
 										</div>
 									</div>
 								</div>

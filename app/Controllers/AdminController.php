@@ -795,13 +795,20 @@ public function generateReport()
                      ->set('Status', 'Complete')
                      ->update();
 
-     // Fetch appointments where Pref_Date is before today
+                     
+    // Update appointments that are complete
+    $scheduleTimingsModel->where('date <', $today)
+                    // ->where('Pref_Time_End <', $formattedTime)
+                    ->set('status', 'Reserved')
+                    ->update();
+
+    //  // Fetch appointments where Pref_Date is before today
     //  $appointments = $appointmentModel->where('Pref_Date <', $today)->findAll();
 
     //  // Update schedule timings based on fetched appointments
     //  foreach ($appointments as $appointment) {
     //      $scheduleTimingsModel->where('id', $appointment['Pref_Timeslot_ID'])
-    //                           ->set('status', 'Available')
+    //                           ->set('status', 'Reserved')
     //                           ->update();
     //  }
 

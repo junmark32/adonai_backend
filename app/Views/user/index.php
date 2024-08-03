@@ -169,10 +169,10 @@
                                                 <li>
                                                     <i class="far fa-clock"></i>Mon-Sun: 9:00 AM - 9:00 PM
                                                 </li>
-                                                <li>
+                                                <!-- <li>
 													<i class="far fa-money-bill-alt"></i> ₱<?= $doctor['Fees_range'] ?>
 													<i class="fas fa-info-circle" data-toggle="tooltip" title="<?= $doctor['Fees_info'] ?>"></i>
-												</li>
+												</li> -->
 
                                             </ul>
                                             <div class="row row-sm">
