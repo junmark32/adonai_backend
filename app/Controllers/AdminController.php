@@ -183,7 +183,43 @@ public function updateStatus()
 
     public function addProduct()
     {
-        return view('admin/add_product');
+        $session = session();
+
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
+
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
+
+                if ($admin) {
+
+ 
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/add_product', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
     }
 
     public function insertProduct()
@@ -236,24 +272,56 @@ public function updateStatus()
 
     public function editProduct($productID)
     {
-        // Load the product model
-        $productModel = new ProductModel();
+        $session = session();
 
-        // Retrieve the product data based on the product ID
-        $product = $productModel->find($productID);
+        // Check if 'user_data' exists in the session
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+            $loggedIn = true;
+            // var_dump($userData);
+            $role = $userData['Role']; // Assuming 'role' is stored in the session
 
-        // Dump the contents and type of the $products variable
-        // var_dump($products);
+            // Check if the user has a 'DoctorID' key
+            if (isset($userData['AdminID'])) {
+                // Retrieve the DoctorID
+                $adminID = $userData['AdminID'];
 
+                // Fetch doctor's data based on DoctorID
+                $adminModel = new AdminModel();
+                $admin = $adminModel->find($adminID);
 
-        // Check if the product exists
-        // if (!$product) {
-        //     // Product not found, redirect or show error message
-        //     return redirect()->to('/admin/products')->with('error', 'Product not found');
-        // }
+                if ($admin) {
+                     // Load the product model
+                    $productModel = new ProductModel();
+                    $prodHistoryModel = new ProdHistoryModel();
 
-        // Pass the product data to the view for editing
-        return view('admin/update_product', ['product' => $product]);
+                    $prodHistory = $prodHistoryModel->where('ProductID', $productID)->findAll();
+
+                    // Retrieve the product data based on the product ID
+                    $product = $productModel->find($productID);
+
+        
+
+                    // print_r($prodHistory);
+                    $data['prodHistory'] = $prodHistory;
+                    $data['product'] = $product;
+                     // Pass loggedIn status, role, and doctor data to the view
+                     $data['loggedIn'] = $loggedIn;
+                     $data['role'] = $role;
+                    // Pass the doctor data to the view
+                    $data['admins'] = [$admin]; // Make sure $doctors is an array
+                    return view('admin/update_product', $data);
+                } else {
+                    return view('error', ['error' => 'Doctor not found']);
+                }
+            } else {
+                return view('error', ['error' => 'DoctorID not found in session data']);
+            }
+        } else {
+            return view('error', ['error' => 'User data not found in session']);
+        }
+       
     }
 
     public function updateProduct()
@@ -315,25 +383,21 @@ public function updateStatus()
     // Update product data in the database
     $productModel->update($productID, $data);
 
+
+    // Find the latest stock quantity for the given product ID in the prodHistoryModel
+    $latestHistory = $prodHistoryModel->where('ProductID', $productID)
+    ->orderBy('created_at', 'DESC') // Assuming there's a 'created_at' field to get the latest entry
+    ->first();
+
+    $stockQuantity = $latestHistory ? $latestHistory['StockQuantity'] : 0; // Default to 0 if no history is found
+
     // Define product data
     $data1 = [
         'ProductID' => $productID,
-        'Image_url' => $imageName, // Relative path to the image
         'Name' => $this->request->getPost('name'),
-        'Brand' => $this->request->getPost('brand'),
-        'Type' => $this->request->getPost('type'),
         'Price' => $this->request->getPost('price'),
-        'StockQuantity' => $this->request->getPost('stock_quantity'),
-        'Faceshape' => $this->request->getPost('faceshape'),
-        'Frameshape' => $this->request->getPost('frameshape'),
-        'Material' => $this->request->getPost('material'),
-        'Gender' => $this->request->getPost('gender'),
-        'Frameage' => $this->request->getPost('frameage'),
-        'Framesize' => $this->request->getPost('framesize'),
-        'Fullframesize' => $this->request->getPost('fullframesize'),
-        'Nosebridgesize' => $this->request->getPost('nosebridgesize'),
-        'Templesize' => $this->request->getPost('templesize'),
-        'Note' => $this->request->getPost('note')
+        'Re-Stock' => $this->request->getPost('stock_quantity'),
+        'StockQuantity' => $stockQuantity,
     ];
 
     // Insert product data into the database

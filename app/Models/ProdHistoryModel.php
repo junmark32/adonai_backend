@@ -12,7 +12,7 @@ class ProdHistoryModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['ProductID', 'Image_url', 'Name', 'Brand', 'Type', 'Price', 'StockQuantity', 'Faceshape', 'Frameshape', 'Material', 'Gender', 'Frameage', 'Framesize', 'Fullframesize', 'Nosebridgesize', 'Templesize', 'Note', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['ProductID', 'Name', 'Price', 'Re-Stock', 'StockQuantity', 'created_at', 'updated_at'];
 
     // Dates
     protected $useTimestamps = false;

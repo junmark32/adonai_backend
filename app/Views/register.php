@@ -91,7 +91,7 @@
         </div>
     </div>
     <div class="text-right">
-        <a class="forgot-link" href="login.html">Already have an account?</a>
+        <a class="forgot-link" href="<?= site_url('/login') ?>">Already have an account?</a>
     </div>
     <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Signup</button>
     <div class="login-or">
