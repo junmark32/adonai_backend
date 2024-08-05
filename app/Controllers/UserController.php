@@ -640,6 +640,126 @@ class UserController extends ResourceController
         ]);
     }
 
+    public function user_orders()
+    {
+       // Load the session service
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    $loggedIn = false;
+    $role = null;
+    $userData = [];
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true;
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+        $token = $userData['token'];
+    }
+
+    
+
+    $patientModel = new PatientModel();
+    $purchaseModel = new PurchaseModel();
+    $productModel = new ProductModel();
+    $lensModel = new LensModel();
+
+    $patient = $patientModel->where('PatientID', $userData['PatientID'])->first();
+    $userId = $patient['UserID'];
+    $purchases = $purchaseModel->where('UserID', $userId)->findAll();
+
+    // Initialize arrays to store EyeWearData and LensData
+    $productData = [];
+    $lensData = [];
+
+    // Fetch EyeWearData and LensData based on the purchase records
+    foreach ($purchases as $purchase) {
+        if (isset($purchase['EyewearID'])) {
+            $product = $productModel->find($purchase['EyewearID']);
+            if ($product) {
+                $productData[] = $product;
+            }
+        }
+
+        if (isset($purchase['LensID'])) {
+            $lens = $lensModel->find($purchase['LensID']);
+            if ($lens) {
+                $lensData[] = $lens;
+            }
+        }
+    }
+
+
+
+    // echo '<pre>';
+    // print_r($purchases);
+    // print_r($productData);
+    // print_r($lensData);
+    // echo '</pre>';
+
+
+
+
+    // Load Patients Data
+    $patientModel = new PatientModel();
+    $patients = [];
+    if (!empty($userData['PatientID'])) {
+        // Fetch only the patient associated with the user's session ID
+        $patients = $patientModel->where('PatientID', $userData['PatientID'])->findAll();
+    }
+     // Load the ProductModel
+     $productModel = new ProductModel();
+
+     // Retrieve all products from the database
+     $products = $productModel->findAll();
+
+     // Load Cart Data for the logged-in user
+    $cartModel = new CartModel();
+    $cartItems = [];
+    if ($loggedIn && isset($userData['UserID'])) {
+        $cartItems = $cartModel->where('UserID', $userData['UserID'])->findAll();
+    }
+
+    // Calculate the count of items in the cart
+    $cartCount = count($cartItems);
+
+     // Pass loggedIn status, role, and patient data to the view
+    $data['purchases'] = $purchases;
+    $data['productData'] = $productData;
+    $data['lensData'] = $lensData;
+    
+    $data['loggedIn'] = $loggedIn;
+    $data['role'] = $role;
+    $data['patients'] = $patients;
+
+     // Pass the products data to the view
+     $data['products'] = $products;
+
+     // Pass the cart count to the view
+     $data['cartCount'] = $cartCount;
+
+     return view('user/user_orders', ['token' => $token] + $data);
+
+    }
+
+    public function cancelPurchase($id)
+    {
+        // Load the PurchaseModel
+        $purchaseModel = new PurchaseModel();
+
+        // Update the status to 'Cancelled'
+        $data = [
+            'Status' => 'Cancelled'
+        ];
+
+        // Check if the update is successful
+        if ($purchaseModel->update($id, $data)) {
+            return redirect()->to('/store/orders')->with('message', 'Purchase cancelled successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to cancel the purchase.');
+        }
+    }
+
 
     
 
@@ -972,11 +1092,14 @@ $data['scheduleTimings'] = json_encode($events);
                     $returnedCount = $purchaseModel->where('Status', 'Returned')->countAllResults();
 
                     $completeCount = $purchaseModel->where('Status', 'Completed')->countAllResults();
+
+                    $cancelCount = $purchaseModel->where('Status', 'Cancelled')->countAllResults();
             // Assign counts to data array
                     $data['purchaseCount'] = $purchaseCount;
                     $data['onprocessCount'] = $onprocessCount;
                     $data['returnedCount'] = $returnedCount;
                     $data['completeCount'] = $completeCount;
+                    $data['cancelCount'] = $cancelCount;
 
 
                             // Pass loggedIn status, role, and doctor data to the view

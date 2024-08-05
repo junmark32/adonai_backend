@@ -28,6 +28,9 @@ $routes->match(['post','get'],'/store/cart/addToCart', 'UserController::addToCar
 $routes->match(['post','get'],'/store/cart', 'UserController::viewCart');
 $routes->match(['post','get'],'/store/cart/remove/(:num)', 'UserController::removeItem/$1');
 $routes->match(['post','get'],'/store/cart/checkout', 'UserController::item_checkout');
+$routes->match(['post','get'],'/store/orders', 'UserController::user_orders');
+$routes->match(['post','get'],'/purchase/cancel/(:num)', 'UserController::cancelPurchase/$1');
+
 
 
 ///

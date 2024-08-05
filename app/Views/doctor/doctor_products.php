@@ -180,6 +180,36 @@
 										<div class="card-body">
 											<div class="dash-widget-header">
 												<div class="dash-count">
+													<h3><?php echo $cancelCount; ?></h3>
+												</div>
+											</div>
+											<div class="dash-widget-info">
+												<h6 class="text-muted">Cancelled Items</h6>
+												<div class="progress progress-sm">
+													<?php
+													// Ensure $returnedCount and $purchaseCount are not negative to avoid division by zero or negative percentages
+													$cancelCount = max(0, $cancelCount);
+													$purchaseCount = max(1, $purchaseCount); // Use max(1, $purchaseCount) to avoid division by zero
+
+													// Calculate percentage
+													$percentage = ($cancelCount / $purchaseCount) * 100;
+
+													// Limit percentage to a maximum of 100%
+													$percentage = min($percentage, 100);
+
+													// Print the progress bar with dynamic width
+													echo '<div class="progress-bar bg-danger" style="width: ' . $percentage . '%;"></div>';
+													?>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-3 col-sm-6 col-12">
+									<div class="card">
+										<div class="card-body">
+											<div class="dash-widget-header">
+												<div class="dash-count">
 													<h3><?php echo $returnedCount; ?></h3>
 												</div>
 											</div>
@@ -259,6 +289,7 @@
 																		<option value="On-Process" <?php if ($purchase->Status == 'On-Process') echo 'selected'; ?>>On-Process</option>
 																		<option value="Completed" <?php if ($purchase->Status == 'Completed') echo 'selected'; ?>>Completed</option>
 																		<option value="Returned" <?php if ($purchase->Status == 'Returned') echo 'selected'; ?>>Returned</option>
+																		<option value="Cancelled" <?php if ($purchase->Status == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
 																	</select>
 																</form>
 															</td>

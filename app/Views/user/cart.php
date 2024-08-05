@@ -102,9 +102,11 @@
                                 <h6>Thank you for choosing Adonai for your eyeglass needs. We are committed to ensuring that you receive the best-fitted eyeglasses and optimal vision correction.</h6>
                                 <h6>After checkout, please be aware that the eyeglasses you've selected will be available for pickup at our clinic. Prior to visiting our clinic, we kindly request you to schedule an appointment for an eye test. This step is crucial to ensure the accuracy of your prescription and the suitability of the selected eyeglasses.</h6>
                                 <h6>Once your purchase is complete, you will receive an email containing a downloadable voucher confirming your order and appointment details. Please present this voucher to our clinic staff during your visit for the eye test. Following the test, you can proceed to collect the glasses you've ordered.</h6>
-                                <form id="checkoutForm" action="/store/cart/checkout" >
+                                <br>
+								<form id="checkoutForm" action="/store/cart/checkout" >
                                     <input type="checkbox" id="confirmCheckout">
                                     <label for="confirmCheckout">I confirm that I have checked the items and want to proceed to checkout.</label>
+									<br>
                                     <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
                                 </form>
                             </div>

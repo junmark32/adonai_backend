@@ -14,6 +14,13 @@
                                                 </a>
                                             </li>
 											<li>
+    <a href="<?= site_url('/store/orders') ?>">
+        <i class="fas fa-box"></i> <!-- or use fas fa-receipt -->
+        <span>Orders</span>
+    </a>
+</li>
+
+											<li>
 												<a href="<?= site_url('/profile-settings') ?>">
 													<i class="fas fa-user-cog"></i>
 													<span>Profile Settings</span>
