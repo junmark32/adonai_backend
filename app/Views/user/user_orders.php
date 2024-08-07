@@ -151,19 +151,68 @@
                 </td>
                 <!-- Replace 'order_date' with the actual order date field -->
                 <td><?= esc($purchase['Status']) ?></td> <!-- Replace 'status' with the actual status field -->
-                <td class="text-right">
+				<td class="text-right">
                     <div class="table-action">
-                        <form action="<?= site_url('/purchase/cancel/' . $purchase['PurchaseID']) ?>" method="post">
-                            <button type="submit" class="btn btn-sm bg-danger text-light">
+                        <form id="cancelForm-<?= $purchase['PurchaseID'] ?>" action="<?= site_url('/purchase/cancel/' . $purchase['PurchaseID']) ?>" method="post" style="display:inline;">
+                            <button type="button" class="btn btn-sm bg-danger text-light" onclick="confirmCancel('<?= $purchase['PurchaseID'] ?>')">
                                 <i class="fas fa-times"></i> Cancel
                             </button>
                         </form>
+                        <button type="button" class="btn btn-sm bg-info text-light" onclick="downloadReceipt('<?= $purchase['PurchaseID'] ?>')">
+    <i class="fas fa-receipt"></i> Download Receipt
+</button>
+
                     </div>
                 </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<script>
+function downloadReceipt(purchaseId) {
+    // Construct the URL for fetching the receipt
+    const url = `<?= site_url('/purchase/getBill/') ?>${purchaseId}`;
+    
+    // Create a new form element to submit the request
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    form.target = '_blank'; // Open in a new tab to download the file
+
+    // Append form to the body and submit it
+    document.body.appendChild(form);
+    form.submit();
+    
+    // Remove form from the document
+    document.body.removeChild(form);
+}
+</script>
+
+
+
+<script>
+    function confirmCancel(purchaseID) {
+        swal({
+            title: "Are you sure?",
+            text: "Are you sure to cancel this order?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, cancel it!",
+            cancelButtonText: "No, keep it",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function(isConfirm) {
+            if (isConfirm) {
+                document.getElementById('cancelForm-' + purchaseID).submit();
+            } else {
+                swal("Cancelled", "Your order is safe :)", "error");
+            }
+        });
+    }
+</script>
 
                                                     </div>
                                                 </div>

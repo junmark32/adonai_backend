@@ -760,6 +760,69 @@ class UserController extends ResourceController
         }
     }
 
+    public function getBill($id)
+{
+    // Load the PurchaseModel
+    $purchaseModel = new PurchaseModel();
+    $productModel = new ProductModel();
+    $lensModel = new LensModel();
+
+    // Fetch the receipt data using the provided ID
+    $purchase = $purchaseModel->find($id);
+
+    if (!$purchase) {
+        // Handle the case where no purchase record is found
+        return $this->response->setStatusCode(404)->setBody('Receipt not found');
+    }
+
+    // Initialize arrays to hold product and lens data
+    $productData = [];
+    $lensData = [];
+
+    // Fetch EyeWearData and LensData based on the purchase record
+    if (isset($purchase['EyewearID'])) {
+        $product = $productModel->find($purchase['EyewearID']);
+        if ($product) {
+            $productData[] = $product;
+        }
+    }
+
+    if (isset($purchase['LensID'])) {
+        $lens = $lensModel->find($purchase['LensID']);
+        if ($lens) {
+            $lensData[] = $lens;
+        }
+    }
+
+    // Debug output
+    // echo '<pre>';
+    // print_r($purchase);
+    // print_r($productData);
+    // print_r($lensData);
+    // echo '</pre>';
+
+    // Prepare the receipt HTML
+    $data = [
+        'purchase' => $purchase,
+        'products' => $productData,
+        'lenses' => $lensData
+    ];
+   // Load view and render HTML
+   $html = view('reports/bill_template', $data);
+
+   // Initialize DOMPDF
+   $options = new Options();
+   $options->set('defaultFont', 'Courier');
+   $dompdf = new Dompdf($options);
+   $dompdf->loadHtml($html);
+   $dompdf->setPaper('A5', 'portrait');
+   $dompdf->render();
+
+   // Output the generated PDF to Browser
+   $dompdf->stream("report.pdf", ["Attachment" => 0]);
+}
+
+
 
     
 
