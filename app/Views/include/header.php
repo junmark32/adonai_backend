@@ -27,6 +27,9 @@
 		<!-- SweetAlert JS -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 		
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>

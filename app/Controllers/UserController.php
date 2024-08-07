@@ -819,7 +819,7 @@ class UserController extends ResourceController
    $dompdf->render();
 
    // Output the generated PDF to Browser
-   $dompdf->stream("report.pdf", ["Attachment" => 0]);
+   $dompdf->stream("adonai_reciept.pdf", ["Attachment" => 1]);
 }
 
 

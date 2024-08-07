@@ -12,6 +12,9 @@ use App\Models\DoctorModel;
 use App\Controllers\NotificationController;
 use Config\Pusher;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 class PatientController extends ResourceController
 {
     public function index()
@@ -174,6 +177,77 @@ class PatientController extends ResourceController
         // Appointment not found, you can handle this case accordingly
         return redirect()->back()->with('error', 'Appointment not found');
     }
+}
+
+public function printAppt($id)
+{
+    $appointmentModel = new AppointmentModel();
+    $patientModel = new PatientModel();
+
+    // Fetch the receipt data using the provided ID
+    $appt = $appointmentModel->find($id);
+
+    if (!$appt) {
+        // Handle the case where no purchase record is found
+        return $this->response->setStatusCode(404)->setBody('Receipt not found');
+    }
+
+    $patientDatas = [];
+    // Fetch EyeWearData and LensData based on the purchase record
+       if (isset($appt['PatientID'])) {
+           $patient = $patientModel->find($appt['PatientID']);
+           if ($patient) {
+               $patientData = $patient;
+           }
+       }
+
+    
+
+    // Debug output
+    // echo '<pre>';
+    // print_r($appt);
+    // print_r($patientData);
+    // // print_r($lensData);
+    // echo '</pre>';
+
+    // Prepare the receipt HTML
+    $data = [
+        'appt' => [
+            'appt_id' => $appt['AppointmentID'],
+            'appt_first_name' => $appt['Firstname'],
+            'appt_last_name' => $appt['Lastname'],
+            'appt_email' => $appt['Email'],
+            'appt_date' => $appt['Pref_Date'],
+            'appt_start_time' => $appt['Pref_Time_Start'],
+            'appt_end_time' => $appt['Pref_Time_End'],
+            'appt_doctor' => $appt['Pref_Doctor'],
+            'appt_purpose' => $appt['Purpose'],
+            'appt_location' => $appt['Pref_Location'],
+            'appt_message' => $appt['Add_message'],
+        ],
+        'patientData' => [
+            'patient_ID' => $patientData['PatientID'],
+            'patient_first_name' => $patientData['FirstName'],
+            'patient_last_name' => $patientData['LastName'],
+        ],
+    ];
+
+    // echo '<pre>';
+    // print_r($data);
+    // echo '</pre>';
+//    Load view and render HTML
+   $html = view('reports/appt_slip', $data);
+
+   // Initialize DOMPDF
+   $options = new Options();
+   $options->set('defaultFont', 'Courier');
+   $dompdf = new Dompdf($options);
+   $dompdf->loadHtml($html);
+   $dompdf->setPaper('A4', 'portrait');
+   $dompdf->render();
+
+   // Output the generated PDF to Browser
+   $dompdf->stream("adonai_appt_slip.pdf", ["Attachment" => 1]);
 }
 
 ///

@@ -93,7 +93,7 @@
                 <td><?= esc($purchase['card'] ?? 'N/A') ?></td>
             </tr>
             <tr>
-                <td colspan="4">Total Items: <?= esc(count($products) + count($lenses)) ?> Total Units: <?= esc($purchase['total_units'] ?? '0') ?></td>
+                <td colspan="4">Total Items: <?= esc(count($products) + count($lenses)) ?> Total Units: <?= esc($purchase['Quantity'] ?? '0') ?></td>
             </tr>
         </tfoot>
     </table>

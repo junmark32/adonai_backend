@@ -6901,3 +6901,17 @@ html.menu-opened body {
 }
 
 /*  */
+.submit-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.update-button {
+    margin-right: auto;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px; /* Adjust the gap between buttons as needed */
+}

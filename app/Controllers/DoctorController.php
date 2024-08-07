@@ -248,17 +248,20 @@ class DoctorController extends ResourceController
     
                     // Load the AppointmentModel
                     $appointmentModel = new AppointmentModel();
-                    // Fetch appointment data based on PatientID and DoctorID
+                    // Fetch appointment data based on PatientID and DoctorID, ordered by a specific column in descending order
                     $appointments = $appointmentModel->where('PatientID', $patientID)
-                                                      ->where('DoctorID', $doctorID)
-                                                      ->findAll();
-                    
-                    // Load the AppointmentModel
+                                                    ->where('DoctorID', $doctorID)
+                                                    ->orderBy('created_at', 'DESC') // Replace 'appointment_date' with the relevant column
+                                                    ->findAll();
+
+                    // Load the PrescriptionModel
                     $prescriptionModel = new PrescriptionModel();
-                    // Fetch appointment data based on PatientID and DoctorID
+                    // Fetch prescription data based on PatientID and DoctorID, ordered by a specific column in descending order
                     $prescriptions = $prescriptionModel->where('PatientID', $patientID)
-                                                      ->where('DoctorID', $doctorID)
-                                                      ->findAll();
+                                                        ->where('DoctorID', $doctorID)
+                                                        ->orderBy('created_at', 'DESC') // Replace 'prescription_date' with the relevant column
+                                                        ->findAll();
+
                     
 
     
@@ -566,6 +569,7 @@ public function edit_prof_pres($presID, $patientID)
           return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
       }
     }
+    
 
     public function generatePres($presID, $patientID)
 {
@@ -750,6 +754,140 @@ public function update_prof_pres($presID, $patientID)
         return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
     }
 }
+
+public function insert_recent_prof_pres($patientID)
+{
+    $pusherConfig = new Pusher();
+        $pusher = new \Pusher\Pusher(
+            $pusherConfig->key,
+            $pusherConfig->secret,
+            $pusherConfig->app_id,
+            [
+                'cluster' => $pusherConfig->cluster,
+                'useTLS' => $pusherConfig->useTLS
+            ]
+        );
+    // Start session
+    $session = session();
+    
+    // Check if 'user_data' exists in the session
+    if ($session->has('user_data')) {
+        // Retrieve user data from session
+        $userData = $session->get('user_data');
+        $loggedIn = true; // Assume logged in if 'user_data' exists
+        $role = $userData['Role']; // Assuming 'role' is stored in the session
+
+        // Check if the user has a 'DoctorID' key
+        if (isset($userData['DoctorID'])) {
+            // Retrieve the DoctorID
+            $doctorID = $userData['DoctorID'];
+
+            // Fetch doctor's data based on DoctorID
+            $doctorModel = new DoctorModel();
+            $doctor = $doctorModel->find($doctorID);
+
+            // Check if the doctor data is found
+            if ($doctor) {
+                // Load the PatientModel
+                $patientModel = new PatientModel();
+                // Fetch patient data based on the patientId
+                $patientData = $patientModel->find($patientID);
+
+                // Load the AppointmentModel
+                $appointmentModel = new AppointmentModel();
+                // Fetch appointment data based on PatientID and DoctorID
+                $appointments = $appointmentModel->where('PatientID', $patientID)
+                                                  ->where('DoctorID', $doctorID)
+                                                  ->findAll();
+
+                // Gather data for insertion
+                $postData = [
+                    'DoctorID' => $doctorID,
+                    'PatientID' => $patientID,
+                    'Name' => $this->request->getVar('name'),
+                    'Gender' => $this->request->getVar('sex'),
+                    'Date' => $this->request->getVar('date'),
+                    'Address' => $this->request->getVar('address'),
+                    'Age' => $this->request->getVar('age'),
+                    'DateOfBirth' => $this->request->getVar('birthday'),
+                    'Occupation' => $this->request->getVar('occupation'),
+                    'Phone' => $this->request->getVar('cp'),
+                    'B_OD_SPH' => $this->request->getVar('bc_od_sph'),
+                    'B_OD_CYL' => $this->request->getVar('bc_od_cyl'),
+                    'B_OD_AX' => $this->request->getVar('bc_od_ax'),
+                    'B_OD_ADD' => $this->request->getVar('bc_od_add'),
+                    'B_OD_VA' => $this->request->getVar('bc_od_va'),
+                    'B_OD_PD' => $this->request->getVar('bc_od_pd'),
+                    'B_OS_SPH' => $this->request->getVar('bc_os_sph'),
+                    'B_OS_CYL' => $this->request->getVar('bc_os_cyl'),
+                    'B_OS_AX' => $this->request->getVar('bc_os_ax'),
+                    'B_OS_ADD' => $this->request->getVar('bc_os_add'),
+                    'B_OS_VA' => $this->request->getVar('bc_os_va'),
+                    'B_OS_PD' => $this->request->getVar('bc_os_pd'),
+                    'Ocular_History' => $this->request->getVar('ocular_history'),
+                    'L_OD_SPH' => $this->request->getVar('lp_od_sph'),
+                    'L_OD_CYL' => $this->request->getVar('lp_od_cyl'),
+                    'L_OD_AX' => $this->request->getVar('lp_od_ax'),
+                    'L_OD_ADD' => $this->request->getVar('lp_od_add'),
+                    'L_OD_PD' => $this->request->getVar('lp_od_pd'),
+                    'L_OS_SPH' => $this->request->getVar('lp_os_sph'),
+                    'L_OS_CYL' => $this->request->getVar('lp_os_cyl'),
+                    'L_OS_AX' => $this->request->getVar('lp_os_ax'),
+                    'L_OS_ADD' => $this->request->getVar('lp_os_add'),
+                    'L_OS_PD' => $this->request->getVar('lp_os_pd'),
+                    'Frame' => $this->request->getVar('frame'),
+                    'Lens' => $this->request->getVar('lens'),
+                    'Total' => $this->request->getVar('total'),
+                    'Diagnosis' => $this->request->getVar('diagnosis'),
+                    'Remarks' => $this->request->getVar('remarks'),
+                    'Management' => $this->request->getVar('management'),
+                    'Follow_Up' => $this->request->getVar('follow_up'),
+                ];
+
+                // Insert data into PrescriptionModel
+                $prescriptionModel = new PrescriptionModel();
+                $prescriptionModel->insert($postData);
+
+                $data['loggedIn'] = $loggedIn;
+                $data['role'] = $role;
+                $data['doctors'] = [$doctor];
+                $data['patient_data'] = [$patientData];
+                
+                // Fetch user's token using UserID
+                $userModel = new UserModel();
+                                // Load the PatientModel
+                $patientModel = new PatientModel();
+
+                // Retrieve the patient data based on the patientId
+                $patientData = $patientModel->find($patientID);
+                 // Retrieve the UserID from the patient data
+                 $userID = $patientData['UserID'];
+                // Fetch user's token using UserID
+                $user = $userModel->find($userID);
+                $token = $user['token'];
+
+                // // Output the token for debugging
+                // var_dump($token);
+
+                // Send notification using Pusher to specific user based on token
+                $data['message'] = 'A new Prescription has been made by ' . $doctor['FirstName'] . '.';
+                $pusher->trigger('user-token-' . $token, 'prescription-notification', $data);
+                // Pass the $data array to the view
+                return $this->response->setJSON(['status' => 'success']);
+            } else {
+                // Handle the case when no doctor data is found
+                return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor not found.');
+            }
+        } else {
+            // Handle the case when 'DoctorID' is not set in user data
+            return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor ID not found in session.');
+        }
+    } else {
+        // User is not logged in
+        return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
+    }
+}
+
 
 public function delete_prof_pres($presID, $patientID)
 {

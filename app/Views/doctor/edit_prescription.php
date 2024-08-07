@@ -94,7 +94,7 @@
                             </div>
                             
                             
-                            <form action="/Doctor/Dashboard/Update-Prescription/<?= $prescription['PrescriptionID'] ?>/Patients-Profile/<?= $patient['PatientID'] ?>" method="post" enctype="multipart/form-data">
+                            <form id="prescriptionForm" action="/Doctor/Dashboard/Update-Prescription/<?= $prescription['PrescriptionID'] ?>/Patients-Profile/<?= $patient['PatientID'] ?>" method="post" enctype="multipart/form-data">
                                 <h5>Personal Information</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -268,16 +268,52 @@
                                     </div>
                                 </div>
 
-                                <!-- Submit Section -->
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="submit-section">
-                                            <button type="submit" class="btn btn-primary submit-btn">Save</button>
-                                            <button type="reset" class="btn btn-secondary submit-btn">Clear</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /Submit Section -->
+<!-- Submit Section -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="submit-section">
+            <div class="update-button">
+                <button type="button" class="btn btn-warning submit-btn" id="updateButton">Update</button>
+            </div>
+            <div class="right-buttons">
+                <button type="submit" class="btn btn-primary submit-btn">Save</button>
+                <button type="reset" class="btn btn-secondary submit-btn">Clear</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Submit Section -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('updateButton').addEventListener('click', function() {
+        // Gather form data
+        const formData = new FormData(document.getElementById('prescriptionForm'));
+
+        // AJAX request
+        fetch('/Doctor/Dashboard/Insert-Recent-Prescription/Patients-Profile/<?= $patient['PatientID'] ?>', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Redirect to another page on success
+                window.location.href = '/Doctor/Dashboard/Patients-Profile/<?= $patient['PatientID'] ?>';
+            } else {
+                // Redirect to an error page or handle error case
+                window.location.href = '/Doctor/Dashboard/ErrorPage'; // Adjust this URL to your error handling page
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Redirect to an error page on AJAX error
+            window.location.href = '/Doctor/Dashboard/ErrorPage'; // Adjust this URL to your error handling page
+        });
+    });
+});
+</script>
+
+
                             </form>
                             
                         </div>
@@ -289,7 +325,6 @@
     </div>
 </div>
 <!-- /Page Content -->
-
 
    
 			<!-- Footer -->

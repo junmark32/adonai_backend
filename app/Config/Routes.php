@@ -50,6 +50,7 @@ $routes->match(['post','get'],'feedback/addReview', 'UserController::addReview')
 $routes->match(['post','get'],'booking/booked-dates', 'PatientController::getBookedDates');
 $routes->match(['post','get'],'available-time-slots', 'PatientController::getAvailableTimeSlots');
 $routes->match(['post','get'],'appointments/cancel/(:num)', 'PatientController::cancelAppointment/$1');
+$routes->match(['post','get'],'appointments/print/(:num)', 'PatientController::printAppt/$1');
 
 
 // doctor
@@ -80,6 +81,7 @@ $routes->match(['post','get'],'/Doctor/Dashboard/Insert-Prescription/Patients-Pr
 $routes->match(['post','get'],'/Doctor/Dashboard/Edit-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::edit_prof_pres/$1/$2');
 $routes->match(['post','get'],'/report/generatePres/(:num)/Patients-Profile/(:num)', 'DoctorController::generatePres/$1/$2');
 $routes->match(['post','get'],'/Doctor/Dashboard/Update-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::update_prof_pres/$1/$2');
+$routes->match(['post','get'],'/Doctor/Dashboard/Insert-Recent-Prescription/Patients-Profile/(:num)', 'DoctorController::insert_recent_prof_pres/$1');
 $routes->match(['post','get'],'/Doctor/Dashboard/Delete-Prescription/(:num)/Patients-Profile/(:num)', 'DoctorController::delete_prof_pres/$1/$2');
 //
 $routes->post('send-notification', 'NotificationController::send');

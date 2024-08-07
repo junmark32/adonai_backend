@@ -153,15 +153,18 @@
 																		</td>
 																		<td class="text-right">
 																			<div class="table-action">
-																				<form action="<?= site_url('appointments/cancel/' . $appointment['AppointmentID']) ?>" method="post">
+																				<form action="<?= site_url('appointments/cancel/' . $appointment['AppointmentID']) ?>" method="post" style="display:inline;">
 																					<button type="submit" class="btn btn-sm bg-danger text-light">
 																						<i class="fas fa-times"></i> Cancel
 																					</button>
 																				</form>
+																				<form action="<?= site_url('appointments/print/' . $appointment['AppointmentID']) ?>" method="post" style="display:inline;">
+																					<button type="submit" class="btn btn-sm bg-primary text-light">
+																						<i class="fas fa-print"></i> Print Appt Slip
+																					</button>
+																				</form>
 																			</div>
 																		</td>
-
-
                                                                     </tr>
                                                                 <?php endforeach; ?>
                                                             </tbody>
