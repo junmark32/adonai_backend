@@ -1042,9 +1042,6 @@ public function patients()
                 $patientModel = new PatientModel();
                 $allPatients = $patientModel->findAll();
 
-                
-               
-
                 // Pass loggedIn status, role, and doctor data to the view
                 $data['loggedIn'] = $loggedIn;
                 $data['role'] = $role;
@@ -1088,24 +1085,24 @@ public function reviews()
             if ($doctor) {
                
                 $docfeedModel = new DocFeedModel();
-        $docfeeds = $docfeedModel->where('DoctorID', $doctorID)->orderBy('created_at', 'DESC')->findAll();
+                $docfeeds = $docfeedModel->where('DoctorID', $doctorID)->orderBy('created_at', 'DESC')->findAll();
 
-        // Initialize an array to hold docfeed and patient data
-        $docfeedData = [];
+                // Initialize an array to hold docfeed and patient data
+                $docfeedData = [];
 
-        // Fetch patient data for each docfeed
-        $patientModel = new PatientModel();
+                // Fetch patient data for each docfeed
+                $patientModel = new PatientModel();
 
-        foreach ($docfeeds as $docfeed) {
-            $patient = $patientModel->find($docfeed['PatientID']);
-            if ($patient) {
-                // Combine docfeed and patient data
-                $docfeedData[] = [
-                    'docfeed' => $docfeed,
-                    'patient' => $patient,
-                ];
-            }
-        }
+                foreach ($docfeeds as $docfeed) {
+                    $patient = $patientModel->find($docfeed['PatientID']);
+                    if ($patient) {
+                        // Combine docfeed and patient data
+                        $docfeedData[] = [
+                            'docfeed' => $docfeed,
+                            'patient' => $patient,
+                        ];
+                    }
+                }
                 
 
                 // var_dump($docfeedData);

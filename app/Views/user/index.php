@@ -49,92 +49,24 @@
 			</section>
 			<!-- /Home Banner -->
 			  
-			<!-- Clinic and Specialities -->
-			<section class="section section-specialities">
-				<div class="container-fluid">
-					<div class="section-header text-center">
-						<h2>Clinic and Specialities</h2>
-						<p class="sub-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-md-9">
-							<!-- Slider -->
-							<div class="specialities-slider slider">
-							
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-01.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>
-									<p>Urology</p>
-								</div>	
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-02.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>
-									<p>Neurology</p>	
-								</div>							
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-03.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>	
-									<p>Orthopedic</p>	
-								</div>							
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-04.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>	
-									<p>Cardiologist</p>	
-								</div>							
-								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
-								<div class="speicality-item text-center">
-									<div class="speicality-img">
-										<img src="assets/img/specialities/specialities-05.png" class="img-fluid" alt="Speciality">
-										<span><i class="fa fa-circle" aria-hidden="true"></i></span>
-									</div>	
-									<p>Dentist</p>
-								</div>							
-								<!-- /Slider Item -->
-								
-							</div>
-							<!-- /Slider -->
-							
-						</div>
-					</div>
-				</div>   
-			</section>	 
-			<!-- Clinic and Specialities -->
+			
 		  
 			<!-- Popular Section -->
             <section class="section section-doctor">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-4">
-                            <div class="section-header ">
-                                <h2>Book Our Doctors</h2>
-                                <p>Lorem Ipsum is simply dummy text </p>
-                            </div>
-                            <div class="about-content">
-                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.</p>
-                                <p>Web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes</p>
-                                <a href="javascript:;">Read More..</a>
-                            </div>
-                        </div>
+					<div class="col-lg-4">
+						<div class="section-header">
+							<h2>Book Our Doctors</h2>
+							<p>Schedule an appointment with our experienced doctors easily.</p>
+						</div>
+						<div class="about-content">
+							<p>Our clinic provides a convenient way to book appointments with top-notch doctors. Explore our services and book your visit online.</p>
+							<p>We aim to make your healthcare experience smooth and hassle-free with easy booking options and comprehensive care.</p>
+							<a href="javascript:;">Read More</a>
+						</div>
+					</div>
+
                         <div class="col-lg-8">
                             <div class="doctor-slider slider">
                                 <?php foreach ($doctors as $doctor): ?>
@@ -202,50 +134,64 @@
 							<img src="assets/img/features/feature.png" class="img-fluid" alt="Feature">
 						</div>
 						<div class="col-md-7">
-							<div class="section-header">	
-								<h2 class="mt-2">Availabe Features in Our Clinic</h2>
-								<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </p>
-							</div>	
+						<div class="section-header">	
+							<h2 class="mt-2">Services Offered in Our Clinic</h2>
+							<p>Our clinic offers a range of services to meet your needs. Explore our offerings below to find out more.</p>
+						</div>		
 							<div class="features-slider slider">
 								<!-- Slider Item -->
 								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-01.jpg" class="img-fluid" alt="Feature">
-									<p>Patient Ward</p>
+									<img src="<?= base_url('uploads/services/so1.png') ?>" class="img-fluid" alt="Feature">
+									<p>Cycloplegic (Kids)</p>
 								</div>
 								<!-- /Slider Item -->
 								
 								<!-- Slider Item -->
 								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-02.jpg" class="img-fluid" alt="Feature">
-									<p>Test Room</p>
+									<img src="<?= base_url('uploads/services/so2.png') ?>" class="img-fluid" alt="Feature">
+									<p>Refraction (Adults)</p>
+								</div>
+
+								<!-- /Slider Item -->
+								
+								<!-- Slider Item -->
+								<div class="feature-item text-center">
+									<img src="<?= base_url('uploads/services/so4.png') ?>" class="img-fluid" alt="Feature">
+									<p>Color Vision</p>
+								</div>
+
+								<!-- /Slider Item -->
+								
+								<!-- Slider Item -->
+								<div class="feature-item text-center">
+									<img src="<?= base_url('uploads/services/so6.png') ?>" class="img-fluid" alt="Feature">
+									<p>Dry Eye Test</p>
 								</div>
 								<!-- /Slider Item -->
 								
 								<!-- Slider Item -->
 								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-03.jpg" class="img-fluid" alt="Feature">
-									<p>ICU</p>
+									<img src="<?= base_url('uploads/services/so5.png') ?>" class="img-fluid" alt="Feature">
+									<p>Lifetime Support</p>
 								</div>
 								<!-- /Slider Item -->
 								
 								<!-- Slider Item -->
 								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-04.jpg" class="img-fluid" alt="Feature">
-									<p>Laboratory</p>
+									<img src="<?= base_url('uploads/services/so7.png') ?>" class="img-fluid" alt="Feature">
+									<p>Free Frame Cleaning</p>
 								</div>
 								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
+								 <!-- Slider Item -->
 								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-05.jpg" class="img-fluid" alt="Feature">
-									<p>Operation</p>
+									<img src="<?= base_url('uploads/services/so3.jpg') ?>" class="img-fluid" alt="Feature">
+									<p>Frame Fit</p>
 								</div>
 								<!-- /Slider Item -->
-								
-								<!-- Slider Item -->
+								 <!-- Slider Item -->
 								<div class="feature-item text-center">
-									<img src="assets/img/features/feature-06.jpg" class="img-fluid" alt="Feature">
-									<p>Medical</p>
+									<img src="<?= base_url('uploads/services/so8.png') ?>" class="img-fluid" alt="Feature">
+									<p>Nosepad Change</p>
 								</div>
 								<!-- /Slider Item -->
 							</div>
