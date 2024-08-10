@@ -1803,51 +1803,53 @@ public function showProdDetails($productID)
 
 
     public function addToCart()
-{
-    // Load the session service
-    $session = session();
-
-    if ($session->has('user_data')) {
-        // Retrieve user data from session
-        $userData = $session->get('user_data');
-
-        // Check if the user has a 'UserID' key
-        if (isset($userData['UserID'])) {
-            // Retrieve the UserID
-            $userID = $userData['UserID'];
-
-            // Retrieve data from POST request
-            $productID = $this->request->getPost('productID');
-            $lensID = $this->request->getPost('lensID');
-            $quantity = $this->request->getPost('quantity');
-
-            // Check if all required data is provided
-            if ($productID && $lensID && $quantity) {
-                // Create an instance of CartModel
-                $cartModel = new CartModel();
-
-                // Insert data into the cart table
-                $data = [
-                    'UserID' => $userID,
-                    'ProductID' => $productID,
-                    'LensID' => $lensID,
-                    'Quantity' => $quantity
-                ];
-
-                $cartModel->insert($data);
-
-                // Redirect the user to a different page after adding to the cart
-                return redirect()->to('/store');
+    {
+        // Load the session service
+        $session = session();
+    
+        if ($session->has('user_data')) {
+            // Retrieve user data from session
+            $userData = $session->get('user_data');
+    
+            // Check if the user has a 'UserID' key
+            if (isset($userData['UserID'])) {
+                // Retrieve the UserID
+                $userID = $userData['UserID'];
+    
+                // Retrieve data from POST request
+                $productID = $this->request->getPost('productID');
+                $lensID = $this->request->getPost('lensID'); // LensID might not be provided
+                $quantity = $this->request->getPost('quantity');
+    
+                // Check if all required data is provided
+                if ($productID && $quantity) {
+                    // Create an instance of CartModel
+                    $cartModel = new CartModel();
+    
+                    // Prepare data for insertion
+                    $data = [
+                        'UserID' => $userID,
+                        'ProductID' => $productID,
+                        'LensID' => $lensID ? $lensID : NULL, // Set LensID to NULL if not provided
+                        'Quantity' => $quantity 
+                    ];
+    
+                    // Insert data into the cart table
+                    $cartModel->insert($data);
+    
+                    // Redirect the user to a different page after adding to the cart
+                    return redirect()->to('/store');
+                } else {
+                    return view('error', ['error' => 'Incomplete data provided']);
+                }
             } else {
-                return view('error', ['error' => 'Incomplete data provided']);
+                return view('error', ['error' => 'UserID not found in session data']);
             }
         } else {
-            return view('error', ['error' => 'UserID not found in session data']);
+            return view('error', ['error' => 'User data not found in session']);
         }
-    } else {
-        return view('error', ['error' => 'User data not found in session']);
     }
-}
+    
 
 public function viewCart()
 {
@@ -1892,17 +1894,26 @@ public function viewCart()
             if ($product) {
                 $item['product'] = $product;
             }
-    
-            // Fetch lens data based on LensID
-            $lens = $lensModel->find($item['LensID']);
-            if ($lens) {
-                $item['lens'] = $lens;
+
+            // Fetch lens data based on LensID if it's provided
+            if (isset($item['LensID']) && !empty($item['LensID'])) {
+                $lens = $lensModel->find($item['LensID']);
+                if ($lens) {
+                    $item['lens'] = $lens;
+                } else {
+                    // If lens is not found, ensure 'lens' key is set but empty
+                    $item['lens'] = null;
+                }
+            } else {
+                // If no LensID, ensure 'lens' key is set but empty
+                $item['lens'] = null;
             }
         }
         
         // Calculate the count of items in the cart
         $cartCount = count($cartItems);
     }
+
 
     // Pass loggedIn status, role, and patient data to the view
     $data = [
@@ -1940,75 +1951,68 @@ public function removeItem($CartID)
 
 public function item_checkout()
 {
-    // Start session if not already started
     session();
 
-    // Check if the user is logged in
     if (!session()->has('user_data')) {
-        // If user is not logged in, redirect to login page or any other appropriate action
         return redirect()->to('login')->with('error', 'Please log in to proceed with checkout.');
     }
 
-    // Get cart items for the user
+    $selectedItems = $this->request->getPost('selectedItems');
+    if (empty($selectedItems)) {
+        return redirect()->back()->with('error', 'No items selected for checkout.');
+    }
+
     $cartModel = new CartModel();
-    $cartItems = $cartModel->where('UserID', session('user_data')['UserID'])->findAll();
+    $cartItems = $cartModel->whereIn('CartID', $selectedItems)->findAll();
 
     if (!empty($cartItems)) {
-        // Initialize total amount
         $totalAmount = 0;
 
-        // Process each cart item for purchase
         foreach ($cartItems as $item) {
-            // Load the related product and lens data
             $productModel = new ProductModel();
             $product = $productModel->find($item['ProductID']);
-
+        
             $lensModel = new LensModel();
-            $lens = $lensModel->find($item['LensID']);
-
-            if (!$product || !$lens) {
-                // Redirect back with error message if product or lens data is missing
+            $lens = isset($item['LensID']) ? $lensModel->find($item['LensID']) : null;
+        
+            if (!$product || ($item['LensID'] && !$lens)) {
                 return redirect()->back()->with('error', 'Product or lens data is missing for some cart items.');
             }
-
-            // Calculate total amount for the item
+        
             $productPrice = $product['Price'];
-            $lensPrice = $lens['Price'];
+            $lensPrice = $lens ? $lens['Price'] : 0; // Set lens price to 0 if no lens
             $itemTotalAmount = $item['Quantity'] * ($productPrice + $lensPrice);
-
-            // Update total amount
             $totalAmount += $itemTotalAmount;
-
-            // Insert purchase record for each item
+        
             $purchaseData = [
                 'UserID' => session('user_data')['UserID'],
                 'EyewearID' => $item['ProductID'],
-                'LensID' => $item['LensID'],
+                'LensID' => $item['LensID'] ?? NULL, // Set LensID to NULL if not provided
                 'PurchaseDate' => date('Y-m-d H:i:s'),
                 'Quantity' => $item['Quantity'],
-                'TotalAmount' => $itemTotalAmount, // Total amount for the item
-                'Status' => 'Pending' // Adjust status as needed
+                'TotalAmount' => $itemTotalAmount,
+                'Status' => 'Pending'
             ];
             $purchaseModel = new PurchaseModel();
             $purchaseModel->insert($purchaseData);
-
-            // Update the stock quantity in the ProductModel
+        
+            // Update stock quantity for product
             $productModel->update($item['ProductID'], ['StockQuantity' => $product['StockQuantity'] - $item['Quantity']]);
-
-            // Update the stock quantity in the LensModel
-            $lensModel->update($item['LensID'], ['StockQuantity' => $lens['StockQuantity'] - $item['Quantity']]);
-
-            // Optionally, you may want to remove the item from the cart after purchase
+        
+            // Update stock quantity for lens only if lens is present
+            if ($lens) {
+                $lensModel->update($item['LensID'], ['StockQuantity' => $lens['StockQuantity'] - $item['Quantity']]);
+            }
+        
             $cartModel->delete($item['CartID']);
         }
-
-        // Redirect to a success page or display a success message
-        return redirect()->to('success-page')->with('totalAmount', $totalAmount);
+        
+        return redirect()->to('/store')->with('success', 'Your purchase was successful!');
     } else {
-        // If cart is empty, display an error message or redirect to cart page
         return redirect()->to('cart-page')->with('error', 'Your cart is empty.');
     }
 }
+
 
 
 

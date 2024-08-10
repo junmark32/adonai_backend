@@ -1,32 +1,4 @@
-<!DOCTYPE html> 
-<html lang="en">
-	
-<!-- doccure/blank-page.html  30 Nov 2019 04:12:20 GMT -->
-<head>
-		<meta charset="utf-8">
-		<title>Doccure</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-		
-		<!-- Favicons -->
-		<link href="assets/img/favicon.png" rel="icon">
-		
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css')?>">
-		
-		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/fontawesome.min.css')?>">
-		<link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/css/all.min.css')?>">
-		
-		<!-- Main CSS -->
-		<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css')?>">
-		
-		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-		<!--[if lt IE 9]>
-			<script src="assets/js/html5shiv.min.js"></script>
-			<script src="assets/js/respond.min.js"></script>
-		<![endif]-->
-	
-	</head>
+<?= $this->include('include/header') ?>
 	<body>
 
 		<!-- Main Wrapper -->
@@ -82,140 +54,140 @@
                 <div class="col-lg-12">
     <div class="product-slider slider">
         <!-- Product Widget -->
-        <div class="profile-widget">
-            <div class="row">
-                <!-- Image column -->
-                <div class="col-lg-6">
-                    <div class="prod-img">
-                        <img class="img-fluid" alt="Product Image" src="<?= base_url('uploads/' . $product['Image_url']) ?>" >
-                    </div>
-                </div>
-                <!-- Content column -->
-                <div class="col-lg-6">
-                    <div class="pro-content">
-                        <h1>
-                            <?= $product['Name'] ?> . <?= $product['Type'] ?>
-                        </h1>
-                        <h3><?= $product['Gender'] ?></h3>
-                        <hr>
-                        <h4>
-                            ₱<?= $product['Price'] ?>
-                        </h4>
-                        <ul class="available-info">
-                            <li>
-                                <i class="fas fa-box"></i> <?= $product['StockQuantity'] ?> in stock
-                            </li>
-                        </ul>
-                        <form action="<?= site_url('/store/cart/addToCart') ?>" method="post">
-    <input type="hidden" name="productID" value="<?= $product['ProductID'] ?>">
-
-    <div class="form-group row">
-        <label class="col-form-label col-md-2">LENSES:</label>
-        <div class="col-md-6">
-            <select class="form-control" name="lensID">
-                <?php foreach ($lens as $lensItem): ?>
-                    <option value="<?= $lensItem['LensID'] ?>">
-                        <?= $lensItem['Brand'] . " " . $lensItem['Model'] ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-
-    <?php if ($product['StockQuantity'] > 0): ?>
-        <div class="form-group row">
-            <label class="col-form-label col-md-2">Quantity:</label>
-            <div class="col-md-3">
-                <input type="number" class="form-control" name="quantity" value="1" min="1" max="<?= $product['StockQuantity'] ?>">
+<div class="profile-widget">
+    <div class="row">
+        <!-- Image column -->
+        <div class="col-lg-6">
+            <div class="prod-img">
+                <img class="img-fluid" alt="Product Image" src="<?= base_url('uploads/' . $product['Image_url']) ?>" >
             </div>
         </div>
+        <!-- Content column -->
+        <div class="col-lg-6">
+            <div class="pro-content">
+                <h1>
+                    <?= $product['Name'] ?> . <?= $product['Type'] ?>
+                </h1>
+                <h3><?= $product['Gender'] ?></h3>
+                <hr>
+                <h4>
+                    ₱<?= $product['Price'] ?>
+                </h4>
+                <ul class="available-info">
+                    <li>
+                        <i class="fas fa-box"></i> <?= $product['StockQuantity'] ?> in stock
+                    </li>
+                </ul>
+                <form action="<?= site_url('/store/cart/addToCart') ?>" method="post">
+                    <input type="hidden" name="productID" value="<?= $product['ProductID'] ?>">
 
-        <div class="form-group row">
-            <div class="col-md-10 offset-md-2">
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
-            </div>
-        </div>
-    <?php else: ?>
-        <div class="form-group row">
-            <div class="col-md-10 offset-md-2">
-                <h3 class="text-danger">Out of Stock</h3>
-            </div>
-        </div>
-    <?php endif; ?>
-</form>
+                    <?php if ($product['Type'] != 'Accessories'): ?>
+                        <div class="form-group row">
+                            <label class="col-form-label col-md-2">LENSES:</label>
+                            <div class="col-md-6">
+                                <select class="form-control" name="lensID">
+                                    <?php foreach ($lens as $lensItem): ?>
+                                        <option value="<?= $lensItem['LensID'] ?>">
+                                            <?= $lensItem['Brand'] . " " . $lensItem['Model'] ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
-
-                        <hr>
-
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Product Information</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <th>Brand</th>
-                                                    <td><?= $product['Brand'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Face Shape</th>
-                                                    <td><?= $product['Faceshape'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Frame Shape</th>
-                                                    <td><?= $product['Frameshape'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Material</th>
-                                                    <td><?= $product['Material'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Gender</th>
-                                                    <td><?= $product['Gender'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Frame Age</th>
-                                                    <td><?= $product['Frameage'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Frame Size (mm)</th>
-                                                    <td><?= $product['Framesize'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Full Frame Size (mm)</th>
-                                                    <td><?= $product['Fullframesize'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Nose Bridge Size (mm)</th>
-                                                    <td><?= $product['Nosebridgesize'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Temple Size (mm)</th>
-                                                    <td><?= $product['Templesize'] ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Note</th>
-                                                    <td><?= $product['Note'] ?></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                    <?php if ($product['StockQuantity'] > 0): ?>
+                        <div class="form-group row">
+                            <label class="col-form-label col-md-2">Quantity:</label>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control" name="quantity" value="1" min="1" max="<?= $product['StockQuantity'] ?>">
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <div class="col-md-10 offset-md-2">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="form-group row">
+                            <div class="col-md-10 offset-md-2">
+                                <h3 class="text-danger">Out of Stock</h3>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </form>
 
+                <?php if ($product['Type'] != 'Accessories'): ?>
+                    <hr>
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Product Information</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped mb-0">
+                                        <tbody>
+                                            <tr>
+                                                <th>Brand</th>
+                                                <td><?= $product['Brand'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Face Shape</th>
+                                                <td><?= $product['Faceshape'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Frame Shape</th>
+                                                <td><?= $product['Frameshape'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Material</th>
+                                                <td><?= $product['Material'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Gender</th>
+                                                <td><?= $product['Gender'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Frame Age</th>
+                                                <td><?= $product['Frameage'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Frame Size (mm)</th>
+                                                <td><?= $product['Framesize'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Full Frame Size (mm)</th>
+                                                <td><?= $product['Fullframesize'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Nose Bridge Size (mm)</th>
+                                                <td><?= $product['Nosebridgesize'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Temple Size (mm)</th>
+                                                <td><?= $product['Templesize'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Note</th>
+                                                <td><?= $product['Note'] ?></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <hr>
-            
+                <?php endif; ?>
 
+            </div>
         </div>
-        <!-- /Product Widget -->
+    </div>
+    <hr>
+</div>
+<!-- /Product Widget -->
+
     </div>
 </div>
 

@@ -50,66 +50,126 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="align-middle">&nbsp;</th>
-                                        <th class="align-middle">&nbsp;</th>
-                                        <th class="align-middle">Product Name &amp; Lens Details</th>
-                                        <th class="align-middle text-center">Price</th>
-                                        <th class="align-middle text-center">Quantity</th>
-                                        <th class="align-middle text-center">Total</th>
-                                        <th class="align-middle text-center">Select</th> <!-- New column for checkboxes -->
-                                    </tr>
-                                </thead>
-                                <tbody>
+						<form id="checkoutForm" name="checkoutForm" action="/store/cart/checkout" method="post">
+    <?= csrf_field() ?> <!-- Ensure CSRF protection is enabled -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="align-middle">&nbsp;</th>
+                <th class="align-middle">&nbsp;</th>
+                <th class="align-middle">Product Name &amp; Lens Details</th>
+                <th class="align-middle text-center">Price</th>
+                <th class="align-middle text-center">Quantity</th>
+                <th class="align-middle text-center">Total</th>
+                <th class="align-middle text-center">Select</th>
+            </tr>
+        </thead>
+        <tbody>
     <?php foreach ($cartItems as $item) : ?>
-        <tr>
-            <td class="align-middle">
-                <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </td>
-            <td class="align-middle">
-                <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
-                    <img src="<?= base_url('uploads/' . $item['product']['Image_url']) ?>" alt="Product Image" style="width: 100px;">
-                </a>
-            </td>
-            <td class="align-middle">
-                <div class="product-details">
-                    <h3 class="product-name"><a href="product-details.php?product=<?= $item['product']['ProductID'] ?>"><?= $item['product']['Name'] ?> - ₱<?= $item['product']['Price']?></a></h3>
+    <tr>
+        <td class="align-middle">
+            <button type="button" class="close" aria-label="Close" onclick="window.location.href='<?= base_url('store/cart/remove/' . $item['CartID']) ?>'">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </td>
+        <td class="align-middle">
+            <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
+                <img src="<?= base_url('uploads/' . $item['product']['Image_url']) ?>" alt="Product Image" style="width: 100px;">
+            </a>
+        </td>
+        <td class="align-middle">
+            <div class="product-details">
+                <h3 class="product-name">
+                    <a href="product-details.php?product=<?= $item['product']['ProductID'] ?>">
+                        <?= $item['product']['Name'] ?> - ₱<?= $item['product']['Price'] ?>
+                    </a>
+                </h3>
+                <?php if (isset($item['lens']) && !empty($item['lens'])): ?>
                     <p>LENS: <?= $item['lens']['Model'] ?> &nbsp; <?= $item['lens']['Brand'] ?> &nbsp; <?= $item['lens']['LensType'] ?> - ₱<?= $item['lens']['Price'] ?></p>
-                </div>
-            </td>
-            <td class="align-middle text-center">₱<?= $item['product']['Price'] + $item['lens']['Price'] ?></td>
-            <td class="align-middle text-center"><?= $item['Quantity'] ?></td>
-            <td class="align-middle text-center">₱<?= $item['Quantity'] * ($item['product']['Price'] + $item['lens']['Price']) ?></td>
-            <td class="align-middle text-center">
-                <input type="checkbox" name="selectedItems[]" value="<?= $item['CartID'] ?>" onchange="updateCartTotal()">
-            </td>
-        </tr>
+                <?php else: ?>
+                    <p>No Lens</p>
+                <?php endif; ?>
+            </div>
+        </td>
+        <td class="align-middle text-center">
+            ₱<?= isset($item['lens']) ? ($item['product']['Price'] + $item['lens']['Price']) : $item['product']['Price'] ?>
+        </td>
+        <td class="align-middle text-center"><?= $item['Quantity'] ?></td>
+        <td class="align-middle text-center">
+            ₱<?= $item['Quantity'] * (isset($item['lens']) ? ($item['product']['Price'] + $item['lens']['Price']) : $item['product']['Price']) ?>
+        </td>
+        <td class="align-middle text-center">
+            <input type="checkbox" name="selectedItems[]" value="<?= $item['CartID'] ?>" onchange="updateCartTotal()">
+        </td>
+    </tr>
     <?php endforeach; ?>
 </tbody>
 
-                            </table>
-                            <hr style="border-top: 3px solid black;">
-                            <h3><strong>Cart Total</strong></h3>
-                            <div class="card-body">
-                                <p id="cartTotal">Subtotal: ₱0</p> <!-- Display cart total here -->
-                            </div>
-                            <div class="card-footer">
-                                <h5><strong>Thank You for Your Purchase! Important Information Regarding Your Eyeglasses</strong></h5>
-                                <h6>Thank you for choosing Adonai for your eyeglass needs. We are committed to ensuring that you receive the best-fitted eyeglasses and optimal vision correction.</h6>
-                                <h6>After checkout, please be aware that the eyeglasses you've selected will be available for pickup at our clinic. Prior to visiting our clinic, we kindly request you to schedule an appointment for an eye test. This step is crucial to ensure the accuracy of your prescription and the suitability of the selected eyeglasses.</h6>
-                                <h6>Once your purchase is complete, you will receive an email containing a downloadable voucher confirming your order and appointment details. Please present this voucher to our clinic staff during your visit for the eye test. Following the test, you can proceed to collect the glasses you've ordered.</h6>
-                                <br>
-								<form id="checkoutForm" action="/store/cart/checkout" >
-                                    <input type="checkbox" id="confirmCheckout">
-                                    <label for="confirmCheckout">I confirm that I have checked the items and want to proceed to checkout.</label>
-									<br>
-                                    <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
-                                </form>
-                            </div>
+    </table>
+
+    <hr style="border-top: 3px solid black;">
+    <h3><strong>Cart Total</strong></h3>
+    <div class="card-body">
+        <p id="cartTotal">Subtotal: ₱0</p> <!-- Display cart total here -->
+    </div>
+    <div class="card-footer">
+        <h5><strong>Thank You for Your Purchase! Important Information Regarding Your Eyeglasses</strong></h5>
+        <h6>Thank you for choosing Adonai for your eyeglass needs...</h6>
+		<h6>After checkout, please be aware that the eyeglasses you've selected will be available for pickup at our clinic. Prior to visiting our clinic, we kindly request you to schedule an appointment for an eye test. This step is crucial to ensure the accuracy of your prescription and the suitability of the selected eyeglasses.</h6>
+		<h6>Once your purchase is complete, please check your Orders in the Order tab on your dashboard. When your order is ready, a downloadable voucher confirming your order and appointment details will be available. Please present the voucher to our clinic staff during your visit for the eye test. After the test, you can proceed to collect the glasses you've ordered.</h6>
+
+        <br>
+        <input type="checkbox" id="confirmCheckout">
+        <label for="confirmCheckout">I confirm that I have checked the items and want to proceed to checkout.</label>
+        <br>
+        <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">Checkout</button>
+    </div>
+</form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert@1.1.3/dist/sweetalert.min.js"></script>
+
+
+
+<script>
+function updateCartTotal() {
+    var checkboxes = document.querySelectorAll('input[name="selectedItems[]"]:checked');
+    var total = 0;
+    checkboxes.forEach(function(checkbox) {
+        var row = checkbox.closest('tr');
+        var itemTotal = parseFloat(row.querySelector('.text-center:nth-child(6)').textContent.replace('₱', '').replace(',', ''));
+        total += itemTotal;
+    });
+    document.getElementById('cartTotal').textContent = 'Subtotal: ₱' + total.toFixed(2);
+}
+
+function checkout() {
+    var checkedItems = document.querySelectorAll('input[name="selectedItems[]"]:checked');
+    if (checkedItems.length > 0) {
+        if (document.getElementById('confirmCheckout').checked) {
+            swal({
+                title: "Are you sure?",
+                text: "Once confirmed, you cannot undo this action!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, proceed!",
+                closeOnConfirm: false
+            },
+            function(){
+                document.getElementById('checkoutForm').submit();
+            });
+        } else {
+            swal("Error!", "Please confirm that you have checked the items.", "error");
+        }
+    } else {
+        swal("Error!", "Please select at least one item to checkout.", "error");
+    }
+}
+
+</script>
+
                             <div class="card-footer d-flex justify-content-center"> <!-- Updated to align button to the right -->
                                 <!-- This section was removed because the checkout form is now within the previous card-footer -->
                             </div>
@@ -124,35 +184,7 @@
 
 
 
-<script>
-    function updateCartTotal() {
-        var checkboxes = document.getElementsByName('selectedItems[]');
-        var cartTotal = 0;
 
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                // Get the price of the selected item
-                var price = parseFloat(document.querySelectorAll('tbody tr')[i].querySelectorAll('td')[5].innerText.replace('₱', ''));
-                cartTotal += price;
-            }
-        }
-
-        // Update the cart total displayed
-        document.getElementById('cartTotal').innerText = 'Subtotal: ₱' + cartTotal.toFixed(2);
-    }
-
-    function checkout() {
-        // Check if the confirmation checkbox is checked
-        var confirmationCheckbox = document.getElementById('confirmCheckout');
-        if (confirmationCheckbox.checked) {
-            // Submit the form synchronously
-            document.getElementById('checkoutForm').submit();
-        } else {
-            // If the confirmation checkbox is not checked, prompt the user to confirm
-            alert("Please confirm that you want to proceed to checkout by checking the box.");
-        }
-    }
-</script>
 
 
 

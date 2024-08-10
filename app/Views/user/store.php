@@ -73,62 +73,58 @@
 						</div>
 					</div> -->
 
-					<!-- Cards -->
-					<section class="comp-section comp-cards">
-
-						<div class="row">
-							<div class="col-12 col-md-6 col-lg-4 d-flex">
-								<div class="comp-header">
-									<h3 class="comp-title">Women</h3>
-									<div class="line"></div>
-								</div>
-							</div>
-
-							<div class="col-12 col-md-6 col-lg-4 d-flex">
-								<div class="comp-header">
-									<h3 class="comp-title">Men</h3>
-									<div class="line"></div>
-								</div>
-							</div>
-
-							<div class="col-12 col-md-6 col-lg-4 d-flex">
-								<div class="comp-header">
-									<h3 class="comp-title">Accesories</h3>
-									<div class="line"></div>
-								</div>
-							</div>
+			<!-- Cards Section -->
+			<section class="comp-section comp-cards">
+				<div class="row mb-4">
+					<!-- Women's Category -->
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="comp-header text-center">
+							<h3 class="comp-title">Women</h3>
+							<div class="line mx-auto"></div>
 						</div>
+					</div>
 
-						<div class="row">
-							<div class="col-12 col-md-6 col-lg-4 d-flex">
-								<div class="card flex-fill">
-									<img alt="Card Image" src="uploads/women.jpg" class="card-img-top">
-									<!-- <div class="card-header">
-										<button type="button" class="btn btn-primary">Women</button>
-									</div> -->
-								</div>
-							</div>
-							
-
-							<div class="col-12 col-md-6 col-lg-4 d-flex">
-								<div class="card flex-fill">
-									<img alt="Card Image" src="uploads/men.jpg" class="card-img-top">
-									<!-- <div class="card-header">
-										<button type="button" class="btn btn-primary">Women</button>
-									</div> -->
-								</div>
-							</div>
-
-							<div class="col-12 col-md-6 col-lg-4 d-flex">
-								<div class="card flex-fill">
-									<img alt="Card Image" src="uploads/accesories.jpg" class="card-img-top">
-									<!-- <div class="card-header">
-										<button type="button" class="btn btn-primary">Women</button>
-									</div> -->
-								</div>
-							</div>
+					<!-- Men's Category -->
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="comp-header text-center">
+							<h3 class="comp-title">Men</h3>
+							<div class="line mx-auto"></div>
 						</div>
-					</section>
+					</div>
+
+					<!-- Accessories Category -->
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="comp-header text-center">
+							<h3 class="comp-title">Accessories</h3>
+							<div class="line mx-auto"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Women's Card -->
+					<div class="col-12 col-md-6 col-lg-4 d-flex">
+						<div class="card flex-fill">
+							<img alt="Women's Collection" src="<?= base_url('uploads/women.jpg' ) ?>" class="card-img-top">
+						</div>
+					</div>
+
+					<!-- Men's Card -->
+					<div class="col-12 col-md-6 col-lg-4 d-flex">
+						<div class="card flex-fill">
+							<img alt="Men's Collection" src="<?= base_url('uploads/men.jpg' ) ?>" class="card-img-top">
+						</div>
+					</div>
+
+					<!-- Accessories Card -->
+					<div class="col-12 col-md-6 col-lg-4 d-flex">
+						<div class="card flex-fill">
+							<img alt="Accessories Collection" src="<?= base_url('uploads/accesories.jpg' ) ?>" class="card-img-top">
+						</div>
+					</div>
+				</div>
+			</section>
+
 
 					<div class="row">
 						<div class="col-12">
@@ -137,45 +133,137 @@
 					</div>
 
 					<div class="row">
-						<div class="col-md-12">
-							<div class="card">
-								<div class="card-body">
-									<ul class="nav nav-tabs nav-tabs-bottom">
-										<li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
-										<li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-toggle="tab">Women</a></li>
-										<li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-toggle="tab">Men</a></li>
-										<li class="nav-item"><a class="nav-link" href="#bottom-tab4" data-toggle="tab">Accessories</a></li>
-									</ul>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-tabs-bottom">
+                    <li class="nav-item"><a class="nav-link active" href="#bottom-tab1" data-toggle="tab">All Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bottom-tab2" data-toggle="tab">Women</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bottom-tab3" data-toggle="tab">Men</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#bottom-tab4" data-toggle="tab">Accessories</a></li>
+                </ul>
 
-									<div class="tab-content">
-										<div class="tab-pane show active" id="bottom-tab1">
-											<div class="row">
-												<!-- Loop through products and generate product cards -->
-												<?php foreach ($products as $product): ?>
-												<div class="col-md-3 mb-4">
-													<div class="card product-card">
-														<img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
-														<div class="card-body">
-															<h5 class="card-title"><?= $product['Name'] ?></h5>
-															<p class="card-text">₱ <?= $product['Price'] ?></p>
-															<hr>
-															<div class="d-flex justify-content-center">
-																<!-- Update button with product ID as parameter -->
-																<a href="<?= base_url('/store/product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Quick View</a>
-																
-															</div>
-														</div>
-													</div>
-												</div>
-												<?php endforeach; ?>
-											</div>
-										</div>
-										<!-- Add more tab panes for other product categories -->
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="bottom-tab1">
+                        <div class="row">
+                            <!-- Loop through products and generate product cards -->
+                            <?php foreach ($products as $product): ?>
+                            <div class="col-md-3 mb-4">
+                                <div class="card product-card">
+                                    <img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= $product['Name'] ?></h5>
+                                        <p class="card-text">₱ <?= $product['Price'] ?></p>
+                                        <hr>
+                                        <div class="d-flex justify-content-center">
+                                            <!-- Update button with product ID as parameter -->
+                                            <a href="<?= base_url('/store/product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Quick View</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Tab pane for Women -->
+                    <div class="tab-pane" id="bottom-tab2">
+                        <div class="row">
+                            <!-- Loop through products and generate product cards -->
+                            <?php foreach ($products as $product): ?>
+                                <?php if ($product['Gender'] == 'Women'): ?>
+                                    <div class="col-md-3 mb-4">
+                                        <div class="card product-card">
+                                            <img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><?= $product['Name'] ?></h5>
+                                                <p class="card-text">₱ <?= $product['Price'] ?></p>
+                                                <hr>
+                                                <div class="d-flex justify-content-center">
+                                                    <!-- Update button with product ID as parameter -->
+                                                    <a href="<?= base_url('/store/product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Quick View</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Tab pane for Men -->
+                    <div class="tab-pane" id="bottom-tab3">
+                        <div class="row">
+                            <!-- Loop through products and generate product cards -->
+                            <?php foreach ($products as $product): ?>
+                                <?php if ($product['Gender'] == 'Men'): ?>
+                                    <div class="col-md-3 mb-4">
+                                        <div class="card product-card">
+                                            <img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><?= $product['Name'] ?></h5>
+                                                <p class="card-text">₱ <?= $product['Price'] ?></p>
+                                                <hr>
+                                                <div class="d-flex justify-content-center">
+                                                    <!-- Update button with product ID as parameter -->
+                                                    <a href="<?= base_url('/store/product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Quick View</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Tab pane for Accessories -->
+                    <div class="tab-pane" id="bottom-tab4">
+                        <div class="row">
+                            <!-- Loop through products and generate product cards -->
+                            <?php foreach ($products as $product): ?>
+                                <?php if ($product['Type'] == 'Accessories'): ?>
+                                    <div class="col-md-3 mb-4">
+                                        <div class="card product-card">
+                                            <img src="<?= base_url('uploads/' . $product['Image_url']) ?>" class="card-img-top" alt="<?= $product['Name'] ?>">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><?= $product['Name'] ?></h5>
+                                                <p class="card-text">₱ <?= $product['Price'] ?></p>
+                                                <hr>
+                                                <div class="d-flex justify-content-center">
+                                                    <!-- Update button with product ID as parameter -->
+                                                    <a href="<?= base_url('/store/product/' . $product['ProductID']) ?>" class="btn btn-rounded btn-outline-primary">Quick View</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if (session()->getFlashdata('success')) : ?>
+    <script>
+        swal({
+            title: "Success!",
+            text: "<?= session()->getFlashdata('success') ?>",
+            type: "success",
+            confirmButtonText: "OK"
+        });
+    </script>
+<?php elseif (session()->getFlashdata('error')) : ?>
+    <script>
+        swal({
+            title: "Error!",
+            text: "<?= session()->getFlashdata('error') ?>",
+            type: "error",
+            confirmButtonText: "OK"
+        });
+    </script>
+<?php endif; ?>
 
 
 				</section>
