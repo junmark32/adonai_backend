@@ -95,6 +95,14 @@ class UserController extends ResourceController
       return view('login');
     }
 
+    public function tryon()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      return view('user/tryon');
+    }
+
     public function register()
     {
     //   $productModel = new ProductModel();

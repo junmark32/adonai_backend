@@ -21,6 +21,7 @@ $routes->match(['post','get'],'/change-password', 'UserController::user_change_p
 $routes->match(['post','get'],'/user/update-password', 'UserController::update_change_password');
 $routes->match(['post','get'],'/doctor-profile/(:num)', 'UserController::doctorProfile/$1');
 $routes->match(['post','get'],'/user/generatePres/(:num)/(:num)', 'UserController::gen_prescript/$1/$2');
+$routes->match(['post','get'],'/tryon', 'UserController::tryon');
 
 //prod
 $routes->match(['post','get'],'/store/product/(:num)', 'UserController::showProdDetails/$1');
