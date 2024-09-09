@@ -69,6 +69,20 @@
                     <?= $product['Name'] ?> . <?= $product['Type'] ?>
                 </h1>
                 <h3><?= $product['Gender'] ?></h3>
+				<button class="btn btn-info" id="tryOnBtn">
+					Try them on <i class="fas fa-glasses" style="margin-left: 5px;"></i>
+				</button>
+
+
+
+				<script>
+					document.getElementById('tryOnBtn').addEventListener('click', function() {
+						// This could be a modal or redirection to the try-on feature
+						alert('Virtual try-on feature coming soon!');
+						// Or open the virtual try-on modal / redirect to another page
+						// window.location.href = '<?= site_url('/try-on/' . $product['ProductID']) ?>';
+					});
+				</script>
                 <hr>
                 <h4>
                     ₱<?= $product['Price'] ?>
