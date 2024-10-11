@@ -410,7 +410,12 @@ document.getElementById('generateReport').addEventListener('click', function() {
         .then(response => response.blob())
         .then(blob => {
             var url = window.URL.createObjectURL(blob);
-            window.open(url, '_blank');
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'report.pdf'; // This will trigger the download
+            document.body.appendChild(a);
+            a.click();
+            a.remove(); // Clean up
         })
         .catch(error => console.error('Error:', error));
     } else {

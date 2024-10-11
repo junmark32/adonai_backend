@@ -26,6 +26,17 @@
 										<div class="login-header">
 											<h3>Login <span>Doccure</span></h3>
 										</div>
+
+										<?php if (session()->getFlashdata('loginError')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> <?= session()->getFlashdata('loginError') ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
+
 										<form action="<?= base_url('/fn_login') ?>">
 										<input type="hidden" name="onesignal_subscription_id" id="onesignal_subscription_id" value="">
 											<div class="form-group form-focus">
@@ -37,7 +48,7 @@
 												<label class="focus-label">Password</label>
 											</div>
 											<div class="text-right">
-												<a class="forgot-link" href="forgot-password.html">Forgot Password ?</a>
+												<a class="forgot-link" href="<?= site_url('/forgot-password') ?>">Forgot Password ?</a>
 											</div>
 											<button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Login</button>
 											<div class="login-or">

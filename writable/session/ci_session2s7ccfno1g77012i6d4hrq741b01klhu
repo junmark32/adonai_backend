@@ -1,0 +1,1 @@
+__ci_last_regenerate|i:1727193348;_ci_previous_url|s:27:"http://localhost:8080/login";loginError|s:19:"Invalid credentials";__ci_vars|a:2:{s:10:"loginError";s:3:"old";s:13:"_ci_old_input";s:3:"old";}_ci_old_input|a:2:{s:3:"get";a:3:{s:25:"onesignal_subscription_id";s:0:"";s:8:"username";s:6:"junjun";s:8:"password";s:0:"";}s:4:"post";a:0:{}}

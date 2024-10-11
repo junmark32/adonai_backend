@@ -2005,7 +2005,7 @@ html.menu-opened body {
 -----------------------*/
 
 .footer {
-    background-color: #15558d;
+    background-color: #926c15;
 }
 .footer .footer-top {
 	padding: 40px 0;
@@ -6914,5 +6914,13 @@ html.menu-opened body {
 .right-buttons {
     display: flex;
     gap: 10px; /* Adjust the gap between buttons as needed */
+}
+
+.table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+.table {
+    min-width: 800px; /* Set a minimum width to allow for scrolling */
 }
 

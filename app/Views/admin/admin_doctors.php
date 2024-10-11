@@ -54,6 +54,10 @@
 							<div class="col-sm-12">
 								<div class="card">
 									<div class="card-body">
+									<h5 class="card-title d-flex justify-content-between">
+														<span>Personal Details</span> 
+														<a class="edit-link" data-toggle="modal" href="#edit_personal_details"><i class="fa fa-edit mr-1"></i>Add Doctor</a>
+													</h5>
 										<div class="table-responsive">
 											<table class="datatable table table-hover table-center mb-0">
 												<thead>
@@ -97,6 +101,85 @@
 										</div>
 									</div>
 								</div>
+
+								<!-- Edit Details Modal -->
+<div class="modal fade" id="edit_personal_details" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Register Doctor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('admin/doc-register') ?>" method="post" enctype="multipart/form-data">
+                    <div class="row form-row">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>User Name</label>
+                                <input type="text" class="form-control" name="username" placeholder="Enter username">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" name="firstname" placeholder="Enter first name">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" name="lastname" placeholder="Enter last name">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email" placeholder="Enter email">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" class="form-control" name="phone" placeholder="Enter phone number">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" class="form-control" name="dateOfBirth">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select class="form-control" name="gender">
+                                    <option value="" disabled selected>Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <h5 class="form-title"><span>Address</span></h5>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" name="address" class="form-control" placeholder="Enter address">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Edit Details Modal -->
+
 							</div>			
 						</div>
 					</div>

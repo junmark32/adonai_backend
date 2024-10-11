@@ -96,57 +96,62 @@
                             
                             <form id="prescriptionForm" action="/Doctor/Dashboard/Update-Prescription/<?= $prescription['PrescriptionID'] ?>/Patients-Profile/<?= $patient['PatientID'] ?>" method="post" enctype="multipart/form-data">
                                 <h5>Personal Information</h5>
-                                <div class="table-responsive">
+                                <div class="table-responsive" style="overflow-x: auto;">
                                     <table class="table table-bordered">
-                                        <tr>
-                                            <td class="col-sm-2 col-form-label">Name:</td>
-                                            <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="name" value="<?= $prescription['Name'] ?>">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-sm-2 col-form-label">Sex:</td>
-                                            <td class="col-sm-1">
-                                                <select class="form-control" name="sex">
-                                                    <option <?= $prescription['Gender'] == 'M' ? 'selected' : '' ?>>M</option>
-                                                    <option <?= $prescription['Gender'] == 'F' ? 'selected' : '' ?>>F</option>
-                                                </select>
-                                            </td>
-                                            <td class="col-sm-1 col-form-label">Date:</td>
-                                            <td class="col-sm-2">
-                                                <input type="date" class="form-control" name="date" value="<?= $prescription['Date'] ?>">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-sm-2 col-form-label">Address:</td>
-                                            <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="address" value="<?= $prescription['Address'] ?>">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-sm-1 col-form-label">Age:</td>
-                                            <td class="col-sm-1">
-                                                <input type="number" class="form-control" name="age" value="<?= $prescription['Age'] ?>">
-                                            </td>
-                                            <td class="col-sm-1 col-form-label">B-day:</td>
-                                            <td class="col-sm-3">
-                                                <input type="date" class="form-control" name="birthday" value="<?= $prescription['DateOfBirth'] ?>">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-sm-2 col-form-label">Occupation:</td>
-                                            <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="occupation" value="<?= $prescription['Occupation'] ?>">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-sm-2 col-form-label">CP#:</td>
-                                            <td class="col-sm-10">
-                                                <input type="text" class="form-control" name="cp" value="<?= $prescription['Phone'] ?>">
-                                            </td>
-                                        </tr>
+                                        <tbody>
+                                            <tr>
+                                                <td class="col-sm-2 col-form-label">Name:</td>
+                                                <td class="col-sm-10">
+                                                    <input type="text" class="form-control" name="name" value="<?= $prescription['Name'] ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-sm-2 col-form-label">Sex:</td>
+                                                <td class="col-sm-1">
+                                                    <select class="form-control" name="sex">
+                                                        <option <?= $prescription['Gender'] == 'M' ? 'selected' : '' ?>>M</option>
+                                                        <option <?= $prescription['Gender'] == 'F' ? 'selected' : '' ?>>F</option>
+                                                    </select>
+                                                </td>
+                                                <td class="col-sm-1 col-form-label">Date:</td>
+                                                <td class="col-sm-2">
+                                                    <input type="date" class="form-control" name="date" value="<?= $prescription['Date'] ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-sm-2 col-form-label">Address:</td>
+                                                <td class="col-sm-10">
+                                                    <input type="text" class="form-control" name="address" value="<?= $prescription['Address'] ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-sm-1 col-form-label">Age:</td>
+                                                <td class="col-sm-1">
+                                                    <input type="number" class="form-control" name="age" value="<?= $prescription['Age'] ?>">
+                                                </td>
+                                                <td class="col-sm-1 col-form-label">B-day:</td>
+                                                <td class="col-sm-3">
+                                                    <input type="date" class="form-control" name="birthday" value="<?= $prescription['DateOfBirth'] ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-sm-2 col-form-label">Occupation:</td>
+                                                <td class="col-sm-10">
+                                                    <input type="text" class="form-control" name="occupation" value="<?= $prescription['Occupation'] ?>">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-sm-2 col-form-label">CP#:</td>
+                                                <td class="col-sm-10">
+                                                    <input type="text" class="form-control" name="cp" value="<?= $prescription['Phone'] ?>">
+                                                </td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
+
+                                <br>
+
                                 
                                 <h5>Best Corrected Optical Power</h5>
                                 <div class="table-responsive">
@@ -184,6 +189,8 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <br>
                                 
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Ocular History:</label>
@@ -226,16 +233,35 @@
                                     </table>
                                 </div>
 
-                                <div class="form-group form-group-row">
-                                    <label class="col-sm-2 col-form-label">Frame:</label>
-                                    <div class="col-sm-4">
+                                <br>
+
+                                <div class="form-group row">
+                                    <!-- Frame and Frame Total -->
+                                    <label class="col-sm-1 col-form-label">Frame:</label>
+                                    <div class="col-sm-2">
                                         <input type="text" class="form-control" name="frame" value="<?= $prescription['Frame'] ?>">
                                     </div>
-                                    <label class="col-sm-2 col-form-label">Lens:</label>
-                                    <div class="col-sm-4">
+                                    <label class="col-sm-1 col-form-label">Frame Total:</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="frame_total" value="<?= $prescription['FrameTotal'] ?>">
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="form-group row">
+                                    
+                                    
+                                    <!-- Lens and Lens Total -->
+                                    <label class="col-sm-1 col-form-label">Lens:</label>
+                                    <div class="col-sm-2">
                                         <input type="text" class="form-control" name="lens" value="<?= $prescription['Lens'] ?>">
                                     </div>
+                                    <label class="col-sm-1 col-form-label">Lens Total:</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="lens_total" value="<?= $prescription['LensTotal'] ?>">
+                                    </div>
                                 </div>
+
                                 <div class="form-group form-group-row">
                                     <label class="col-sm-2 col-form-label">Total:</label>
                                     <div class="col-sm-4">
@@ -268,50 +294,50 @@
                                     </div>
                                 </div>
 
-<!-- Submit Section -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="submit-section">
-            <div class="update-button">
-                <button type="button" class="btn btn-warning submit-btn" id="updateButton">Update</button>
-            </div>
-            <div class="right-buttons">
-                <button type="submit" class="btn btn-primary submit-btn">Save</button>
-                <button type="reset" class="btn btn-secondary submit-btn">Clear</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Submit Section -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('updateButton').addEventListener('click', function() {
-        // Gather form data
-        const formData = new FormData(document.getElementById('prescriptionForm'));
+                                <!-- Submit Section -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="submit-section">
+                                            <div class="update-button">
+                                                <button type="button" class="btn btn-warning submit-btn" id="updateButton">Update</button>
+                                            </div>
+                                            <div class="right-buttons">
+                                                <button type="submit" class="btn btn-primary submit-btn">Save</button>
+                                                <button type="reset" class="btn btn-secondary submit-btn">Clear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Submit Section -->
+                                <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    document.getElementById('updateButton').addEventListener('click', function() {
+                                        // Gather form data
+                                        const formData = new FormData(document.getElementById('prescriptionForm'));
 
-        // AJAX request
-        fetch('/Doctor/Dashboard/Insert-Recent-Prescription/Patients-Profile/<?= $patient['PatientID'] ?>', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Redirect to another page on success
-                window.location.href = '/Doctor/Dashboard/Patients-Profile/<?= $patient['PatientID'] ?>';
-            } else {
-                // Redirect to an error page or handle error case
-                window.location.href = '/Doctor/Dashboard/ErrorPage'; // Adjust this URL to your error handling page
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Redirect to an error page on AJAX error
-            window.location.href = '/Doctor/Dashboard/ErrorPage'; // Adjust this URL to your error handling page
-        });
-    });
-});
-</script>
+                                        // AJAX request
+                                        fetch('/Doctor/Dashboard/Insert-Recent-Prescription/Patients-Profile/<?= $patient['PatientID'] ?>', {
+                                            method: 'POST',
+                                            body: formData,
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.status === 'success') {
+                                                // Redirect to another page on success
+                                                window.location.href = '/Doctor/Dashboard/Patients-Profile/<?= $patient['PatientID'] ?>';
+                                            } else {
+                                                // Redirect to an error page or handle error case
+                                                window.location.href = '/Doctor/Dashboard/ErrorPage'; // Adjust this URL to your error handling page
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            // Redirect to an error page on AJAX error
+                                            window.location.href = '/Doctor/Dashboard/ErrorPage'; // Adjust this URL to your error handling page
+                                        });
+                                    });
+                                });
+                                </script>
 
 
                             </form>

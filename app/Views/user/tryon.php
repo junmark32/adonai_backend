@@ -43,108 +43,189 @@
   <!-- INCLUDE LANDMARKS STABILIZER -->
   <script src="<?= base_url('helpers/landmarksStabilizers/OneEuroLMStabilizer.js')?>"></script>
 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <style type='text/css'>
-    body {
-      margin: 0;
-      background-color: silver;
-    }
-    #WebARRocksFaceCanvas, #threeCanvas {
-      position: fixed;
-      height: 100vh;
-      top: 0;
-      left: 50%;
-      transform: rotateY(180deg) translate(50%, 0px);
-    }
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    #WebARRocksFaceCanvas {
-      z-index: 0;
-    }
-    #threeCanvas {
-      z-index: 1;
-    }
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: white;
+        }
 
-    #controls {
-      display: none;
-      position: fixed;
-      z-index: 2;
-      width: 100vw;
-      bottom: 0;
-      left: 0;
-      flex-direction: row;
-      flex-wrap: wrap;
-    }
+        #cameraContainer {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
 
-    #controls > div {
-      cursor: pointer;
-      flex-grow: 1;
-      font-variant: small-caps;
-      font-size: 14pt;
-      text-align: center;
-      min-width: 110px;
-      box-sizing: border-box;
-      padding-top: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      height: 40px;
-      color: #eee;
+@media (min-width: 768px) {
+    #cameraContainer {
+        width: 375px; /* Set fixed mobile width */
+        height: 667px; /* Set fixed mobile height (iPhone X height) */
+        margin: 0 auto; /* Center the container on larger screens */
     }
+}
 
-    #controls > div:hover {
-      background: rgba(50, 50, 50, 0.5);
-      color: #fff;
-    }
+canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: scaleX(-1); /* Flip horizontally */
+    
+}
+
+
+
+        /* Floating controls like Instagram */
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        #captureBtn {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            border: 5px solid #888;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #filtersMenu {
+            position: absolute;
+            bottom: 120px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .filter-option {
+            margin: 0 10px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .filter-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Floating icons on top */
+        .top-controls {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .top-controls div {
+            background-color: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
   </style>
 </head>
-  
 <body>
-  <canvas id='WebARRocksFaceCanvas'></canvas>
-  <canvas id='threeCanvas'></canvas>
 
-  <div id='controls'>
-    <div onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses1.glb')?>")'>Glasses 1</div>
-    <div onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/qwe.glb')?>")'>Glasses 2</div>
-    <div onclick='WebARRocksMirror.load(false)'>No glasses</div>
-    <div onclick='WebARRocksMirror.pause(true)'>Pause</div>
-    <div onclick='WebARRocksMirror.resume(true)'>Resume</div>
-    <div onclick='WebARRocksMirror.resize(400, 400)'>Resize</div>
-    <div onclick='capture_image()'>Capture</div>
-  </div>
+<div id="cameraContainer">
+    <canvas id='WebARRocksFaceCanvas'></canvas>
+    <canvas id='threeCanvas'></canvas>
 
-  <script>
+    <!-- Top control buttons -->
+    <div class="top-controls">
+        <div onclick='switchCamera()'>Switch Camera</div>
+        <div onclick='WebARRocksMirror.load(false)'>No Glasses</div>
+    </div>
+
+    <!-- Filter selection -->
+    <div id="filtersMenu">
+        <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses1.glb')?>")'>
+            <img src="filter1-thumbnail.jpg" alt="Filter 1">
+        </div>
+        <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/qwe.glb')?>")'>
+            <img src="filter2-thumbnail.jpg" alt="Filter 2">
+        </div>
+    </div>
+
+    <!-- Capture button -->
+    <div id="controls">
+        <div id="captureBtn" onclick="capture_image()"></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-      const faceCanvas = document.getElementById('WebARRocksFaceCanvas');
-      const threeCanvas = document.getElementById('threeCanvas');
+        const faceCanvas = document.getElementById('WebARRocksFaceCanvas');
+        const threeCanvas = document.getElementById('threeCanvas');
 
-      if (faceCanvas && threeCanvas) {
-        console.log('Canvas elements found');
-        
-        // Initialize WebARRocksFace
-        WebARRocksFace.initialize({
-          canvas: faceCanvas,
-          onSuccess: function() {
-            console.log('WebARRocksFace initialized successfully');
-          },
-          onError: function(error) {
-            console.error('WebARRocksFace initialization error:', error);
-          }
-        });
+        if (faceCanvas && threeCanvas) {
+            console.log('Canvas elements found');
+            
+            // Initialize WebARRocksFace
+            WebARRocksFace.initialize({
+                canvas: faceCanvas,
+                onSuccess: function() {
+                    console.log('WebARRocksFace initialized successfully');
+                },
+                onError: function(error) {
+                    console.error('WebARRocksFace initialization error:', error);
+                }
+            });
 
-        // Initialize THREE.js
-        const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            // Initialize THREE.js
+            const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-        // Add additional THREE.js setup here
-
-      } else {
-        console.error('Canvas elements not found');
-      }
+            // Add additional THREE.js setup here
+        } else {
+            console.error('Canvas elements not found');
+        }
     });
 
     function capture_image() {
-      // Implement image capture logic here
-      console.log('Capture button clicked');
+        // Implement image capture logic here
+        console.log('Capture button clicked');
     }
-  </script>
+
+    function switchCamera() {
+        // Switch camera function
+        console.log('Switch camera clicked');
+    }
+</script>
+
 </body>
 </html>

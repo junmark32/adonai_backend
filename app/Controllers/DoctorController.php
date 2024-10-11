@@ -28,6 +28,10 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 //
 use Config\Pusher;
+//
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\RequestOptions;
 class DoctorController extends ResourceController
 {
     public function index()
@@ -718,7 +722,9 @@ public function update_prof_pres($presID, $patientID)
                     'L_OS_ADD' => $this->request->getVar('lp_os_add'),
                     'L_OS_PD' => $this->request->getVar('lp_os_pd'),
                     'Frame' => $this->request->getVar('frame'),
+                    'FrameTotal' => $this->request->getVar('frame_total'),
                     'Lens' => $this->request->getVar('lens'),
+                    'LensTotal' => $this->request->getVar('lens_total'),
                     'Total' => $this->request->getVar('total'),
                     'Diagnosis' => $this->request->getVar('diagnosis'),
                     'Remarks' => $this->request->getVar('remarks'),
@@ -848,6 +854,25 @@ public function insert_recent_prof_pres($patientID)
                 $prescriptionModel = new PrescriptionModel();
                 $prescriptionModel->insert($postData);
 
+                 if ($prescriptionModel->insert($postData)) {
+                    // Prepare to send SMS
+                    $phoneNumber = $patientData['Phone']; // Ensure the Phone field exists
+                    $message = 'Hello! A new prescription has been made for you by Dr. ' . $doctor['FirstName'] . '.';
+
+                    // Send SMS using Semaphore API
+                    $response = $this->sendSMSToUser($phoneNumber, $message);
+
+                    // Handle SMS response
+                    if ($response['success']) {
+                        log_message('info', 'SMS sent successfully! Output: ' . $response['output']);
+                    } else {
+                        log_message('error', 'SMS sending failed: ' . $response['message'] . ' Output: ' . $response['output']);
+                    }
+                }
+
+
+                
+
                 $data['loggedIn'] = $loggedIn;
                 $data['role'] = $role;
                 $data['doctors'] = [$doctor];
@@ -885,6 +910,53 @@ public function insert_recent_prof_pres($patientID)
     } else {
         // User is not logged in
         return redirect()->to('/Doctor/Dashboard')->with('error', 'User data not found in session.');
+    }
+}
+
+// Method to send SMS to the user
+public function sendSMSToUser($phoneNumber, $message)
+{
+    // Define Semaphore API key
+    $apiKey = 'ef0a9cf7d5bf8f4b43bbdac91a2f1276'; // Replace with your actual Semaphore API key
+
+    // Set parameters for the Semaphore API request
+    $parameters = [
+        'apikey' => $apiKey,
+        'number' => $phoneNumber, // Recipient's phone number
+        'message' => $message,     // Message to send
+        'sendername' => 'Adonai' // Custom sender name
+    ];
+
+    // Initialize cURL
+    $ch = curl_init();
+
+    // Set cURL options for Semaphore API
+    curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Disable SSL verification (not recommended for production)
+
+    // Execute the cURL request
+    $output = curl_exec($ch);
+
+    // Close the cURL resource
+    curl_close($ch);
+
+    // Parse the response to check for success or failure
+    if ($output !== false) {
+        return [
+            'success' => true,
+            'message' => 'SMS sent successfully.',
+            'output' => $output // Add API response output if needed for further verification
+        ];
+    } else {
+        // If sending failed
+        return [
+            'success' => false,
+            'message' => 'Failed to send SMS.',
+            'output' => $output // Add API response output for debugging
+        ];
     }
 }
 

@@ -42,7 +42,11 @@ $routes->match(['post','get'],'/register-user', 'UserController::register_user')
 $routes->get('/verify-user', 'UserController::verify');
 $routes->match(['post','get'],'/verify-code', 'UserController::verifyCode');
 $routes->match(['post','get'],'/fn_login', 'UserController::fn_login');
+$routes->match(['post','get'],'/forgot-password', 'UserController::forgot_pass');
+$routes->post('verify-email', 'UserController::checkEmail');
 
+$routes->get('reset-password', 'UserController::resetPasswordForm');
+$routes->post('reset-password', 'UserController::resetPassword');
 
 //patient
 $routes->match(['post','get'],'patient/insertBooking', 'PatientController::insertBooking',['filter' => 'authGuard']);
@@ -69,6 +73,13 @@ $routes->match(['post','get'],'doctor/update_prof_settings', 'DoctorController::
 $routes->match(['post','get'],'doctor/update_password', 'DoctorController::update_password',['filter' => 'authGuard']);
 $routes->match(['post','get'],'schedule/insert', 'DoctorController::insertSchedule',['filter' => 'authGuard']);
 $routes->match(['post','get'],'schedule/delete/(:num)', 'DoctorController::deleteSchedule/$1',['filter' => 'authGuard']);
+
+//register doctor
+// Route for user registration
+$routes->post('admin/doc-register', 'AdminController::register_doctor');
+
+// Route for email verification
+$routes->get('/doctor/verifyEmail/(:any)', 'AdminController::verifyEmail/$1');
 
 //
 $routes->match(['post','get'],'/getDoctorsData', 'DoctorController::getDoctorsData',['filter' => 'authGuard']);

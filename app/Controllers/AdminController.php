@@ -15,6 +15,10 @@ use App\Models\DocFeedModel;
 use App\Models\UserModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class AdminController extends BaseController
 {
     public function index()
@@ -383,15 +387,10 @@ public function updateStatus()
     // Update product data in the database
     $productModel->update($productID, $data);
 
+    // Get the current stock quantity from ProductModel
+    $stockQuantity = $product['StockQuantity'];
 
-    // Find the latest stock quantity for the given product ID in the prodHistoryModel
-    $latestHistory = $prodHistoryModel->where('ProductID', $productID)
-    ->orderBy('created_at', 'DESC') // Assuming there's a 'created_at' field to get the latest entry
-    ->first();
-
-    $stockQuantity = $latestHistory ? $latestHistory['StockQuantity'] : 0; // Default to 0 if no history is found
-
-    // Define product data
+    // Define product history data
     $data1 = [
         'ProductID' => $productID,
         'Name' => $this->request->getPost('name'),
@@ -400,13 +399,13 @@ public function updateStatus()
         'StockQuantity' => $stockQuantity,
     ];
 
-    // Insert product data into the database
+    // Insert product history data into the database
     $prodHistoryModel->insert($data1);
 
     // Optionally, redirect or return a response
-    // For example:
     return redirect()->to('/Admin/Products')->with('success', 'Product updated successfully');
 }
+
 
 public function showAppt()
     {
@@ -799,11 +798,11 @@ public function showAppt()
 
 
 
-public function generateReport()
+    public function generateReport()
     {
         $startDate = $this->request->getPost('start_date');
         $endDate = $this->request->getPost('end_date');
-
+    
         // Fetch the data
         $purchaseModel = new PurchaseModel();
         $builder1 = $purchaseModel->builder();
@@ -818,10 +817,10 @@ public function generateReport()
         $data['purchases'] = $builder1->get()->getResult();
         $data['startDate'] = $startDate;
         $data['endDate'] = $endDate;
-
+    
         // Load view and render HTML
         $html = view('reports/prod_report_view', $data);
-
+    
         // Initialize DOMPDF
         $options = new Options();
         $options->set('defaultFont', 'Courier');
@@ -829,10 +828,11 @@ public function generateReport()
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
-
+    
         // Output the generated PDF to Browser
-        $dompdf->stream("report.pdf", ["Attachment" => 0]);
+        $dompdf->stream("report.pdf", ["Attachment" => 1]);
     }
+    
 
 
     public function updateScheduleStatus()
@@ -882,6 +882,141 @@ public function generateReport()
 
 
     
+////////////////////////////
+
+public function register_doctor()
+{
+    try {
+        $userModel = new UserModel();
+        $doctorModel = new DoctorModel();
+
+        // Generate a verification token
+        $token = $this->verification(50);
+        
+
+        // Data for the Users table
+        $userData = [
+            'Username' => $this->request->getVar('username'),
+            'PasswordHash' => password_hash(('Adonai123'), PASSWORD_DEFAULT),
+            'token'    => $token,
+            'status'   => 'pending', // Set status to pending until verification is complete
+            'role'     => 'doctor',
+        ];
+
+        // Save user data
+        if ($userModel->save($userData)) {
+            // Get the UserID to link it to the Doctor table
+            $userID = $userModel->insertID();
+
+            // Data for the doctors table
+            $doctorData = [
+                'UserID'       => $userID,
+                'FirstName'    => $this->request->getVar('firstname'),
+                'LastName'     => $this->request->getVar('lastname'),
+                'Email'        => $this->request->getVar('email'),
+                'Phone'        => $this->request->getVar('phone'),
+                'BirthDate'  => $this->request->getVar('dateOfBirth'),
+                'Gender'       => $this->request->getVar('gender'),
+                'Address'      => $this->request->getVar('address'),
+                'Verified' => 1,
+                'Status' => 'Active'
+            ];
+
+            // Save doctor data
+            if ($doctorModel->save($doctorData)) {
+                // Send verification email
+                if ($this->sendVerificationEmail($this->request->getVar('email'), $token)) {
+                    // Success message for admin
+                    return redirect()->back()->with('success', 'Doctor registered successfully. An email verification has been sent to the doctor.');
+                } else {
+                    return $this->respond(['msg' => 'Failed to send verification email'], 500);
+                }
+            } else {
+                return $this->respond(['msg' => 'Failed to save doctor data'], 500);
+            }
+        } else {
+            return $this->respond(['msg' => 'Failed to save user data'], 500);
+        }
+    } catch (\Exception $e) {
+        return $this->respond(['msg' => 'Server error', 'error' => $e->getMessage()], 500);
+    }
+}
+
+private function verification($length)
+    {
+        $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        return substr(str_shuffle($str_result), 0, $length);
+    }
+
+private function sendVerificationEmail($email, $token)
+{
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+         $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'adonaieyecare@gmail.com'; // Your Gmail address
+            $mail->Password   = 'suxqojbojluggurs';        // Your Gmail password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+        //Recipients
+        $mail->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare');
+        $mail->addAddress($email); // Recipient's email
+
+        // Create the verification link
+        $verificationLink = site_url('doctor/verifyEmail/' . $token);
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Doctor Email Verification';
+        $mail->Body    = "Please click the following link to verify your email: <a href='{$verificationLink}'>Verify Email</a><br>"
+                       . "Your default password is: <strong>Adonai123</strong>";
+        // Send the email
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        log_message('error', "Email could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+public function verifyEmail($token)
+{
+    $userModel = new UserModel();
+    $doctorModel = new DoctorModel();
+
+    // Find the user using the verification token
+    $user = $userModel->where('token', $token)->first();
+
+    if ($user) {
+        $userID = $user['UserID']; // Get the UserID only if the user exists
+
+        // Find the corresponding doctor by UserID in DoctorModel
+        $doctor = $doctorModel->where('UserID', $userID)->first();
+
+        if ($doctor) {
+            // Update the user status to active and set the token to null (optional)
+            $userModel->update($user['UserID'], [
+                'status' => 'active',  // Set user status as active
+                'verified' => 1      // Mark email as verified
+                // 'token' => null        // Optional: Set the token to null after verification
+            ]);
+
+            // Redirect to a success page
+            return redirect()->to('/doctor/verified_success')->with('success', 'Email successfully verified!');
+        } else {
+            // Redirect if no doctor is found for the given UserID
+            return redirect()->to('/doctor/verification_failed')->with('error', 'Doctor not found.');
+        }
+    } else {
+        // Redirect if the token is invalid or user is not found
+        return redirect()->to('/doctor/verification_failed')->with('error', 'Invalid verification link.');
+    }
+}
+
 
 
 

@@ -95,6 +95,14 @@ class UserController extends ResourceController
       return view('login');
     }
 
+    public function forgot_pass()
+    {
+    //   $productModel = new ProductModel();
+    //   $data['products'] = $productModel->findAll();
+
+      return view('forgot_pass');
+    }
+
     public function tryon()
     {
     //   $productModel = new ProductModel();
@@ -539,7 +547,7 @@ class UserController extends ResourceController
     $dompdf->render();
 
     // Output the generated PDF to Browser
-    $dompdf->stream("report.pdf", ["Attachment" => 0]);
+    $dompdf->stream("report.pdf", ["Attachment" => 1]);
 
     }
 
@@ -1491,22 +1499,21 @@ $data['scheduleTimings'] = json_encode($events);
         $authenticatePassword = password_verify($password, $hashedPassword);
 
         if ($authenticatePassword) {
-            $status = $userData['status']; // Get the status of the user
+            $status = $userData['status'];
 
             if ($status === 'active') {
-                // User is active, proceed with login
-                $role = $userData['role']; // Adjust column name based on your database schema
-                $response = [];
-
-                 // Check if OneSignal subscription ID exists
-                 if (empty($userData['onesignal_subscription_id'])) {
-                    // Insert new OneSignal subscription ID
+                // Handle OneSignal subscription ID
+                if (empty($userData['onesignal_subscription_id'])) {
                     $userData['onesignal_subscription_id'] = $onesignal;
                     $user->update($userData['UserID'], $userData);
                 } else {
-                    // Update existing OneSignal subscription ID
                     $user->where('UserID', $userData['UserID'])->set('onesignal_subscription_id', $onesignal)->update();
                 }
+
+                // Prepare response based on user role
+                $role = $userData['role'];
+                $response = [];
+                $redirectURL = '';
 
                 switch ($role) {
                     case 'user':
@@ -1526,7 +1533,6 @@ $data['scheduleTimings'] = json_encode($events);
                     case 'doctor':
                         $doctorModel = new DoctorModel();
                         $doctorData = $doctorModel->where('UserID', $userData['UserID'])->first();
-    
                         $response = [
                             'msg' => 'okay',
                             'token' => $userData['token'],
@@ -1536,13 +1542,11 @@ $data['scheduleTimings'] = json_encode($events);
                             'Role' => $role,
                         ];
                         $redirectURL = '/Doctor/Dashboard';
-                        
                         break;
 
                     case 'admin':
                         $adminModel = new AdminModel();
                         $adminData = $adminModel->where('UserID', $userData['UserID'])->first();
-
                         $response = [
                             'msg' => 'okay',
                             'token' => $userData['token'],
@@ -1555,27 +1559,150 @@ $data['scheduleTimings'] = json_encode($events);
                         break;
 
                     default:
-                        // Unknown role
                         return $this->respond(['msg' => 'Invalid role'], 401);
                 }
 
                 // Store the response data into session storage
                 $session = session();
                 $session->set('user_data', $response);
-
-                // Redirect based on the role
                 return redirect()->to($redirectURL);
             } else {
-                // User is not active (status is pending or something else)
-                return $this->respond(['msg' => 'User is not active'], 401);
+                // User is not active
+                session()->setFlashdata('loginError', 'User is not active');
+                return redirect()->back()->withInput();
             }
         } else {
-            return $this->respond(['msg' => 'Invalid credentials'], 401);
+            session()->setFlashdata('loginError', 'Invalid credentials');
+            return redirect()->back()->withInput();
         }
     } else {
-        return $this->respond(['msg' => 'User not found'], 404);
+        session()->setFlashdata('loginError', 'User not found');
+        return redirect()->back()->withInput();
     }
 }
+
+
+public function checkEmail()
+{
+    // Load the PatientModel and UserModel
+    $patientModel = new PatientModel();
+    $userModel = new UserModel();
+
+    // Get the user input (email) from the request
+    $email = $this->request->getPost('email');
+
+    // Check if email exists in the database
+    $patient = $patientModel->where('Email', $email)->first();
+
+    if ($patient) {
+        // Generate a 50-character token
+        $resetToken = $this->verification(50); // Call the verification method
+
+        // Update the UserModel with the reset token
+        $userID = $patient['UserID']; // Assuming PatientModel has a UserID field
+        $userModel->update($userID, ['token' => $resetToken]);
+
+        // Create a new PHPMailer instance
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();                                            // Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                       // Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                  // Enable SMTP authentication
+            $mail->Username   = 'adonaieyecare@gmail.com';              // Your Gmail address
+            $mail->Password   = 'suxqojbojluggurs';                     // Your Gmail password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          // Enable TLS encryption
+            $mail->Port       = 587;                                   // TCP port to connect to
+
+            // Recipients
+            $mail->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare'); // Your Name and your email address
+            $mail->addAddress($email);                                  // Recipient's email
+
+            // Content
+            $resetUrl = site_url('reset-password?token=' . $resetToken); // Create the reset URL
+
+            $mail->isHTML(true);                                        // Set email format to HTML
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    = "Click <a href='{$resetUrl}'>here</a> to reset your password.";
+            $mail->AltBody = "Click on the following link to reset your password: {$resetUrl}";
+
+            $mail->send();
+
+            // Redirect to the 'reset password' page
+            return redirect()->to(site_url('reset-password'))->with('email', $email);
+        } catch (Exception $e) {
+            // Return an error message
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'Could not send email. Please try again later.'
+            ]);
+        }
+    } else {
+        // Email not found, return an error message
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'Email does not exist.'
+        ]);
+    }
+}
+
+public function resetPasswordForm()
+    {
+        // Retrieve the reset token from the query string
+        $token = $this->request->getGet('token');
+
+        // Check if the token is valid
+        if (!$token) {
+            // Redirect to a different page or show an error if no token is provided
+            return redirect()->to('/')->with('error', 'Invalid token.');
+        }
+
+        // Pass the token to the view
+        return view('reset_password', ['token' => $token]);
+    }
+
+public function resetPassword()
+{
+    // Load the UserModel
+    $userModel = new UserModel();
+
+    // Get the form data
+    $token = $this->request->getPost('token');
+    $newPassword = $this->request->getPost('new_password');
+    $confirmPassword = $this->request->getPost('confirm_password');
+
+    // Validation
+    $validation = \Config\Services::validation();
+    $validation->setRules([
+        'new_password' => 'required|min_length[4]',
+        'confirm_password' => 'required|matches[new_password]'
+    ]);
+
+    if (!$validation->withRequest($this->request)->run()) {
+        return redirect()->back()->withInput()->with('errors', $validation->getErrors());
+    }
+
+    // Fetch the user based on the token
+    $user = $userModel->where('token', $token)->first();
+
+    if (!$user) {
+        return redirect()->back()->withInput()->with('error', 'Invalid or expired token.');
+    }
+
+    // Hash the new password
+    $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    // Update the user's password and clear the reset token
+    $userModel->update($user['UserID'], [
+        'PasswordHash' => $newPasswordHash,
+        'token' => null // Clear the reset token
+    ]);
+
+    // Redirect to login page or a success page
+    return redirect()->to('/login')->with('status', 'Password reset successfully. Please log in with your new password.');
+}
+
 
 //admin
 
