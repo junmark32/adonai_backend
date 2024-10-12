@@ -764,15 +764,16 @@ public function update_prof_pres($presID, $patientID)
 public function insert_recent_prof_pres($patientID)
 {
     $pusherConfig = new Pusher();
-        $pusher = new \Pusher\Pusher(
-            $pusherConfig->key,
-            $pusherConfig->secret,
-            $pusherConfig->app_id,
-            [
-                'cluster' => $pusherConfig->cluster,
-                'useTLS' => $pusherConfig->useTLS
-            ]
-        );
+    $pusher = new \Pusher\Pusher(
+        $pusherConfig->key,
+        $pusherConfig->secret,
+        $pusherConfig->app_id,
+        [
+            'cluster' => $pusherConfig->cluster,
+            'useTLS' => $pusherConfig->useTLS
+        ]
+    );
+
     // Start session
     $session = session();
     
@@ -852,53 +853,39 @@ public function insert_recent_prof_pres($patientID)
 
                 // Insert data into PrescriptionModel
                 $prescriptionModel = new PrescriptionModel();
-                $prescriptionModel->insert($postData);
+                $insertedId = $prescriptionModel->insert($postData);
 
-                 if ($prescriptionModel->insert($postData)) {
-                    // Prepare to send SMS
-                    $phoneNumber = $patientData['Phone']; // Ensure the Phone field exists
-                    $message = 'Hello! A new prescription has been made for you by Dr. ' . $doctor['FirstName'] . '.';
+                // Check if insertion was successful
+                if ($insertedId) {
+                    // Retrieve the patient's phone number
+                    $patientData = $patientModel->find($patientID);
+                    $phone = $patientData['Phone'];
 
-                    // Send SMS using Semaphore API
-                    $response = $this->sendSMSToUser($phoneNumber, $message);
+                    // Send SMS
+                    $this->sendSms($phone, 'A new Prescription has been made by ' . $doctor['FirstName'] . '.');
 
-                    // Handle SMS response
-                    if ($response['success']) {
-                        log_message('info', 'SMS sent successfully! Output: ' . $response['output']);
-                    } else {
-                        log_message('error', 'SMS sending failed: ' . $response['message'] . ' Output: ' . $response['output']);
-                    }
+                    // Prepare data for Pusher notification
+                    $data['loggedIn'] = $loggedIn;
+                    $data['role'] = $role;
+                    $data['doctors'] = [$doctor];
+                    $data['patient_data'] = [$patientData];
+                    
+                    // Fetch user's token using UserID
+                    $userID = $patientData['UserID'];
+                    $userModel = new UserModel();
+                    $user = $userModel->find($userID);
+                    $token = $user['token'];
+
+                    // Send notification using Pusher to specific user based on token
+                    $data['message'] = $phone . 'A new Prescription has been made by ' . $doctor['FirstName'] . '.';
+                    $pusher->trigger('user-token-' . $token, 'prescription-notification', $data);
+                    
+                    // Return success response
+                    return $this->response->setJSON(['status' => 'success']);
+                } else {
+                    // Handle insertion failure
+                    return redirect()->to('/Doctor/Dashboard')->with('error', 'Failed to insert prescription.');
                 }
-
-
-                
-
-                $data['loggedIn'] = $loggedIn;
-                $data['role'] = $role;
-                $data['doctors'] = [$doctor];
-                $data['patient_data'] = [$patientData];
-                
-                // Fetch user's token using UserID
-                $userModel = new UserModel();
-                                // Load the PatientModel
-                $patientModel = new PatientModel();
-
-                // Retrieve the patient data based on the patientId
-                $patientData = $patientModel->find($patientID);
-                 // Retrieve the UserID from the patient data
-                 $userID = $patientData['UserID'];
-                // Fetch user's token using UserID
-                $user = $userModel->find($userID);
-                $token = $user['token'];
-
-                // // Output the token for debugging
-                // var_dump($token);
-
-                // Send notification using Pusher to specific user based on token
-                $data['message'] = 'A new Prescription has been made by ' . $doctor['FirstName'] . '.';
-                $pusher->trigger('user-token-' . $token, 'prescription-notification', $data);
-                // Pass the $data array to the view
-                return $this->response->setJSON(['status' => 'success']);
             } else {
                 // Handle the case when no doctor data is found
                 return redirect()->to('/Doctor/Dashboard')->with('error', 'Doctor not found.');
@@ -913,52 +900,43 @@ public function insert_recent_prof_pres($patientID)
     }
 }
 
-// Method to send SMS to the user
-public function sendSMSToUser($phoneNumber, $message)
+private function sendSms($phone, $message)
 {
-    // Define Semaphore API key
-    $apiKey = 'ef0a9cf7d5bf8f4b43bbdac91a2f1276'; // Replace with your actual Semaphore API key
 
-    // Set parameters for the Semaphore API request
-    $parameters = [
-        'apikey' => $apiKey,
-        'number' => $phoneNumber, // Recipient's phone number
-        'message' => $message,     // Message to send
-        'sendername' => 'Adonai' // Custom sender name
-    ];
 
-    // Initialize cURL
     $ch = curl_init();
+    $parameters = array(
+        'apikey' => 'ad4811aa957df160ff00b39a18661395',
+        'number' => $phone,
+        'message' => $message,
+        'sendername' => 'SEMAPHORE'
+    );
 
-    // Set cURL options for Semaphore API
     curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
-    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Disable SSL verification (not recommended for production)
 
-    // Execute the cURL request
+    // Send the request and store the response
     $output = curl_exec($ch);
 
-    // Close the cURL resource
-    curl_close($ch);
-
-    // Parse the response to check for success or failure
-    if ($output !== false) {
-        return [
-            'success' => true,
-            'message' => 'SMS sent successfully.',
-            'output' => $output // Add API response output if needed for further verification
-        ];
+    // Check for cURL errors
+    if ($output === false) {
+        $error = curl_error($ch);
+        log_message('error', 'cURL Error: ' . $error);
     } else {
-        // If sending failed
-        return [
-            'success' => false,
-            'message' => 'Failed to send SMS.',
-            'output' => $output // Add API response output for debugging
-        ];
+        $response = json_decode($output, true);
+        if (isset($response['success']) && !$response['success']) {
+            log_message('error', 'SMS failed to send: ' . json_encode($response));
+        } else {
+            log_message('info', 'SMS sent successfully to ' . $phone);
+        }
     }
+
+    curl_close($ch);
 }
+
+
 
 
 public function delete_prof_pres($presID, $patientID)
