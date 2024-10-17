@@ -482,6 +482,18 @@
     }
 </script>
 
+<script>
+  function reloadLink() {
+    fetch('/scheduler/update-status')
+      .then(response => response.text())
+      .then(data => console.log('Link reloaded: ', data))
+      .catch(error => console.error('Error reloading link:', error));
+  }
+
+  // Reload every 5 seconds (5000 milliseconds)
+  setInterval(reloadLink, 1000);
+</script>
+
 
 
 	  

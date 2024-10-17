@@ -170,7 +170,13 @@ canvas {
         <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses1.glb')?>")'>
             <img src="filter1-thumbnail.jpg" alt="Filter 1">
         </div>
-        <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/qwe.glb')?>")'>
+        <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses-1.glb')?>")'>
+            <img src="filter2-thumbnail.jpg" alt="Filter 2">
+        </div>
+        <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses-2.glb')?>")'>
+            <img src="filter2-thumbnail.jpg" alt="Filter 2">
+        </div>
+        <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses-3.glb')?>")'>
             <img src="filter2-thumbnail.jpg" alt="Filter 2">
         </div>
     </div>

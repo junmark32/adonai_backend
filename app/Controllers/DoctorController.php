@@ -937,6 +937,78 @@ private function sendSms($phone, $message)
 }
 
 
+public function sendAppointmentReminders()
+{
+    // Load the Appointment model (assuming you've created one)
+    $appointmentModel = new AppointmentModel();
+
+    // Get tomorrow's date
+    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+
+    // Fetch appointments where Pref_Date is tomorrow and SMS hasn't been sent yet (is_sms_sent = 0)
+    $appointments = $appointmentModel->where('Pref_Date', $tomorrow)
+                                     ->where('is_sms_sent', 0)
+                                     ->findAll();
+
+    // Loop through appointments and send SMS
+    foreach ($appointments as $appointment) {
+        $firstName = $appointment['Firstname'];
+        $phone = $appointment['Phone'];
+
+        // Convert start and end time to a readable string format
+        $timestart = (new \DateTime($appointment['Pref_Time_Start']))->format('h:i A');
+        $timeend = (new \DateTime($appointment['Pref_Time_End']))->format('h:i A');
+
+        // Customize the message with the start and end time
+        $message = "Hi " . $firstName . ", this is a reminder for your appointment tomorrow on " . $tomorrow .
+                   " from " . $timestart . " to " . $timeend . ". Thank you!";
+
+        // Call the sendSmsAppt function to send the message
+        if ($this->sendSmsAppt($phone, $message)) {
+            // Update the appointment record to mark the SMS as sent
+            $appointmentModel->update($appointment['AppointmentID'], ['is_sms_sent' => 1]);
+        }
+    }
+}
+
+// The SMS sending function
+private function sendSmsAppt($phone, $message)
+{
+    $ch = curl_init();
+    $parameters = array(
+        'apikey' => 'ad4811aa957df160ff00b39a18661395', // Your Semaphore API key
+        'number' => $phone,
+        'message' => $message,
+        'sendername' => 'ADONAI'
+    );
+
+    curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Send the request and store the response
+    $output = curl_exec($ch);
+
+    // Check for cURL errors
+    if ($output === false) {
+        $error = curl_error($ch);
+        log_message('error', 'cURL Error: ' . $error);
+        return false; // Failed to send SMS
+    } else {
+        $response = json_decode($output, true);
+        if (isset($response['success']) && !$response['success']) {
+            log_message('error', 'SMS failed to send: ' . json_encode($response));
+            return false; // SMS failed to send
+        } else {
+            log_message('info', 'SMS sent successfully to ' . $phone);
+            return true; // SMS sent successfully
+        }
+    }
+
+    curl_close($ch);
+}
+
 
 
 public function delete_prof_pres($presID, $patientID)
@@ -1783,6 +1855,11 @@ public function update_password()
                 log_message('error', 'Email error: ' . $mail->ErrorInfo);
             }
         }
+
+        
+
+    
+    
         
 
 

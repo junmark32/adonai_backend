@@ -121,6 +121,7 @@ $routes->post('report/generateReport', 'AdminController::generateReport');
 // app/Config/Routes.php
 $routes->get('/scheduler/update-status', 'AdminController::updateScheduleStatus');
 
+$routes->get('/sendSms/update-appointment', 'DoctorController::sendAppointmentReminders');
 
 //
 $routes->post('purchase/updateStatus', 'AdminController::updateStatus');

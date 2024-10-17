@@ -78,15 +78,35 @@
                 <label class="focus-label">Username</label>
             </div>
             <!-- Password Field -->
-            <div class="form-group form-focus">
-                <input type="password" class="form-control floating" name="password" id="password" required>
-                <label class="focus-label">Password</label>
-            </div>
-            <!-- Confirm Password Field -->
-            <div class="form-group form-focus">
-                <input type="password" class="form-control floating" name="confirm_password" id="confirm_password" required>
-                <label class="focus-label">Confirm Password</label>
-            </div>
+<div class="form-group form-focus" style="position: relative;">
+    <input type="password" class="form-control floating" name="password" id="password" required>
+    <label class="focus-label">Password</label>
+    <i class="fa fa-eye" id="togglePassword" style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+</div>
+
+<!-- Confirm Password Field -->
+<div class="form-group form-focus" style="position: relative;">
+    <input type="password" class="form-control floating" name="confirm_password" id="confirm_password" required>
+    <label class="focus-label">Confirm Password</label>
+    <i class="fa fa-eye" id="toggleConfirmPassword" style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+</div>
+
+<script>
+    document.getElementById('togglePassword').onclick = function() {
+        const passwordInput = document.getElementById('password');
+        this.classList.toggle('fa-eye-slash');
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('toggleConfirmPassword').onclick = function() {
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        this.classList.toggle('fa-eye-slash');
+        confirmPasswordInput.type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+    }
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
            
         </div>
     </div>

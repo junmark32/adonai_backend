@@ -973,7 +973,7 @@ private function sendVerificationEmail($email, $token)
         $mail->isHTML(true);
         $mail->Subject = 'Doctor Email Verification';
         $mail->Body    = "Please click the following link to verify your email: <a href='{$verificationLink}'>Verify Email</a><br>"
-                       . "Your default password is: <strong>Adonai123</strong>";
+                       . "Your default password is: <strong>Adonai123</strong>, change it in your profile settings";
         // Send the email
         $mail->send();
         return true;

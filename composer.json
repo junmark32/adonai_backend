@@ -24,7 +24,8 @@
         "phpmailer/phpmailer": "^6.9",
         "psr/log": "^1.1",
         "pusher/pusher-php-server": "^7.2",
-        "tecnickcom/tcpdf": "^6.6"
+        "tecnickcom/tcpdf": "^6.6",
+        "telerivet/telerivet-php-client": "^1.7"
     },
     "require-dev": {
         "codeigniter/coding-standard": "^1.5",

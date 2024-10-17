@@ -43,10 +43,22 @@
 												<input type="text" class="form-control floating" name="username">
 												<label class="focus-label">Email</label>
 											</div>
-											<div class="form-group form-focus">
-												<input type="password" class="form-control floating" name="password">
-												<label class="focus-label">Password</label>
-											</div>
+											<div class="form-group form-focus" style="position: relative;">
+    <input type="password" class="form-control floating" name="password" id="passwordInput">
+    <label class="focus-label">Password</label>
+    <i class="fa fa-eye" id="togglePassword" style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+</div>
+
+<script>
+    document.getElementById('togglePassword').onclick = function() {
+        const passwordInput = document.getElementById('passwordInput');
+        this.classList.toggle('fa-eye-slash');
+        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+    }
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 											<div class="text-right">
 												<a class="forgot-link" href="<?= site_url('/forgot-password') ?>">Forgot Password ?</a>
 											</div>

@@ -128,7 +128,11 @@
                     title: "Appointment Details",
                     text: `#APT${appointment.AppointmentID}
                     \nDate: ${new Date(appointment.Pref_Date + ' ' + appointment.Pref_Time_Start).toLocaleString()}
-                    \nStatus: ${appointment.Status}`,
+                    \nStatus: ${appointment.Status}
+					\nName: ${appointment.Firstname + ' ' + appointment.Lastname}
+					\nPhone: ${appointment.Phone}
+					\nMessage: ${appointment.Add_message}
+					`,
                     type: "info",
                     confirmButtonText: "OK"
                 });
