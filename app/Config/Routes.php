@@ -51,6 +51,7 @@ $routes->post('reset-password', 'UserController::resetPassword');
 //patient
 $routes->match(['post','get'],'patient/insertBooking', 'PatientController::insertBooking',['filter' => 'authGuard']);
 $routes->match(['post','get'],'feedback/addReview', 'UserController::addReview',['filter' => 'authGuard']);
+$routes->match(['post','get'],'feedback/addProdReview', 'UserController::addProdReview',['filter' => 'authGuard']);
 //appointmet
 $routes->match(['post','get'],'booking/booked-dates', 'PatientController::getBookedDates',['filter' => 'authGuard']);
 $routes->match(['post','get'],'available-time-slots', 'PatientController::getAvailableTimeSlots',['filter' => 'authGuard']);

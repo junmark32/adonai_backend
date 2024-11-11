@@ -488,6 +488,25 @@ class DoctorController extends ResourceController
 
                 // // Output the token for debugging
                 // var_dump($token);
+                $beamsClient = new \Pusher\PushNotifications\PushNotifications([
+                    'instanceId' => 'b1e88c3a-8e5a-4b1d-8377-0cceab7f4198',
+                    'secretKey' => 'E30307054376F089797DC5492F14E4224184E1B0C12FEE3D978E8596CF8C5D1D', // replace with your secret key
+                ]);
+                
+                $publishResponse = $beamsClient->publishToInterests(
+                    ['hello'], // Interest(s) to send the notification to
+                    [
+                        'fcm' => [
+                            'notification' => [
+                                'title' => 'New Prescription Alert!',
+                                'body' => 'You have a new prescription ready for you.',
+                                'icon' => 'https://adonai-eyecare.online/adonai/public/uploads/logo-adonai.png', // replace with actual icon path
+                                'click_action' => 'https://adonai-eyecare.online/', // URL to open on click
+                            ],
+                        ],
+                    ]
+                );
+                
 
                 // Send notification using Pusher to specific user based on token
                 $data['message'] = 'A new Prescription has been made by ' . $doctor['FirstName'] . '.';

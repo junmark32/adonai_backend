@@ -16,6 +16,14 @@
 					<div class="row">
 						<div class="col-md-8 offset-md-2">
 							
+						<?php if (session()->getFlashdata('loginSuccess')): ?>
+    <div class="alert alert-warning alert-dismissible fade show" role="warning">
+        <strong>Warning!</strong> <?= session()->getFlashdata('loginSuccess') ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
 							<!-- Login Tab Content -->
 <div class="account-content">
     <div class="row align-items-center justify-content-center">

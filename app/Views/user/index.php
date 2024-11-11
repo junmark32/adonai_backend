@@ -1,6 +1,8 @@
 <?= $this->include('include/header') ?>
 
+
 	<body>
+	
 
 		<!-- Main Wrapper -->
 		<div class="main-wrapper">
@@ -28,6 +30,52 @@
 
 
 			<!-- /Header -->
+			<?php if (session()->getFlashdata('book')): ?>
+    <div class="alert alert-success alert-dismissible fade show text-center mx-auto" role="alert" id="flash-alert-success" style="width: 50%;">
+        <strong>Success!</strong> <?= session()->getFlashdata('book') ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger alert-dismissible fade show text-center mx-auto" role="alert" id="flash-alert-error" style="width: 50%;">
+        <strong>Error!</strong> <?= session()->getFlashdata('error') ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
+<script>
+    // Auto-remove the success alert after 5 seconds
+    setTimeout(function() {
+        var successAlert = document.getElementById('flash-alert-success');
+        if (successAlert) {
+            successAlert.classList.remove('show');
+            successAlert.classList.add('fade');
+            setTimeout(function() {
+                successAlert.remove();
+            }, 500);
+        }
+    }, 5000); // 5 seconds
+
+    // Auto-remove the error alert after 5 seconds
+    setTimeout(function() {
+        var errorAlert = document.getElementById('flash-alert-error');
+        if (errorAlert) {
+            errorAlert.classList.remove('show');
+            errorAlert.classList.add('fade');
+            setTimeout(function() {
+                errorAlert.remove();
+            }, 500);
+        }
+    }, 5000); // 5 seconds
+</script>
+
+
+
 			
 			<!-- Home Banner -->
 			<section class="section section-search">

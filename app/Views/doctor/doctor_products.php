@@ -265,7 +265,7 @@
 												<table id="purchaseTable" class="table table-hover table-center mb-0">
 													<thead>
 														<tr>
-															<th>Id</th>
+															<th>Order Id</th>
 															<th>Customer</th>
 															<th>Email</th>
 															<th>Product</th>
@@ -277,7 +277,7 @@
 													<tbody>
 														<?php foreach ($purchases as $purchase): ?>
 														<tr id="purchase_<?php echo $purchase->PurchaseID; ?>">
-															<td><?php echo $purchase->PurchaseID; ?></td>
+															<td>#ORD<?php echo $purchase->PurchaseID; ?></td>
 															<td><?php echo $purchase->FirstName; ?> <?php echo $purchase->LastName; ?></td>
 															<td><?php echo $purchase->Email; ?></td>
 															<td><?php echo $purchase->ProductName; ?></td>
@@ -307,10 +307,18 @@
 									</div>
 									<!-- /Feed Activity -->
 
+									<div class="loader-overlay" id="loader-overlay">
+    <div class="loader"></div>
+</div>
+
+
+
 <script>
     // JavaScript to handle status update using AJAX
     document.addEventListener('DOMContentLoaded', function () {
         const statusForms = document.querySelectorAll('.status-form');
+        const loaderOverlay = document.getElementById('loader-overlay'); // Reference to the loader overlay
+        const content = document.body; // Apply blur to the whole body
 
         statusForms.forEach(form => {
             form.addEventListener('change', function (event) {
@@ -320,12 +328,20 @@
                 const purchaseId = formData.get('purchase_id');
                 const status = formData.get('status');
 
+                // Show the loader and blur the screen when the form is submitted
+                loaderOverlay.style.visibility = 'visible';
+                content.classList.add('blur-effect');
+
                 fetch('<?php echo base_url('purchase/updateStatus'); ?>', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
+                    // Hide the loader and remove the blur effect once the status is updated
+                    loaderOverlay.style.visibility = 'hidden';
+                    content.classList.remove('blur-effect');
+
                     if (data.success) {
                         // Update the status in the table cell
                         const statusCell = document.querySelector(`#purchase_${purchaseId} .status-select`);
@@ -335,6 +351,10 @@
                     }
                 })
                 .catch(error => {
+                    // Hide the loader and remove the blur effect in case of an error
+                    loaderOverlay.style.visibility = 'hidden';
+                    content.classList.remove('blur-effect');
+
                     console.error('Error:', error);
                     alert('An error occurred while updating status.');
                 });
@@ -342,6 +362,8 @@
         });
     });
 </script>
+
+
 
 
 

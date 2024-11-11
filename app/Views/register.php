@@ -29,6 +29,16 @@
 										</div> -->
 										
 										<!-- Register Form -->
+										<?php if (session()->getFlashdata('registerError')): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> <?= session()->getFlashdata('registerError') ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
+
+
 <!-- Register Form -->
 <form action="/register-user" method="POST">
     <div class="row">
@@ -103,6 +113,12 @@
         this.classList.toggle('fa-eye-slash');
         confirmPasswordInput.type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
     }
+
+	function disableSubmitButton() {
+                    const submitButton = document.querySelector('.login-btn');
+                    submitButton.disabled = true;
+                    submitButton.innerText = 'Processing...';
+                }
 </script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

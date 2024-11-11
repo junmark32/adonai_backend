@@ -734,7 +734,89 @@ document.addEventListener('DOMContentLoaded', (event) => {
                             </div>
                         </div>
                     </div>
+
+                    
                 </div>
+<!-- Lens Management -->
+<div class="card card-table flex-fill">
+    <div class="card-header">
+        <h4 class="card-title">Lens Management</h4>
+        <div class="d-flex flex-wrap align-items-center">
+            <div class="mb-2 mb-md-0">
+                <button id="addNewLens" class="btn btn-primary" data-toggle="modal" data-target="#addLensModal">Add New Lens</button>
+            </div>
+            <div class="ml-auto mb-2 mb-md-0 d-flex align-items-center">
+                <label for="rowLimit" class="mr-2 mb-0">Show:</label>
+                <select id="rowLimit" class="form-control d-inline-block" style="width: auto;">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+                <label for="rowLimit" class="ml-2 mb-0">entries</label>
+            </div>
+            <div class="ml-auto d-flex align-items-center">
+                <button id="prevPage" class="btn btn-secondary mr-2">Previous</button>
+                <button id="nextPage" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table id="lensTable" class="table table-hover table-center mb-0">
+                <thead>
+                    <tr>
+                        <th>Lens ID</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Lens Type</th>
+                        <th>Lens Material</th>
+                        <th>Lens Color</th>
+                        <th>Lens Coating</th>
+                        <th>Lens Power</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($lenses as $lens): ?>
+                    <tr id="lens_<?php echo $lens['LensID']; ?>">
+                        <td><?php echo $lens['LensID']; ?></td>
+                        <td><?php echo $lens['Brand']; ?></td>
+                        <td><?php echo $lens['Model']; ?></td>
+                        <td><?php echo $lens['LensType']; ?></td>
+                        <td><?php echo $lens['LensMaterial']; ?></td>
+                        <td><?php echo $lens['LensColor']; ?></td>
+                        <td><?php echo $lens['LensCoating']; ?></td>
+                        <td><?php echo $lens['LensPower']; ?></td>
+                        <td><?php echo $lens['Price']; ?></td>
+                        <td>
+                            <form id="statusForm_<?php echo $lens['LensID']; ?>" class="status-form">
+                                <input type="hidden" name="lens_id" value="<?php echo $lens['LensID']; ?>">
+                                <select name="status" class="form-control status-select">
+                                    <option value="Enabled" <?php if ($lens['Status'] == 'Enabled') echo 'selected'; ?>>Enabled</option>
+                                    <option value="Disabled" <?php if ($lens['Status'] == 'Disabled') echo 'selected'; ?>>Disabled</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary update-lens" data-toggle="modal" data-target="#updateLensModal" data-id="<?php echo $lens['LensID']; ?>" data-brand="<?php echo $lens['Brand']; ?>" data-model="<?php echo $lens['Model']; ?>" data-type="<?php echo $lens['LensType']; ?>" data-material="<?php echo $lens['LensMaterial']; ?>" data-color="<?php echo $lens['LensColor']; ?>" data-coating="<?php echo $lens['LensCoating']; ?>" data-power="<?php echo $lens['LensPower']; ?>" data-price="<?php echo $lens['Price']; ?>">Update</button>
+                            <button class="btn btn-sm btn-warning toggle-status" data-id="<?php echo $lens['LensID']; ?>">
+                                <?php echo ($lens['Status'] == 'Enabled') ? 'Disable' : 'Enable'; ?>
+                            </button>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+                
 
 					
 				</div>			

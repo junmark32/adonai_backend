@@ -202,6 +202,119 @@
 </div>
 <!-- /Product Widget -->
 
+<div class="profile-widget">
+    <!-- Review Listing -->
+	<div class="widget review-listing">
+										<ul class="comments-list">
+											<?php foreach ($reviews as $review): ?>
+												<!-- Comment List -->
+												<li>
+													<div class="comment d-flex">
+													<img class="avatar avatar-sm rounded-circle" alt="User Image" src="<?= base_url('uploads/' . $review->Profile_url) ?>">
+														<div class="comment-body flex-grow-1">
+															<div class="meta-data">
+																<span class="comment-author"><?= $review->FirstName ?> <?= $review->LastName ?></span>
+																<span class="comment-date">
+																	<?php
+																	// Calculate the relative time
+																	$reviewTime = \CodeIgniter\I18n\Time::parse($review->created_at);
+																	echo 'Reviewed ' . $reviewTime->humanize();
+																	?>
+																</span>
+															</div>
+															<p class="comment-content">
+																<?= $review->Review ?>
+															</p>
+														</div>
+														<div class="review-count rating text-right">
+															<?php for ($i = 0; $i < $review->Rating; $i++): ?>
+																<i class="fas fa-star filled"></i>
+															<?php endfor; ?>
+															<?php for ($i = $review->Rating; $i < 5; $i++): ?>
+																<i class="fas fa-star"></i>
+															<?php endfor; ?>
+														</div>
+													</div>
+												</li>
+												<!-- /Comment List -->
+											<?php endforeach; ?>
+										</ul>
+										
+										<!-- Show All -->
+										<div class="all-feedback text-center">
+											<a href="#" class="btn btn-primary btn-sm">
+												Show all feedback <strong>(167)</strong>
+											</a>
+										</div>
+										<!-- /Show All -->
+										
+									</div>
+									<!-- /Review Listing -->
+
+								
+									<!-- Write Review -->
+									<div class="write-review">
+										<h4>Write a review for <strong>  <?= $product['Name'] ?> </strong></h4>
+										
+										<!-- Write Review Form -->
+									<form action="<?= base_url('/feedback/addProdReview') ?>" method="post">
+										<div class="form-group">
+											<label>Review</label>
+											<div class="star-rating">
+												<input id="star-5" type="radio" name="rating" value="5">
+												<label for="star-5" title="5 stars">
+													<i class="active fa fa-star"></i>
+												</label>
+												<input id="star-4" type="radio" name="rating" value="4">
+												<label for="star-4" title="4 stars">
+													<i class="active fa fa-star"></i>
+												</label>
+												<input id="star-3" type="radio" name="rating" value="3">
+												<label for="star-3" title="3 stars">
+													<i class="active fa fa-star"></i>
+												</label>
+												<input id="star-2" type="radio" name="rating" value="2">
+												<label for="star-2" title="2 stars">
+													<i class="active fa fa-star"></i>
+												</label>
+												<input id="star-1" type="radio" name="rating" value="1">
+												<label for="star-1" title="1 star">
+													<i class="active fa fa-star"></i>
+												</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label>Your review</label>
+											<textarea id="review_desc" name="review_desc" maxlength="100" class="form-control"></textarea>
+											<div class="d-flex justify-content-between mt-3">
+												<small class="text-muted"><span id="chars">100</span> characters remaining</small>
+											</div>
+										</div>
+										<hr>
+										<div class="form-group">
+											<div class="terms-accept">
+												<div class="custom-checkbox">
+													<input type="checkbox" id="terms_accept">
+													<label for="terms_accept">I have read and accept <a href="#">Terms &amp; Conditions</a></label>
+												</div>
+											</div>
+										</div>
+										<div class="submit-section">
+											<button type="submit" class="btn btn-primary submit-btn">Add Review</button>
+										</div>
+										<!-- Hidden fields for doctor and patient IDs -->
+										<input type="hidden" name="product_id" value=" <?= $product['ProductID'] ?>"> <!-- Replace with actual doctor ID -->
+										<input type="hidden" name="patient_id" value="<?= $userData['PatientID'] ?>"> <!-- Replace with actual patient ID -->
+									</form>
+									<!-- /Write Review Form -->
+
+										
+									</div>
+									<!-- /Write Review -->
+</div>
+<!-- /Container -->
+
+
     </div>
 </div>
 

@@ -27,6 +27,7 @@ use App\Models\DocExpModel;
 use App\Models\DocServModel;
 use App\Models\DocSpecModel;
 use App\Models\DocFeedModel;
+use App\Models\ProdReviewModel;
 use CodeIgniter\I18n\Time;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -1331,6 +1332,27 @@ $data['scheduleTimings'] = json_encode($events);
         }
     }
 
+    public function addProdReview()
+    {
+        $prod_review = new ProdReviewModel();
+
+        // Get data from the request
+        $data = [
+            'ProductID' => $this->request->getPost('product_id'), // Ensure this input exists in the form
+            'PatientID' => $this->request->getPost('patient_id'), // Ensure this input exists in the form
+            'Rating' => $this->request->getPost('rating'),
+            'Review' => $this->request->getPost('review_desc'),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        // Insert data into the database
+        if ($prod_review->insert($data)) {
+            return redirect()->to('/'); // Redirect to a success page or other route
+        } else {
+            return redirect()->to('/feedback/error'); // Redirect to an error page or other route
+        }
+    }
+
 
     public function getDoctorDetails($DoctorID)
     {
@@ -1353,64 +1375,125 @@ $data['scheduleTimings'] = json_encode($events);
     ///
 
     public function register_user()
-    {
-        try {
-            $userModel = new UserModel();
-            $patientModel = new PatientModel();
-    
-            // Generate a verification token
-            $token = $this->verification(50);
-    
-            // Generate a verification code
-            $verificationCode = $this->generateVerificationCode();
-    
-            // Data for the Users table
-            $userData = [
-                'Username' => $this->request->getVar('username'),
-                'PasswordHash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-                'token' => $token,
-                'status' => 'pending', // Set status to pending until verification is complete
-                'role' => 'user',
-                'verification_code' => $verificationCode, // Add verification code to user data
+{
+    try {
+        $userModel = new UserModel();
+        $patientModel = new PatientModel();
+
+        // Check if the email already exists
+        $existingEmail = $patientModel->where('Email', $this->request->getVar('email'))->first();
+
+        if ($existingEmail) {
+            session()->setFlashdata('registerError', 'Email already exist!');
+        return redirect()->back()->withInput();
+        }
+
+        // Check if the email already exists
+        $existingUsername = $userModel->where('Username', $this->request->getVar('username'))->first();
+
+        if ($existingUsername) {
+            session()->setFlashdata('registerError', 'Username already exist!');
+        return redirect()->back()->withInput();
+        }
+
+        // Generate a verification token
+        $token = $this->verification(50);
+
+        // Generate a verification code
+        $verificationCode = $this->generateVerificationCode();
+
+        // Data for the Users table
+        $userData = [
+            'Username' => $this->request->getVar('username'),
+            'PasswordHash' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            'token' => $token,
+            'status' => 'pending', // Set status to pending until verification is complete
+            'role' => 'user',
+            'verification_code' => $verificationCode, // Add verification code to user data
+        ];
+
+        // Save user data
+        $userSaved = $userModel->save($userData);
+
+        if ($userSaved) {
+            // Data for the patients table
+            $patientData = [
+                'UserID' => $userModel->insertID(),
+                'FirstName' => $this->request->getVar('firstname'),
+                'LastName' => $this->request->getVar('lastname'),
+                'Email' => $this->request->getVar('email'),
+                'Phone' => $this->request->getVar('phone'),
+                'DateOfBirth' => $this->request->getVar('dateOfBirth'),
+                'Gender' => $this->request->getVar('gender'),
+                'Address' => $this->request->getVar('address'),
             ];
-    
-            // Save user data
-            $userSaved = $userModel->save($userData);
-    
-            if ($userSaved) {
-                // Data for the patients table
-                $patientData = [
-                    'UserID' => $userModel->insertID(),
-                    'FirstName' => $this->request->getVar('firstname'),
-                    'LastName' => $this->request->getVar('lastname'),
-                    'Email' => $this->request->getVar('email'),
-                    'Phone' => $this->request->getVar('phone'),
-                    'DateOfBirth' => $this->request->getVar('dateOfBirth'),
-                    'Gender' => $this->request->getVar('gender'),
-                    'Address' => $this->request->getVar('address'),
-                ];
-    
-                // Save patient data
-                $patientSaved = $patientModel->save($patientData);
-    
-                if ($patientSaved) {
-                    // Send verification email
-                    $this->sendVerificationEmail($this->request->getVar('email'), $verificationCode);
-    
-                                    // Redirect to a page informing the user to check their email for the verification code
+
+            // Save patient data
+            $patientSaved = $patientModel->save($patientData);
+
+            if ($patientSaved) {
+                // Send verification email
+                $this->sendVerificationEmail($this->request->getVar('email'), $verificationCode);
+                // Customize the message with the start and end time
+                        $message = "Your OTP is: " . $verificationCode . " . Do not share with anyone. ADONAI";
+
+                // Call the sendSmsAppt function to send the message
+                $this->sendSmsOtp($this->request->getVar('phone'), $message);
+               
+
+                // Redirect to a page informing the user to check their email for the verification code
                 return redirect()->to('/verify-user');
-                } else {
-                    // If patient data saving fails
-                    return $this->respond(['msg' => 'failed to save patient data'], 500);
-                }
             } else {
-                // If user data saving fails
-                return $this->respond(['msg' => 'failed to save user data'], 500);
+                // If patient data saving fails
+                return $this->respond(['msg' => 'Failed to save patient data'], 500);
             }
-        } catch (\Exception $e) {
-            return $this->respond(['msg' => 'server error', 'error' => $e->getMessage()], 500);
+        } else {
+            // If user data saving fails
+            return $this->respond(['msg' => 'Failed to save user data'], 500);
+        }
+    } catch (\Exception $e) {
+        return $this->respond(['msg' => 'Server error', 'error' => $e->getMessage()], 500);
+    }
+}
+
+// The SMS sending function
+private function sendSmsOtp($phone, $message)
+{
+    $ch = curl_init();
+    $parameters = array(
+        'apikey' => 'ad4811aa957df160ff00b39a18661395', // Your Semaphore API key
+        'number' => $phone,
+        'message' => $message,
+        'sendername' => 'ADONAI'
+    );
+
+    curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Send the request and store the response
+    $output = curl_exec($ch);
+
+    // Check for cURL errors
+    if ($output === false) {
+        $error = curl_error($ch);
+        log_message('error', 'cURL Error: ' . $error);
+        return false; // Failed to send SMS
+    } else {
+        $response = json_decode($output, true);
+        if (isset($response['success']) && !$response['success']) {
+            log_message('error', 'SMS failed to send: ' . json_encode($response));
+            return false; // SMS failed to send
+        } else {
+            log_message('info', 'SMS sent successfully to ' . $phone);
+            return true; // SMS sent successfully
         }
     }
+
+    curl_close($ch);
+}
+
     
     private function generateVerificationCode()
     {
@@ -1427,7 +1510,7 @@ $data['scheduleTimings'] = json_encode($events);
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
             $mail->Username   = 'adonaieyecare@gmail.com'; // Your Gmail address
-            $mail->Password   = 'suxqojbojluggurs';        // Your Gmail password
+            $mail->Password   = 'wgxofkwcodnqabei';        // Your Gmail password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
     
@@ -1567,9 +1650,33 @@ $data['scheduleTimings'] = json_encode($events);
                 $session->set('user_data', $response);
                 return redirect()->to($redirectURL);
             } else {
-                // User is not active
-                session()->setFlashdata('loginError', 'User is not active');
-                return redirect()->back()->withInput();
+                // User is not active, generate and send new verification code
+                $verificationCode = $this->generateVerificationCode();
+                 // Generate a verification token
+                $token = $this->verification(50);
+                $user->update($userData['UserID'], ['verification_code' => $verificationCode]);
+                $user->update($userData['UserID'], ['token' => $token]);
+
+                // Get the email from the patients table
+                $patientModel = new PatientModel();
+                $patientData = $patientModel->where('UserID', $userData['UserID'])->first();
+                $email = $patientData['Email'];
+                $phone = $patientData['Phone'];
+
+                // Send verification email
+                $message = "Your OTP is: " . $verificationCode . " . Do not share with anyone. ADONAI";
+
+                // Call the sendSmsAppt function to send the message
+                $this->sendSmsOtp($phone, $message);
+                $emailSent = $this->sendVerificationEmail($email, $verificationCode);
+
+                if ($emailSent) {
+                    session()->setFlashdata('loginSuccess', 'Verify First Your Account!');
+                    return redirect()->to('/verify-user?token=' . $token);
+                } else {
+                    session()->setFlashdata('loginError', 'Unable to send verification email. Please try again.');
+                    return redirect()->back()->withInput();
+                }
             }
         } else {
             session()->setFlashdata('loginError', 'Invalid credentials');
@@ -1580,6 +1687,7 @@ $data['scheduleTimings'] = json_encode($events);
         return redirect()->back()->withInput();
     }
 }
+
 
 
 public function checkEmail()
@@ -1611,7 +1719,7 @@ public function checkEmail()
             $mail->Host       = 'smtp.gmail.com';                       // Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                  // Enable SMTP authentication
             $mail->Username   = 'adonaieyecare@gmail.com';              // Your Gmail address
-            $mail->Password   = 'suxqojbojluggurs';                     // Your Gmail password
+            $mail->Password   = 'wgxofkwcodnqabei';                     // Your Gmail password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;          // Enable TLS encryption
             $mail->Port       = 587;                                   // TCP port to connect to
 
@@ -1881,6 +1989,7 @@ public function showProdDetails($productID)
         // Retrieve user data from session
         $userData = $session->get('user_data');
         $loggedIn = true;
+        $patientID = $userData['PatientID'];
         $role = $userData['Role']; // Assuming 'role' is stored in the session
     }
 
@@ -1911,6 +2020,14 @@ public function showProdDetails($productID)
     // Calculate the count of items in the cart
     $cartCount = count($cartItems);
 
+    // Fetch product reviews for the specific product
+    $prod_review = new ProdReviewModel();
+    $builder = $prod_review->builder();
+    $builder->select('patients.FirstName, patients.LastName, patients.Profile_url, prod_review.Rating, prod_review.Review, prod_review.created_at');
+    $builder->join('patients', 'patients.PatientID = prod_review.PatientID');
+    $builder->where('prod_review.ProductID', $productID);
+    $reviews = $builder->get()->getResult(); // Get the reviews
+
     // // Pass the cart count to the view
     // $data['cartCount'] = $cartCount;
 
@@ -1932,7 +2049,9 @@ public function showProdDetails($productID)
             'loggedIn' => $loggedIn,
             'role' => $role,
             'patients' => $patients,
-            'cartCount' => $cartCount
+            'cartCount' => $cartCount,
+            'reviews' => $reviews,  // Include reviews in the data array
+            'userData' => $userData
         ]);
     }
 
@@ -1973,7 +2092,7 @@ public function showProdDetails($productID)
                     $cartModel->insert($data);
     
                     // Redirect the user to a different page after adding to the cart
-                    return redirect()->to('/store');
+                    return redirect()->to('/store')->with('success', 'Item successfully added to your cart!');
                 } else {
                     return view('error', ['error' => 'Incomplete data provided']);
                 }

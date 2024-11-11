@@ -41,6 +41,10 @@ class NodeConfig extends \Google\Collection
    */
   public $diskType;
   /**
+   * @var string
+   */
+  public $effectiveCgroupMode;
+  /**
    * @var bool
    */
   public $enableConfidentialStorage;
@@ -122,6 +126,10 @@ class NodeConfig extends \Google\Collection
    * @var bool
    */
   public $spot;
+  /**
+   * @var string[]
+   */
+  public $storagePools;
   /**
    * @var string[]
    */
@@ -230,6 +238,20 @@ class NodeConfig extends \Google\Collection
   public function getDiskType()
   {
     return $this->diskType;
+  }
+  /**
+   * @param string
+   */
+  public function setEffectiveCgroupMode($effectiveCgroupMode)
+  {
+    $this->effectiveCgroupMode = $effectiveCgroupMode;
+  }
+  /**
+   * @return string
+   */
+  public function getEffectiveCgroupMode()
+  {
+    return $this->effectiveCgroupMode;
   }
   /**
    * @param bool
@@ -622,6 +644,20 @@ class NodeConfig extends \Google\Collection
   public function getSpot()
   {
     return $this->spot;
+  }
+  /**
+   * @param string[]
+   */
+  public function setStoragePools($storagePools)
+  {
+    $this->storagePools = $storagePools;
+  }
+  /**
+   * @return string[]
+   */
+  public function getStoragePools()
+  {
+    return $this->storagePools;
   }
   /**
    * @param string[]

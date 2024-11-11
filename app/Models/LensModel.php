@@ -12,7 +12,7 @@ class LensModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['Brand', 'Model', 'LensType', 'LensMaterial', 'LensColor', 'LensCoating', 'LensPower', 'Price', 'StockQuantity'];
+    protected $allowedFields    = ['Brand', 'Model', 'LensType', 'LensMaterial', 'LensColor', 'LensCoating', 'LensPower', 'Price', 'StockQuantity', 'Status'];
 
     // Dates
     protected $useTimestamps = false;

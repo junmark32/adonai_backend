@@ -150,20 +150,23 @@
                     <span><?= esc($formattedTime) ?></span>
                 </td>
                 <!-- Replace 'order_date' with the actual order date field -->
-                <td><?= esc($purchase['Status']) ?></td> <!-- Replace 'status' with the actual status field -->
-				<td class="text-right">
-                    <div class="table-action">
-                        <form id="cancelForm-<?= $purchase['PurchaseID'] ?>" action="<?= site_url('/purchase/cancel/' . $purchase['PurchaseID']) ?>" method="post" style="display:inline;">
-                            <button type="button" class="btn btn-sm bg-danger text-light" onclick="confirmCancel('<?= $purchase['PurchaseID'] ?>')">
-                                <i class="fas fa-times"></i> Cancel
-                            </button>
-                        </form>
-                        <button type="button" class="btn btn-sm bg-info text-light" onclick="downloadReceipt('<?= $purchase['PurchaseID'] ?>')">
-    <i class="fas fa-receipt"></i> Download Receipt
-</button>
+<td><?= esc($purchase['Status']) ?></td> <!-- Replace 'status' with the actual status field -->
+<td class="text-right">
+    <div class="table-action">
+        <form id="cancelForm-<?= $purchase['PurchaseID'] ?>" action="<?= site_url('/purchase/cancel/' . $purchase['PurchaseID']) ?>" method="post" style="display:inline;">
+            <button type="button" 
+                    class="btn btn-sm bg-danger text-light" 
+                    onclick="confirmCancel('<?= $purchase['PurchaseID'] ?>')"
+                    <?= $purchase['Status'] === 'Cancelled' ? 'disabled' : '' ?>>
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </form>
+        <button type="button" class="btn btn-sm bg-info text-light" onclick="downloadReceipt('<?= $purchase['PurchaseID'] ?>')">
+            <i class="fas fa-receipt"></i> Download Receipt
+        </button>
+    </div>
+</td>
 
-                    </div>
-                </td>
             </tr>
         <?php endforeach; ?>
     </tbody>

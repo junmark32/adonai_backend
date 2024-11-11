@@ -379,52 +379,86 @@
 		   
 		</div>
 		<!-- /Main Wrapper -->
+		<script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
 		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-    // Make the userID available in JavaScript
-    var token = '<?php echo $token; ?>';
-    // Enable Pusher logging - don't include this in production
-    console.log("User Token:", token);
-    Pusher.logToConsole = true;
 
-    var pusher = new Pusher('66016c500af8a7ce62eb', {
-        cluster: 'ap1',
-        encrypted: true
-    });
+ <script>
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+                console.error('Service Worker registration failed:', error);
+            });
+        }
 
-    var channel = pusher.subscribe('user-token-' + token);
-    channel.bind('prescription-notification', function(data) {
-        // Handle the notification data here
-        console.log('Received data:', data);
-        
-        // Request permission to show notifications if not already granted
-        if (Notification.permission === 'granted') {
-            showNotification(data.message);
-        } else if (Notification.permission !== 'denied') {
-            Notification.requestPermission().then(function(permission) {
+        // Initialize Pusher Beams and subscribe to "hello" device interest
+        const beamsClient = new PusherPushNotifications.Client({
+            instanceId: 'b1e88c3a-8e5a-4b1d-8377-0cceab7f4198' // replace with your instance ID
+        });
+
+        beamsClient.start()
+            .then(() => beamsClient.addDeviceInterest('hello'))
+            .then(() => console.log('Successfully registered and subscribed to "hello"!'))
+            .catch(console.error);
+
+        // Check for notification permission
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission().then(permission => {
                 if (permission === 'granted') {
-                    showNotification(data.message);
+                    console.log('Notification permission granted.');
+                } else {
+                    console.log('Notification permission denied.');
                 }
             });
         }
-    });
 
-    // Function to display the notification
-    function showNotification(message) {
-        var options = {
-            body: message,
-            icon: 'path_to_icon/icon.png' // Optional: Path to an icon
-        };
-        var notification = new Notification('Adonai', options);
+        // Pusher Channels Fallback
+        const userToken = '<?php echo $token; ?>';
+        Pusher.logToConsole = true;
 
-        // Optional: Handle notification click
-        notification.onclick = function(event) {
-            event.preventDefault();
-            // Example: Focus or navigate to the app
-            window.focus();
-        };
-    }
-</script>
+        const pusher = new Pusher('66016c500af8a7ce62eb', {
+            cluster: 'ap1',
+            encrypted: true
+        });
+
+        const channel = pusher.subscribe('user-token-' + userToken);
+        channel.bind('prescription-notification', function(data) {
+            console.log('Received data from Pusher Channels:', data);
+
+            if (Notification.permission === 'granted') {
+                showNotification(data.message);
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === 'granted') {
+                        showNotification(data.message);
+                    }
+                });
+            }
+        });
+
+        // Function to display the notification
+        function showNotification(message) {
+            const options = {
+                body: message,
+                icon: 'https://adonai-eyecare.online/adonai/public/uploads/logo-adonai.png' // replace with actual icon path
+            };
+            const notification = new Notification('Adonai', options);
+
+            notification.onclick = function(event) {
+                event.preventDefault();
+                window.focus();
+            };
+        }
+
+        // Listen for push events for Pusher Beams notifications
+        navigator.serviceWorker.addEventListener('message', function(event) {
+            if (event.data && event.data.message) {
+                // Display Pusher Beams notification
+                showNotification(event.data.message);
+            }
+        });
+    </script>
 
 	  
 		<!-- jQuery -->

@@ -134,18 +134,22 @@ class PatientController extends ResourceController
                     
 
                     // Redirect to a success view
+                    session()->setFlashdata('book', 'Your appointment has been successfully booked!');
                     return redirect()->to('/');
                 } else {
                     // Handle insertion failure
-                    return $this->respond(['error' => 'Failed to add appointment']);
+                    session()->setFlashdata('error', 'There was an issue booking your appointment. Please try again.');
+                    return redirect()->to('/');
                 }
             } else {
                 // Handle missing PatientID
-                return $this->respond(['error' => 'PatientID not found']);
+                session()->setFlashdata('error', 'There was an issue booking your appointment. Please try again.');
+                return redirect()->to('/');
             }
         } else {
             // Handle missing user data in session
-            return $this->respond(['error' => 'User data not found in session']);
+            session()->setFlashdata('error', 'There was an issue booking your appointment. Please try again.');
+            return redirect()->to('/');
         }
     }
 

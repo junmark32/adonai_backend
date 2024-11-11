@@ -24,6 +24,7 @@
         "phpmailer/phpmailer": "^6.9",
         "psr/log": "^1.1",
         "pusher/pusher-php-server": "^7.2",
+        "pusher/pusher-push-notifications": "^2.0",
         "tecnickcom/tcpdf": "^6.6",
         "telerivet/telerivet-php-client": "^1.7"
     },

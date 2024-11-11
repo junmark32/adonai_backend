@@ -147,8 +147,8 @@ class Subscriptions extends \Google\Service\Resource
    * subscription](https://developers.google.com/workspace/events/guides/update-
    * subscription). (subscriptions.patch)
    *
-   * @param string $name Optional. Immutable. Identifier. Resource name of the
-   * subscription. Format: `subscriptions/{subscription}`
+   * @param string $name Identifier. Resource name of the subscription. Format:
+   * `subscriptions/{subscription}`
    * @param Subscription $postBody
    * @param array $optParams Optional parameters.
    *
@@ -156,7 +156,8 @@ class Subscriptions extends \Google\Service\Resource
    * updates any fields included in the request. You can update one of the
    * following fields in a subscription: * `expire_time`: The timestamp when the
    * subscription expires. * `ttl`: The time-to-live (TTL) or duration of the
-   * subscription. To fully replace the subscription (the equivalent of `PUT`),
+   * subscription. * `event_types`: The list of event types to receive about the
+   * target resource. To fully replace the subscription (the equivalent of `PUT`),
    * use `*`. Any omitted fields are updated with empty values.
    * @opt_param bool validateOnly Optional. If set to `true`, validates and
    * previews the request, but doesn't update the subscription.

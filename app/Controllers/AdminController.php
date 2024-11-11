@@ -13,6 +13,7 @@ use App\Models\ScheduleModel;
 use App\Models\DoctorModel;
 use App\Models\DocFeedModel;
 use App\Models\UserModel;
+use App\Models\LensModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -53,6 +54,10 @@ class AdminController extends BaseController
                     $productModel = new ProductModel();
                     $purchaseModel = new PurchaseModel();
                     $patientModel = new PatientModel();
+                    $lensModel = new LensModel();
+
+                    // $data['lenses'] = $lensModel->findAll();
+                    $lenses = $lensModel->findAll();
 
                     // Retrieve all products from the database
                     $products = $productModel->findAll();
@@ -115,6 +120,8 @@ class AdminController extends BaseController
                     // Pass the products data to the view
                     $data['products'] = $products;
 
+                    $data['lenses'] = $lenses;
+
         
 
                      // Pass loggedIn status, role, and doctor data to the view
@@ -135,54 +142,161 @@ class AdminController extends BaseController
     }
 
     // Method to update purchase status
-public function updateStatus()
-{
-    // Ensure this method is accessed via POST
-    if ($this->request->getMethod() === 'post') {
-        // Get the purchase_id and status from POST data
-        $purchaseId = $this->request->getPost('purchase_id');
-        $status = $this->request->getPost('status');
-
-        // Load the PurchaseModel (replace with your actual model name)
-        $purchaseModel = new PurchaseModel();
-
-        // Update the status in the database
-        $data = [
-            'Status' => $status
-        ];
-
-        $updated = $purchaseModel->update($purchaseId, $data);
-
-        if ($updated) {
-            // Status updated successfully
-            // Prepare JSON response
-            $response = [
-                'success' => true,
-                'message' => 'Status updated successfully.',
-                'status' => $status // Optionally include updated status
+    public function updateStatus()
+    {
+        // Ensure this method is accessed via POST
+        if ($this->request->getMethod() === 'post') {
+            // Get the purchase_id and status from POST data
+            $purchaseId = $this->request->getPost('purchase_id');
+            $status = $this->request->getPost('status');
+    
+            // Load the PurchaseModel and PatientModel
+            $purchaseModel = new PurchaseModel();
+            $patientModel = new PatientModel(); // Make sure you have this model set up
+    
+            // Fetch the Purchase record to get the UserID
+            $purchase = $purchaseModel->find($purchaseId);
+            if (!$purchase) {
+                // Return error if purchase not found
+                $response = [
+                    'success' => false,
+                    'message' => 'Purchase not found.'
+                ];
+                return $this->response->setJSON($response);
+            }
+    
+            // Get the UserID from the purchase
+            $userId = $purchase['UserID'];
+    
+            // Fetch the patient's phone number using UserID
+            $patient = $patientModel->where('UserID', $userId)->first();
+            if (!$patient) {
+                // Return error if patient not found
+                $response = [
+                    'success' => false,
+                    'message' => 'Patient not found.'
+                ];
+                return $this->response->setJSON($response);
+            }
+    
+            // Update the status in the database
+            $data = [
+                'Status' => $status
             ];
+            $updated = $purchaseModel->update($purchaseId, $data);
+    
+            if ($updated) {
+                // Status updated successfully
+                $response = [
+                    'success' => true,
+                    'message' => 'Status updated successfully.',
+                    'status' => $status
+                ];
+    
+                // Check if the status is 'Completed'
+                if (strtolower($status) === 'completed') {
+                    // Send SMS using Semaphore
+                    $phone = $patient['Phone']; // Fetch phone number from patient record
+                    $email = $patient['Email'];
+                    $message = "Your order #ORD$purchaseId has been completed and is ready for pickup. Kindly check the receipt in your account dashboard and present it at the store. Thank you for choosing ADONAI!";
+                    
+                    $emailSent = $this->sendOrderEmail($email, $message);
+                    // Call the sendSmsOtp function to send SMS
+                    $smsSent = $this->sendSmsOrder($phone, $message);
+    
+                    if ($smsSent) {
+                        $response['sms'] = 'SMS sent successfully to ' . $phone;
+                    } else {
+                        $response['sms'] = 'Failed to send SMS to ' . $phone;
+                    }
+                }
+            } else {
+                // Failed to update status
+                $response = [
+                    'success' => false,
+                    'message' => 'Failed to update status.'
+                ];
+            }
+    
+            // Return JSON response
+            return $this->response->setJSON($response);
         } else {
-            // Failed to update status
-            // Prepare JSON response
+            // Handle invalid request method
             $response = [
                 'success' => false,
-                'message' => 'Failed to update status.'
+                'message' => 'Invalid request method.'
             ];
+            return $this->response->setJSON($response);
         }
-
-        // Return JSON response
-        return $this->response->setJSON($response);
-    } else {
-        // Handle invalid request method (should not be accessed directly)
-        // Prepare JSON response for invalid request method
-        $response = [
-            'success' => false,
-            'message' => 'Invalid request method.'
-        ];
-
-        return $this->response->setJSON($response);
     }
-}
+    
+    // The SMS sending function
+    private function sendSmsOrder($phone, $message)
+    {
+        $ch = curl_init();
+        $parameters = array(
+            'apikey' => 'ad4811aa957df160ff00b39a18661395', // Your Semaphore API key
+            'number' => $phone,
+            'message' => $message,
+            'sendername' => 'ADONAI'
+        );
+    
+        curl_setopt($ch, CURLOPT_URL, 'https://semaphore.co/api/v4/messages');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        // Send the request and store the response
+        $output = curl_exec($ch);
+    
+        // Check for cURL errors
+        if ($output === false) {
+            $error = curl_error($ch);
+            log_message('error', 'cURL Error: ' . $error);
+            return false; // Failed to send SMS
+        } else {
+            $response = json_decode($output, true);
+            if (isset($response['success']) && !$response['success']) {
+                log_message('error', 'SMS failed to send: ' . json_encode($response));
+                return false; // SMS failed to send
+            } else {
+                log_message('info', 'SMS sent successfully to ' . $phone);
+                return true; // SMS sent successfully
+            }
+        }
+    
+        curl_close($ch);
+    }
+    
+    private function sendOrderEmail($email, $message)
+    {
+        $mail = new PHPMailer(true);
+    
+        try {
+            //Server settings
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'adonaieyecare@gmail.com'; // Your Gmail address
+            $mail->Password   = 'wgxofkwcodnqabei';        // Your Gmail password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+    
+            //Recipients
+            $mail->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare'); // Your Name and your email address
+            $mail->addAddress($email); // Recipient's email
+    
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Order Status';
+            $mail->Body    = $message;
+    
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
 
     public function addProduct()

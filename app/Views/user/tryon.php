@@ -168,16 +168,16 @@ canvas {
     <!-- Filter selection -->
     <div id="filtersMenu">
         <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses1.glb')?>")'>
-            <img src="filter1-thumbnail.jpg" alt="Filter 1">
+            <img src="<?= base_url('assets/models-image/sg1.png')?>" alt="Filter 1">
         </div>
         <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses-1.glb')?>")'>
-            <img src="filter2-thumbnail.jpg" alt="Filter 2">
+            <img src="<?= base_url('assets/models-image/sg2.png')?>" alt="Filter 2">
         </div>
         <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses-2.glb')?>")'>
-            <img src="filter2-thumbnail.jpg" alt="Filter 2">
+            <img src="<?= base_url('assets/models-image/sg4.png')?>" alt="Filter 2">
         </div>
         <div class="filter-option" onclick='WebARRocksMirror.load("<?= base_url('assets/models3D/glasses-3.glb')?>")'>
-            <img src="filter2-thumbnail.jpg" alt="Filter 2">
+            <img src="<?= base_url('assets/models-image/sg3.png')?>" alt="Filter 2">
         </div>
     </div>
 
@@ -192,10 +192,11 @@ canvas {
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const faceCanvas = document.getElementById('WebARRocksFaceCanvas');
-        const threeCanvas = document.getElementById('threeCanvas');
+    let isUsingFrontCamera = true;
+    const faceCanvas = document.getElementById('WebARRocksFaceCanvas');
+    const threeCanvas = document.getElementById('threeCanvas');
 
+    document.addEventListener('DOMContentLoaded', function() {
         if (faceCanvas && threeCanvas) {
             console.log('Canvas elements found');
             
@@ -216,20 +217,42 @@ canvas {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-            // Add additional THREE.js setup here
+            // Additional THREE.js setup
         } else {
             console.error('Canvas elements not found');
         }
     });
 
     function capture_image() {
-        // Implement image capture logic here
-        console.log('Capture button clicked');
+        const combinedCanvas = document.createElement('canvas');
+        combinedCanvas.width = faceCanvas.width;
+        combinedCanvas.height = faceCanvas.height;
+
+        const context = combinedCanvas.getContext('2d');
+        context.drawImage(faceCanvas, 0, 0);
+        context.drawImage(threeCanvas, 0, 0);
+
+        combinedCanvas.toBlob((blob) => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'capture.png';
+            link.click();
+        });
+        
+        console.log('Image captured');
     }
 
     function switchCamera() {
-        // Switch camera function
-        console.log('Switch camera clicked');
+        isUsingFrontCamera = !isUsingFrontCamera;
+        
+        WebARRocksFace.switchCamera(isUsingFrontCamera ? 'user' : 'environment', {
+            onSuccess: function() {
+                console.log('Camera switched successfully');
+            },
+            onError: function(error) {
+                console.error('Camera switching error:', error);
+            }
+        });
     }
 </script>
 
