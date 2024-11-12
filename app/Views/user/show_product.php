@@ -206,9 +206,9 @@
     <!-- Review Listing -->
 	<div class="widget review-listing">
 										<ul class="comments-list">
-											<?php foreach ($reviews as $review): ?>
+										<?php foreach ($reviews as $index => $review): ?>
 												<!-- Comment List -->
-												<li>
+												<li class="review-item" style="<?= $index >= 5 ? 'display: none;' : '' ?>">
 													<div class="comment d-flex">
 													<img class="avatar avatar-sm rounded-circle" alt="User Image" src="<?= base_url('uploads/' . $review->Profile_url) ?>">
 														<div class="comment-body flex-grow-1">
@@ -242,9 +242,9 @@
 										
 										<!-- Show All -->
 										<div class="all-feedback text-center">
-											<a href="#" class="btn btn-primary btn-sm">
-												Show all feedback <strong>(167)</strong>
-											</a>
+											<button onclick="toggleReviews()" id="toggle-btn" class="btn btn-primary btn-sm">
+												Show all feedback <strong>(<?= count($reviews) ?>)</strong>
+											</button>
 										</div>
 										<!-- /Show All -->
 										
@@ -314,6 +314,24 @@
 </div>
 <!-- /Container -->
 
+<script>
+    function toggleReviews() {
+        const reviewItems = document.querySelectorAll('.review-item');
+        const toggleBtn = document.getElementById('toggle-btn');
+
+        // Toggle visibility of reviews
+        reviewItems.forEach((item, index) => {
+            if (index >= 5) {
+                item.style.display = item.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+
+        // Toggle button text
+        toggleBtn.textContent = toggleBtn.textContent.includes('Show all')
+            ? 'Show less feedback'
+            : 'Show all feedback (<?= count($reviews) ?>)';
+    }
+</script>
 
     </div>
 </div>

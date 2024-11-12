@@ -1338,7 +1338,7 @@ $data['scheduleTimings'] = json_encode($events);
 
         // Get data from the request
         $data = [
-            'ProductID' => $this->request->getPost('product_id'), // Ensure this input exists in the form
+            'ProductID' => trim($this->request->getPost('product_id')), // Ensure this input exists in the form
             'PatientID' => $this->request->getPost('patient_id'), // Ensure this input exists in the form
             'Rating' => $this->request->getPost('rating'),
             'Review' => $this->request->getPost('review_desc'),
@@ -1347,7 +1347,7 @@ $data['scheduleTimings'] = json_encode($events);
 
         // Insert data into the database
         if ($prod_review->insert($data)) {
-            return redirect()->to('/'); // Redirect to a success page or other route
+            return redirect()->to('/store/product/' . $data['ProductID']); // Redirect to a success page or other route
         } else {
             return redirect()->to('/feedback/error'); // Redirect to an error page or other route
         }
