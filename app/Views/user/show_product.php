@@ -24,6 +24,51 @@
     }
     ?>
 <?php endif; ?>
+
+<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+    <!-- Success Toast -->
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="toast" id="toast-success" data-delay="5000">
+            <div class="toast-header bg-success text-white">
+			<i class="fas fa-check-circle text-success rounded mr-2" aria-hidden="true"></i>
+                <strong class="mr-auto">Success</strong>
+                <small>Just now</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <?= session()->getFlashdata('success') ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- Error Toast -->
+    <?php if (session()->getFlashdata('error')): ?>
+        <div class="toast" id="toast-error" data-delay="5000">
+            <div class="toast-header bg-danger text-white">
+                <img src="error-icon.png" class="rounded mr-2" alt="Error Icon">
+                <strong class="mr-auto">Error</strong>
+                <small>Just now</small>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                <?= session()->getFlashdata('error') ?>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Show toasts if they exist
+        $('#toast-success').toast('show');
+        $('#toast-error').toast('show');
+    });
+</script>
+
 			
 			<!-- Breadcrumb -->
 			<div class="breadcrumb-bar">

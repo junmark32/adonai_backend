@@ -1347,9 +1347,11 @@ $data['scheduleTimings'] = json_encode($events);
 
         // Insert data into the database
         if ($prod_review->insert($data)) {
+            session()->setFlashdata('success', 'You have successfully added a review to this product!');
             return redirect()->to('/store/product/' . $data['ProductID']); // Redirect to a success page or other route
         } else {
-            return redirect()->to('/feedback/error'); // Redirect to an error page or other route
+            session()->setFlashdata('error', 'There was an error adding your review. Please try again.');
+            return redirect()->to('/store/product/' . $data['ProductID']); // Redirect to an error page or other route
         }
     }
 
